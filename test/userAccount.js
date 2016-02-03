@@ -23,7 +23,7 @@ describe('Account Tests', function() {
 
     it('FIND ALL users', function(done){
         userAccount.getUsers(function(targetDoc){
-            expect(targetDoc.length).to.be.above(1);
+            expect(targetDoc.length).not.to.be.empty;
             done();
         });
     });
