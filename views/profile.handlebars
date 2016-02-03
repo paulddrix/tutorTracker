@@ -1,0 +1,16 @@
+<div>
+	<h1>User Profile</h1>
+	<p><b>Name &nbsp;</b>{{ userData.firstName }}&nbsp;{{ userData.lastName }}</p>
+	{{#if userData.degree}}
+	<p><b>Degree &nbsp;</b>{{ userData.degree }}</p>
+	{{/if}}
+	<p><b>Email &nbsp;</b>{{ userData.email }}</p>
+	<p><b>Phone &nbsp;</b>{{ userData.phone }}</p>
+	{{#if userData.admin}}
+	<p><b>Administrator</b></p>
+	{{/if}}
+	<span>Text alerts are on</span>
+	<input type="checkbox" name="txtStatus" value="off">
+	<a href="/editprofile">Edit Profile</a>
+	<a href="logout">Log Out</a>
+</div>

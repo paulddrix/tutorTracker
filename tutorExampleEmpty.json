@@ -1,0 +1,16 @@
+{
+	"email" : "",
+	"password" : "",
+	"degree" : "",
+	"firstName" : "",
+  "lastName":"",
+	"phone" : "",
+	"admin" : ,
+  "textAlert":,
+	"idNumber":"",
+  "scheduledOfficeHours":[],
+  "monthlyTotalHours":,
+  "studentsToTutor":[],
+  "timeSheet":[],
+  "eligibleCourses":[]
+}

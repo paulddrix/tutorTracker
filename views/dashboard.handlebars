@@ -1,0 +1,43 @@
+<div>
+  {{#if userData.admin}}
+  <h1>Shift Requests</h1>
+  <ul>
+    {{#each systemData.shiftRequests}}
+    <li><b>Name</b>&nbsp; {{shiftRequest.shiftUser}} <b>Date&nbsp;{{shiftRequest.shiftDate}}</b></li>
+    {{/each}}
+  </ul>
+  {{!-- Start Tutor Side --}}
+  {{else}}
+  <div class="scheOff">
+    <h1>Scheduled Office Hours</h1>
+
+      {{#if userData.scheduledOfficeHours}}
+      {{#each userData.scheduledOfficeHours}}
+    	<li>{{ this.date }} &nbsp;</b>{{ this.startTime }}</li>
+      {{/each}}
+      {{else}}
+        <span>There are no scheduled shifts.</span>
+      {{/if}}
+  </div>
+  <div class="totalHours">
+    <h1>Monthly Total Hours</h1>
+
+      {{#if userData.monthlyTotalHours}}
+      <span>{{userData.monthlyTotalHours}} &nbsp; Hours</span>
+      {{else}}
+        <span>0&nbsp;Hours</span>
+      {{/if}}
+  </div>
+  <div class="reqHelp">
+    <h1>Requested Help</h1>
+
+    {{#if userData.studentsToTutor}}
+    {{#each userData.studentsToTutor}}
+    <li><b>Name</b>&nbsp;{{ this.name }} &nbsp;<b>Email</b>&nbsp;{{ this.email }}</li>
+    {{/each}}
+    {{else}}
+      <span>You have no students to tutor.</span>
+    {{/if}}
+  </div>
+  {{/if}}
+</div>

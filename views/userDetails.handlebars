@@ -1,0 +1,12 @@
+<div>
+	<h1>User's Details</h1>
+	<p><b>Name &nbsp;</b>{{ userProfile.firstName }}&nbsp;{{ userProfile.lastName }}</p>
+	{{#if userProfile.degree}}
+	<p><b>Degree &nbsp;</b>{{ userProfile.degree }}</p>
+	{{/if}}
+	<p><b>Email &nbsp;</b>{{ userProfile.email }}</p>
+	<p><b>Phone &nbsp;</b>{{ userProfile.phone }}</p>
+	{{#if userProfile.admin}}
+	<p><b>Administrator</b></p>
+	{{/if}}
+</div>

@@ -1,0 +1,30 @@
+// Variables
+
+//COLORS
+$orange:#FF6500;
+$black:#1B212F;
+$coolBlue:#208A87;
+$white:#EBEBEB;
+$pastel:#EAEDB4;
+
+//FONTS
+
+$base-font-family:'Source Sans Pro', sans-serif;
+$base-font-size:   16px;
+$small-font-size:  $base-font-size * 0.875;
+
+//Query sizes
+
+$sTutor-min: 320px;
+$sTutor-max: 490px;
+
+$mTutor-min:491px;
+$mTutor-max:599px;
+
+$lTutor-min:600px;
+$lTutor-max:766px;
+
+$xLTutor-min:$lTutor-max + 1px;
+$xLTutor-max:1024px;
+
+$kingTutor:$xLTutor-max + 1px;

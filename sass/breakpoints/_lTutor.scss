@@ -1,0 +1,17 @@
+/*
+Stylesheet: 600px to 766px Stylesheet
+*/
+
+/*
+NAVIGATION STYLES
+*/
+nav a:nth-of-type(n+2){
+	display:none;
+}
+nav span{
+  display: block;
+}
+/* BelowNav */
+#belowNav{
+	margin:10% auto;
+}

@@ -1,0 +1,42 @@
+{
+	"email" : "dsora@fullsail.edu",
+	"password" : "dani",
+	"degree" : "Digital Arts & Design",
+	"firstName" : "Daniela",
+  "lastName":"Sora",
+	"phone" : "4073728122",
+	"admin" : false,
+  "textAlert":true,
+	"idNumber":"1020121",
+  "scheduledOfficeHours":[
+    {
+    "date":"02/20/2016",
+    "startTime":"9:00 AM",
+    "endTime":"3:00 PM",
+    "notes":""
+    }
+  ],
+  "monthlyTotalHours":10,
+  "studentsToTutor":[
+    {
+    "name":"Paul Diederichs",
+    "email":"pdiederichssierr@fullsail.edu",
+    "phone":"9043074738",
+    "course":"Design Principles I",
+    }
+  ],
+  "timeSheet":[
+    {
+    "date":"02/07/2016",
+    "startTime":"7:00 PM",
+    "endTime":"10:00 PM"
+    }
+  ],
+  "eligibleCourses":[
+    {
+    "courseAbbr":"ADS",
+    "courseName":"Advanced Database Structures",
+    "courseCode":"ADS-1"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+/*
+Stylesheet: 491px to 599px
+*/
+/*
+NAVIGATION
+*/
+/* hiding nav links*/
+nav a:nth-of-type(n+2){
+	display:none;
+}
+nav span{
+  display: block;
+}
+/* BelowNav */
+#belowNav{
+	margin:14% auto;
+}

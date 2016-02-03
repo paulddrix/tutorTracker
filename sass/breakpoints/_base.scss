@@ -1,0 +1,179 @@
+/*
+Stylesheet: Base Mobile Stylesheet
+*/
+/*
+GENERAL STYLES
+*/
+body {
+	font-family:$base-font-family;
+	font-size: 100%;
+	line-height: 1.5;
+  background-color: #EBEBEB;
+}
+
+#wrapper{
+max-width: 1038px;
+margin: 0 auto;
+}
+
+/*
+H1, H2, H3, H4, H5 STYLES
+*/
+
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5 {
+	/*color:$coolBlue;*/
+	font-weight: 500;
+	/*
+	if you're going to use webfonts, be sure to check your weights
+	http://css-tricks.com/watch-your-font-weight/
+	*/
+
+	/* removing text decoration from all headline links */
+	a {
+		text-decoration: none;
+	}
+}
+
+h1, .h1 {
+	font-size: 2.5em;
+	line-height: 1.333em;
+}
+
+h2, .h2 {
+	font-size: 1.75em;
+	line-height: 1.4em;
+	margin-bottom: 0.375em;
+}
+
+h3, .h3 {
+	font-size: 1.125em;
+}
+
+h4, .h4 {
+	font-size: 1.1em;
+	font-weight: 700;
+}
+
+h5, .h5 {
+	font-size: 0.846em;
+	line-height: 2.09em;
+	text-transform: uppercase;
+	letter-spacing: 2px;
+}
+
+/*
+NAVIGATION STYLES
+**/
+nav{
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  left:0;
+  background-color: $orange;
+	a[href="#menu"]{
+		display: none;
+	}
+  a{
+    float:right;
+    width: 15%;
+    text-align:center;
+    margin: 0;
+    display: block;
+    line-height: 58px;
+    height: 58px;
+    text-decoration: none;
+    color:$white;
+    &:link, &:visited {
+      color:$white;
+    }
+    &:hover{
+			background-color: #F97932;
+      cursor: pointer;
+      color: $black;
+    }
+  }
+  a:first-child{
+    float:left;
+    width: 258px;
+    text-align:center;
+    margin: 0;
+		/*&:hover svg path,&:hover svg polygon{
+			fill:#1FDB1F;
+		}*/
+  }
+}
+ div[id="mobileNav"]{
+  background-color: black;
+  z-index: 999;
+  position: fixed;
+  top: 58px;
+  left:0;
+  text-align: center;
+  width: 100%;
+  height: auto;
+  a {
+    text-decoration: none;
+    line-height: 58px;
+    height: 58px;
+    display: block;
+    &:link, &:visited {
+
+    }
+    &:hover{
+      color: #1FDB1F;
+    }
+  }
+}
+/*
+BELOWNAV
+*/
+#belowNav{
+  max-width:1338px ;
+  width:98%;
+  margin: 8% 1.5%;
+}
+
+/*
+CONTENT STYLES
+*/
+#leftPanel{
+  background-color: $orange;
+}
+/*
+BUTTONS
+*/
+button{
+	padding: 10px;
+	border: none;
+	background-color:$coolBlue;
+}
+/*
+USERS LIST
+*/
+.userList{
+	li{
+		background-color: $pastel;
+		padding: 10px;
+		margin:5px;
+	}
+	a{
+		text-decoration: none;
+		color:$black;
+	}
+}
+/*
+FOOTER
+*/
+footer{
+	background-color: $orange;
+	text-align: center;
+	a{
+		text-decoration: none;
+		color:$white;
+		&:hover{
+			color:$black;
+			text-decoration: underline;
+		}
+	}
+}

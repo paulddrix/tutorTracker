@@ -1,0 +1,21 @@
+<div>
+  <h1>View {{ systemData.currentMonth}}'s Availability</h1>
+  {{#each systemData.month.week}}
+  <div class="week">
+    <div class="day">
+      <span>{{systemData.dayName}} &nbsp; {{systemData.dayDate}}</span>
+      {{#each systemData.dayShifts}}
+        <div class="shift">
+          <span>{{systemData.startTime}} &nbsp; {{systemData.endTime}}</span>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+  {{/each}}
+
+  {{#if userData.admin}}
+  <a href="/editshifts" class="blue_button">Edit Shifts</a>
+  {{else}}
+  <a href="/requestshift" class="blue_button">Request Shift</a>
+  {{/if}}
+</div>

@@ -1,0 +1,41 @@
+{
+  "name": "tutortracker",
+  "version": "0.0.0",
+  "description": "tutor tracker application",
+  "main": "app.js",
+  "scripts": {
+    "test": "mocha",
+    "start":"node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/paulddrix/tutortracker.git"
+  },
+  "keywords": [
+    "tutor",
+    "tracker"
+  ],
+  "author": "Paul Diederichs",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.14.1",
+    "connect": "^3.4.0",
+    "cookie-parser": "^1.4.0",
+    "express": "^4.13.3",
+    "express-handlebars": "^2.0.1",
+    "jsonwebtoken": "^5.4.0",
+    "mandrill-api": "^1.0.45",
+    "mongodb": "~2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.3.0",
+    "gulp": "^3.9.0",
+    "gulp-minify-css": "^1.2.1",
+    "gulp-nodemon": "^2.0.4",
+    "mocha": "^2.3.4"
+  },
+  "bugs": {
+    "url": "https://github.com/paulddrix/tutortracker.git/issues"
+  },
+  "homepage": "https://github.com/paulddrix/tutortracker.git#readme"
+}

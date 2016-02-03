@@ -1,0 +1,10 @@
+{
+	"email" : "nbrooks@fullsail.com",
+	"password" : "nicole",
+	"firstName" : "Nicole",
+  "lastName":"Brooks",
+	"phone" : "4072159518",
+	"admin" : true,
+  "textAlert":true,
+  "idNumber":9000
+}

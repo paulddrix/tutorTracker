@@ -1,0 +1,30 @@
+// importing partials from `sass_dir` (defaults to `sass`)
+@import
+        "../../sass/partials/variables",
+        "../../sass/partials/normalize",
+        "../../sass/partials/typography"
+;
+// importing base from breakpoints
+@import "../../sass/breakpoints/base";
+
+//Media Queries from breakpoints
+
+@media only screen and (min-width:$sTutor-min) and (max-width:$sTutor-max){
+  @import "../../sass/breakpoints/sTutor";
+}// End of sTutor query
+
+@media only screen and (min-width:$mTutor-min) and (max-width:$mTutor-max){
+  @import "../../sass/breakpoints/mTutor";
+}// End of mTutor query
+
+@media only screen and (min-width:$lTutor-min) and (max-width:$lTutor-max){
+  @import "../../sass/breakpoints/lTutor";
+}// End of lTutor query
+
+@media only screen and (min-width:$xLTutor-min) and (max-width:$xLTutor-max){
+  @import "../../sass/breakpoints/xLTutor";
+}// End of xLTutor query
+
+@media only screen and (min-width:$kingTutor){
+  @import "../../sass/breakpoints/kingTutor";
+}// End of kingTutor query

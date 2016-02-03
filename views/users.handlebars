@@ -1,0 +1,17 @@
+<div>
+	<h1>Users</h1>
+	{{#if userData.admin}}
+  <a href="/adduser" class="blue_button">Add User</a>
+	<ul class="userList">
+		{{#each users}}
+		<a href="/userprofiles/{{idNumber}}"><li><b>Name&nbsp;</b>{{ firstName }} &nbsp;{{ lastName }}&nbsp;<b>Degree&nbsp;</b> {{degree}} &nbsp; <a href="/delete/{{idNumber}}">Delete</a>&nbsp; <a href="/edituser/{{idNumber}}">Edit User</a></li></a>
+		{{/each}}
+	</ul>
+  {{else}}
+	<ul class="userList">
+		{{#each users}}
+		<a href="/userprofiles/{{idNumber}}"><li><b>Name&nbsp;</b>{{ firstName }} &nbsp;{{ lastName }}&nbsp;<b>Email&nbsp;</b> {{email}}</li></a>
+		{{/each}}
+	</ul>
+  {{/if}}
+</div>

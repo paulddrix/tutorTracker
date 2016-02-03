@@ -1,0 +1,18 @@
+<div>
+	<h1>Time Sheet</h1>
+	{{#if userData.admin}}
+	<ul class="userList">
+		{{#each users}}
+		<a href="/userprofiles/{{userName}}"><li><b>Name&nbsp;</b>{{ userName }} &nbsp;<b>Degree&nbsp;</b> {{degree}} &nbsp; <a href="/delete/{{userName}}">Delete</a>&nbsp; <a href="/edituser/{{userName}}">Edit User</a></li></a>
+		{{/each}}
+	</ul>
+  {{else}}
+  <!-- Tutor Side -->
+	<ul class="userList">
+    <a href="/adduser" class="blue_button">Add Session</a>
+		{{#each session}}
+		<li><b>Date&nbsp;</b>{{ userName }} &nbsp;<b>Email&nbsp;</b> {{userEmail}}</li>
+		{{/each}}
+	</ul>
+  {{/if}}
+</div>
