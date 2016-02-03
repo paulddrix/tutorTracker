@@ -5,14 +5,14 @@ describe('Account Tests', function() {
 
     it('ADD a new user', function(done){
         userAccount.createUser({
-            email: "pdiederichssierr@fullsail.edu",
-            password: "hello",
-            name:"Paul Diederichs",
-            phone:9046242477
+            email: "tester@testsuit.test",
+            password: "testing101",
+            name:"Tester Quiz",
+            phone:6060606060
             }, function (doc) {
                 var newUser = doc;
                 expect(doc).not.to.be.null;
-                userAccount.getUser({password:"hello"}, function(targetDoc){
+                userAccount.getUser({email:"tester@testsuit.test"}, function(targetDoc){
                     expect(targetDoc).not.to.be.null;
                     done();
                 });
@@ -31,7 +31,7 @@ describe('Account Tests', function() {
     it('REMOVE an existing user', function(done){
         userAccount.createUser({
             email: "bbergh@fullsail.edu",
-            eassword: "bb",
+            password: "bb",
             name:"Brandy Bergh",
             phone:8918223211
             }, function (doc) {
@@ -48,8 +48,8 @@ describe('Account Tests', function() {
     });
     //remove all test from db
     it('REMOVE all test users',function (done){
-        userAccount.destroyUser({email: "pdiederichssierr@fullsail.edu"}, function() {
-            userAccount.getUser({email: "pdiederichssierr@fullsail.edu"}, function(targetTest){
+        userAccount.destroyUser({email: "tester@testsuit.test"}, function() {
+            userAccount.getUser({email: "tester@testsuit.test"}, function(targetTest){
                 expect(targetTest).to.be.empty;
                 done();
             });
