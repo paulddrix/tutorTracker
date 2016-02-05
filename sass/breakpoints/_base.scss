@@ -149,6 +149,32 @@ button{
 	background-color:$coolBlue;
 }
 /*
+BLUE BUTTON
+*/
+.blue_button{
+	text-align: center;
+	display: block;
+	padding: 10px;
+	border: none;
+	text-decoration: none;
+	width: 120px;
+	background-color:$coolBlue;
+	color:$white;
+}
+/*
+ORANGE BUTTON
+*/
+.orange_button{
+	text-align: center;
+	width: 120px;
+	text-decoration: none;
+	display: block;
+	padding: 10px;
+	border: none;
+	background-color:$orange;
+	color:$white;
+}
+/*
 USERS LIST
 */
 .customList{

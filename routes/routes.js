@@ -567,7 +567,7 @@ var bodyParser =  require('body-parser'),
               else if(decoded['iss'] === "system"){
                 userAccount.getUser({email:decoded.email},function(result){
                   var data = {userData:result[0]};
-                  userAccount.getUsers({},function(results) {
+                  userAccount.getUsers({admin:false},function(results) {
                    data['users']=results;
                    res.render('timeSheet',data);
                   });

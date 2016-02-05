@@ -4,7 +4,7 @@
   <a href="/adduser" class="blue_button">Add User</a>
 	<ul class="customList">
 		{{#each users}}
-		<a href="/userprofiles/{{idNumber}}"><li><b>Name&nbsp;</b>{{ firstName }} &nbsp;{{ lastName }}&nbsp;<b>Degree&nbsp;</b> {{degree}} &nbsp; <a href="/deleteuserhandler/{{idNumber}}">Delete</a>&nbsp; <a href="/edituser/{{idNumber}}">Edit User</a></li></a>
+		<a href="/userprofiles/{{idNumber}}"><li><b>Name&nbsp;</b>{{ firstName }} &nbsp;{{ lastName }}&nbsp;<b>Degree&nbsp;</b> {{degree}} &nbsp; <a href="/deleteuserhandler/{{idNumber}}" class="orange_button">Delete</a>&nbsp; <a href="/edituser/{{idNumber}}" class="blue_button">Edit User</a></li></a>
 		{{/each}}
 	</ul>
   {{else}}

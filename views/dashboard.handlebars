@@ -6,7 +6,7 @@
     <li><b>Name</b>&nbsp; {{this.firstName}}&nbsp;{{this.lastName}}&nbsp;<b>Date&nbsp;{{this.date}}</b></li>
     {{/each}}
   </ul>
-  <a href="/addtutorrequest">Add Tutor Request</a>
+  <a href="/addtutorrequest" class="blue_button">Add Tutor Request</a>
   {{!-- Start Tutor Side --}}
   {{else}}
   <div class="scheOff customList">
@@ -22,7 +22,6 @@
   </div>
   <div class="totalHours">
     <h1>Monthly Total Hours</h1>
-
       {{#if userData.monthlyTotalHours}}
       <span>{{userData.monthlyTotalHours}} &nbsp; Hours</span>
       {{else}}
@@ -31,7 +30,6 @@
   </div>
   <div class="reqHelp customList">
     <h1>Requested Help</h1>
-
     {{#if userData.studentsToTutor}}
     {{#each userData.studentsToTutor}}
     <li><b>Name</b>&nbsp;{{ this.firstName }}&nbsp;{{ this.lastName }} &nbsp;<b>Email</b>&nbsp;{{ this.email }}</li>

@@ -21,6 +21,13 @@
         <label for="phone">Phone</label>
         <input type="text" min="10" name="phone" id="phone" value="{{userData.phone}}">
       </p>
+      <p>
+        {{#if userData.textAlert}}
+        <input type="checkbox" name="textAlert" checked="checked" value="true">&nbsp;Text Alerts<br>
+        {{else}}
+        <input type="checkbox" name="textAlert" value="true">&nbsp;Text Alerts<br>
+        {{/if}}
+      </p>
       <input type="hidden" name="idNumber" value="{{userData.idNumber}}">
       <button type="submit" class="blue_button">Save Changes</button>
     </form>

@@ -570,6 +570,32 @@ button {
   background-color: #208A87; }
 
 /*
+BLUE BUTTON
+*/
+.blue_button {
+  text-align: center;
+  display: block;
+  padding: 10px;
+  border: none;
+  text-decoration: none;
+  width: 120px;
+  background-color: #208A87;
+  color: #EBEBEB; }
+
+/*
+ORANGE BUTTON
+*/
+.orange_button {
+  text-align: center;
+  width: 120px;
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  border: none;
+  background-color: #FF6500;
+  color: #EBEBEB; }
+
+/*
 USERS LIST
 */
 .customList li {
