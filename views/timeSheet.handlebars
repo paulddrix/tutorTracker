@@ -3,7 +3,7 @@
 	{{#if userData.admin}}
 	<ul class="userList">
 		{{#each users}}
-		<a href="/userprofiles/{{userName}}"><li><b>Name&nbsp;</b>{{ userName }} &nbsp;<b>Degree&nbsp;</b> {{degree}} &nbsp; <a href="/delete/{{userName}}">Delete</a>&nbsp; <a href="/edituser/{{userName}}">Edit User</a></li></a>
+		<li><b>Name&nbsp;</b>{{ firstName }} &nbsp;<b>Degree&nbsp;</b> {{degree}} &nbsp; &nbsp; </li>
 		{{/each}}
 	</ul>
   {{else}}

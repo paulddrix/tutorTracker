@@ -1,0 +1,12 @@
+`{
+	{
+	"courseAbbr" : "ASL",
+	"courseName" : "Advanced Server-side Languages",
+	"courseCode" : "WDD442",
+	},
+	{
+	"courseAbbr" : "DWP",
+	"courseName" : "Deployment of Web Applications",
+	"courseCode" : "WDD463",
+	}
+}`

@@ -3,7 +3,7 @@ var expect = require('chai').expect,
 
 describe('Account Tests', function() {
 
-    it('ADD a new user', function(done){
+    it('Create a new user', function(done){
         userAccount.createUser({
             email: "tester@testsuit.test",
             password: "testing101",

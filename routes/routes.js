@@ -6,7 +6,9 @@ var bodyParser =  require('body-parser'),
     //mandrill_client = new mandrill.Mandrill('R6xFyX_txF1on5jGLGWreQ'),
     jwt = require('jsonwebtoken'),
     fs = require('fs'),
-    userAccount = require('../models/Account.js');
+    userAccount = require('../models/Account');
+    courses = require('../models/Courses');
+    tutorRequests = require('../models/TutorRequests');
     app.use(cookieParser());
 
     // =-=-=-=-=-=-=-=-=-=-=-=- Home =-=-=-=-=-=-=-=-=-=-=
@@ -80,7 +82,7 @@ var bodyParser =  require('body-parser'),
               else if(decoded['iss'] === "system" && decoded['admin'] == true){
                 userAccount.getUser({email:decoded.email},function(result){
                   var data = {userData:result[0]};
-                  userAccount.getUsers(function(results) {
+                  userAccount.getUsers({},function(results) {
                    data['users']=results;
                    res.render('dashboard',data);
                   });
@@ -93,6 +95,72 @@ var bodyParser =  require('body-parser'),
                    data['users']=result[0];
                    res.render('dashboard',data);
                 });
+              }
+          });
+      }
+    });
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= DASHBOARD > ADD TUTOR REQUEST =-=-=-=-=-=-=-=-=-=-=-=-=-=
+    app.get('/addtutorrequest',function(req,res) {
+      if(req.cookies.auth === undefined){
+        res.redirect('/login');
+      }
+      else{
+        // we will check if the user requesting the page is a tutor or an admin
+          // verify a token asymmetric
+          var cert = fs.readFileSync('./keys/public.pem');
+          jwt.verify(req.cookies.auth, cert, function(err, decoded){
+            console.log('decoded jwt',decoded);
+              if(decoded == undefined){
+                res.redirect('/login');
+              }
+              else if(decoded['iss'] === "system"){
+                var data = {};
+                userAccount.getUsers({admin:false},function(results) {
+                  data['tutorList']=results;
+                  courses.getCourses({},function(courseRes) {
+                    data['courseList']=courseRes;
+                    res.render('addTutorRequest',data);
+                  });
+
+                });
+              }
+          });
+      }
+    });
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= DASHBOARD > ADD TUTOR REQUEST HANDLER =-=-=-=-=-=-=-=-=-=-=-=-=-=
+    app.post('/addtutorrequesthandler', urlencodedParser, function(req,res) {
+      console.log('req body',req.body);
+      if(req.cookies.auth === undefined){
+        res.redirect('/login');
+      }
+      else{
+        // we will check if the user requesting the page is a tutor or an admin
+          // verify a token asymmetric
+          var cert = fs.readFileSync('./keys/public.pem');
+          jwt.verify(req.cookies.auth, cert, function(err, decoded){
+            console.log('decoded jwt',decoded);
+              if(decoded == undefined){
+                res.redirect('/login');
+              }
+              else if(decoded['iss'] === "system"){
+                var comingTutor = parseInt(req.body.assignTutor);
+                var newTutorRequest = {
+                  "firstName": req.body.firstName,
+                  "lastName": req.body.lastName,
+                  "email": req.body.email,
+                  "phone": req.body.phone,
+                  "degree": req.body.degree,
+                  "courseToTutor": req.body.courseToTutor,
+                  "program": req.body.program,
+                  "assignTutor": comingTutor,
+                };
+                tutorRequests.createRequest(newTutorRequest,function(err,result){
+                  console.log('error ',err);
+                });
+                userAccount.updateStdReqs({idNumber:comingTutor},{studentsToTutor:newTutorRequest},function(err,result){
+                  console.log('error',err);
+                });
+                res.redirect('/dashboard');
               }
           });
       }
@@ -114,7 +182,7 @@ var bodyParser =  require('body-parser'),
               else if(decoded['iss'] === "system"){
                 userAccount.getUser({email:decoded.email},function(result){
                   var data = {userData:result[0]};
-                  userAccount.getUsers(function(results) {
+                  userAccount.getUsers({},function(results) {
                    data['users']=results;
                    res.render('officeHours',data);
                   });
@@ -140,7 +208,7 @@ var bodyParser =  require('body-parser'),
               else if(decoded['iss'] === "system"){
                 userAccount.getUser({email:decoded.email},function(result){
                   var data = {userData:result[0]};
-                  userAccount.getUsers(function(results) {
+                  userAccount.getUsers({},function(results) {
                    data['users']=results;
                    res.render('requestShift',data);
                   });
@@ -197,6 +265,7 @@ var bodyParser =  require('body-parser'),
     });
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= HANDLE EDIT PROFILE =-=-=-=-=-=-=-=-=-=-=-=-=-=
     app.post('/editprofilehandler',urlencodedParser,function(req,res) {
+      var comingID = parseInt(req.body.idNumber);
       if(req.cookies.auth === undefined){
         res.redirect('/login');
       }
@@ -210,8 +279,16 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                userAccount.updateUser({ email:decoded.email },req.body,function(result){
-
+                var editedProfile = {
+                    "firstName":req.body.firstName,
+                    "lastName":req.body.lastName,
+                    "email":req.body.email,
+                    "password":req.body.password,
+                    "phone":req.body.phone,
+                    "idNumber":comingID,
+                };
+                userAccount.updateUser({ idNumber:comingID },editedProfile,function(result){
+                  console.log('result from update in editprofilehandler',result);
                   res.redirect('profile');
                 });
               }
@@ -236,7 +313,7 @@ var bodyParser =  require('body-parser'),
               else if(decoded['iss'] === "system"){
                 userAccount.getUser({email:decoded.email},function(result){
                   var data = {userData:result[0]};
-                  userAccount.getUsers(function(results) {
+                  userAccount.getUsers({},function(results) {
                    data['users']=results;
                    res.render('users',data);
                   });
@@ -263,12 +340,10 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                userAccount.getUser({email:decoded.email},function(result){
-                  var data = {userData:result[0]};
-                  userAccount.getUser({idNumber:incomingNumber},function(results) {
-                   data['userProfile']=results[0];
-                   res.render('userDetails',data);
-                  });
+                userAccount.getUser({idNumber:incomingNumber},function(result) {
+                var data={};
+                 data['userProfile']=result[0];
+                 res.render('userDetails',data);
                 });
               }
           });
@@ -299,7 +374,6 @@ var bodyParser =  require('body-parser'),
     });
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= HANDLE ADD USER =-=-=-=-=-=-=-=-=-=-=-=-=-=
     app.post('/adduserhandler',urlencodedParser,function(req,res){
-      console.log(req.body);
       if(req.cookies.auth === undefined){
         res.redirect('/login');
       }
@@ -308,23 +382,32 @@ var bodyParser =  require('body-parser'),
           // verify a token asymmetric
           var cert = fs.readFileSync('./keys/public.pem');
           jwt.verify(req.cookies.auth, cert, function(err, decoded){
-            console.log('decoded jwt',decoded);
+            console.log('decoded jwt in adduserhandler',decoded);
               if(decoded == undefined){
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
+
                 //check if the new user is an admin
-                if(req.params.admin){
+                if(req.body.admin === 'true'){
+                  var comingAdmin = true;
                   var comingID = parseInt(req.body.idNumber);
+                  var comingTxt;
+                  if(req.body.textAlert === 'true'){
+                    comingTxt= true;
+                  }
+                  else{
+                    comingTxt= false;
+                  }
                   var newUser = {
                     "email" : req.body.email,
                   	"password" : req.body.password,
-                  	"degree" : req.body.degree,
+                  	"degree" : false,
                   	"firstName" : req.body.firstName,
                     "lastName":req.body.lastName,
                   	"phone" : req.body.phone,
-                  	"admin" : req.body.admin,
-                    "textAlert":req.body.textAlert,
+                  	"admin" : comingAdmin,
+                    "textAlert":comingTxt,
                   	"idNumber":comingID,
                   };
                   userAccount.createUser(newUser,function(result, err){
@@ -333,6 +416,13 @@ var bodyParser =  require('body-parser'),
                 }
                 else{
                   var comingID = parseInt(req.body.idNumber);
+                  var comingTxt;
+                  if(req.body.textAlert === 'true'){
+                    comingTxt= true;
+                  }
+                  else{
+                    comingTxt= false;
+                  }
                   var newUser = {
                     "email" : req.body.email,
                   	"password" : req.body.password,
@@ -340,8 +430,8 @@ var bodyParser =  require('body-parser'),
                   	"firstName" : req.body.firstName,
                     "lastName":req.body.lastName,
                   	"phone" : req.body.phone,
-                  	"admin" : req.body.admin,
-                    "textAlert":req.body.textAlert,
+                  	"admin" : false,
+                    "textAlert":comingTxt,
                   	"idNumber":comingID,
                     "scheduledOfficeHours":[],
                     "monthlyTotalHours":0,
@@ -359,6 +449,107 @@ var bodyParser =  require('body-parser'),
       }
 
     });
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= HANDLE DELETE USER =-=-=-=-=-=-=-=-=-=-=-=-=-=
+    app.get('/deleteuserhandler/:idNumber',urlencodedParser,function(req,res){
+      console.log(req.params);
+      var comingID = parseInt(req.params.idNumber);
+      if(req.cookies.auth === undefined){
+        res.redirect('/login');
+      }
+      else{
+        // we will check if the user requesting the page is a tutor or an admin
+          // verify a token asymmetric
+          var cert = fs.readFileSync('./keys/public.pem');
+          jwt.verify(req.cookies.auth, cert, function(err, decoded){
+            console.log('decoded jwt in deleteuserhandler',decoded);
+              if(decoded == undefined){
+                res.redirect('/login');
+              }
+              else if(decoded['iss'] === "system"){
+                userAccount.destroyUser({idNumber:comingID},function(result,err) {
+                  res.redirect("/users");
+                });
+              }
+          });
+
+      }
+
+    });
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= USERS > EDIT PAGE =-=-=-=-=-=-=-=-=-=-=-=-=-=
+    app.get('/edituser/:idNumber',function(req,res){
+      var comingID = parseInt(req.params.idNumber);
+      if(req.cookies.auth === undefined){
+        res.redirect('/login');
+      }
+      else{
+        // we will check if the user requesting the page is a tutor or an admin
+          // verify a token asymmetric
+          var cert = fs.readFileSync('./keys/public.pem');
+          jwt.verify(req.cookies.auth, cert, function(err, decoded){
+            console.log('decoded jwt in edituser',decoded);
+              if(decoded == undefined){
+                res.redirect('/login');
+              }
+              else if(decoded['iss'] === "system"){
+                userAccount.getUser({idNumber:comingID},function(result){
+                  var data = {userData:result[0]};
+                  res.render('editUser',data);
+                });
+              }
+          });
+      }
+    });
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= HANDLE EDIT USER =-=-=-=-=-=-=-=-=-=-=-=-=-=
+    app.post('/edituserhandler',urlencodedParser,function(req,res){
+      var comingID = parseInt(req.body.idNumber);
+      if(req.cookies.auth === undefined){
+        res.redirect('/login');
+      }
+      else{
+        // we will check if the user requesting the page is a tutor or an admin
+          // verify a token asymmetric
+          var cert = fs.readFileSync('./keys/public.pem');
+          jwt.verify(req.cookies.auth, cert, function(err, decoded){
+            console.log('decoded jwt in editprofilehandler',decoded);
+              if(decoded == undefined){
+                res.redirect('/login');
+              }
+              else if(decoded['iss'] === "system"){
+                var comingID = parseInt(req.body.idNumber);
+                var comingTxt;
+                var comingAdmin;
+                if(req.body.textAlert === 'true'){
+                  comingTxt= true;
+                }
+                else{
+                  comingTxt= false;
+                }
+                if(req.body.admin === 'true'){
+                  comingAdmin= true;
+                }
+                else{
+                  comingAdmin= false;
+                }
+                var editedUser = {
+                  "email" : req.body.email,
+                  "password" : req.body.password,
+                  "degree" : req.body.degree,
+                  "firstName" : req.body.firstName,
+                  "lastName":req.body.lastName,
+                  "phone" : req.body.phone,
+                  "admin" : comingAdmin,
+                  "textAlert":comingTxt,
+                  "idNumber":comingID,
+                };
+                userAccount.updateUser({ idNumber:comingID},editedUser,function(result){
+
+                  res.redirect('/users');
+                });
+              }
+          });
+      }
+
+    });
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= TIME SHEET  =-=-=-=-=-=-=-=-=-=-=-=-=-=
     app.get('/timesheet',function(req,res) {
       if(req.cookies.auth === undefined){
@@ -369,14 +560,14 @@ var bodyParser =  require('body-parser'),
           // verify a token asymmetric
           var cert = fs.readFileSync('./keys/public.pem');
           jwt.verify(req.cookies.auth, cert, function(err, decoded){
-            console.log('decoded jwt',decoded);
+            console.log('decoded jwt in timesheet',decoded);
               if(decoded == undefined){
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
                 userAccount.getUser({email:decoded.email},function(result){
                   var data = {userData:result[0]};
-                  userAccount.getUsers(function(results) {
+                  userAccount.getUsers({},function(results) {
                    data['users']=results;
                    res.render('timeSheet',data);
                   });
@@ -400,7 +591,7 @@ var bodyParser =  require('body-parser'),
               else if(decoded['iss'] === "system"){
                 userAccount.getUser({email:decoded.email},function(result){
                   var userInfo = {userData:result[0]};
-                  userAccount.getUsers(function(results) {
+                  userAccount.getUsers({},function(results) {
                    userInfo['users']=results;
                    res.render('helpSupport',userInfo);
                   });

@@ -2,17 +2,17 @@ var MongoClient = require('mongodb').MongoClient,
 assert = require('assert');
 module.exports ={
 
-  getUsers: function(query,callback) {
+  getCourses: function(query,callback) {
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the DB Server
     MongoClient.connect(mongoUrl, function(err, db) {
       assert.equal(null, err);
       //console.log("Connected correctly to mongodb");
       // Get the documents collection
-      var collection = db.collection('users');
+      var collection = db.collection('courses');
       // Find some documents
       collection.find(query).toArray(function(err, docs) {
-        //console.log("logging out all users");
+        //console.log("logging out all courses");
         //console.dir(docs);
         //parsing mongoDoc
         callback(docs);
@@ -22,14 +22,14 @@ module.exports ={
 
     });
   },
-  getUser: function(userInfo,callback) {
+  getCourse: function(userInfo,callback) {
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the DB Server
     MongoClient.connect(mongoUrl, function(err, db) {
       assert.equal(null, err);
       //console.log("Connected correctly to mongodb");
       // Get the documents collection
-      var collection = db.collection('users');
+      var collection = db.collection('courses');
       // Find some documents
       collection.find(userInfo).toArray(function(err, docs) {
         //console.log("logging out one user");
@@ -42,14 +42,14 @@ module.exports ={
 
     });
   },
-  createUser: function(user,callback) {
+  createCourse: function(user,callback) {
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
     MongoClient.connect(mongoUrl, function(err, db) {
       assert.equal(null, err);
       //console.log("Connected correctly to mongodb");
       // Get the documents collection
-      var collection = db.collection('users');
+      var collection = db.collection('courses');
       // Insert some documents
       collection.insertOne(user, function(err, result) {
         //console.log("error? ",err);
@@ -59,14 +59,14 @@ module.exports ={
       });
     });
   },
-  destroyUser: function(user,callback) {
+  destroyCourse: function(user,callback) {
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
     MongoClient.connect(mongoUrl, function(err, db) {
       assert.equal(null, err);
       //console.log("Connected correctly to mongodb");
       // Get the documents collection
-      var collection = db.collection('users');
+      var collection = db.collection('courses');
       // Insert some documents
       collection.remove(user, function(err, result) {
         //console.log('result from user deletion ',result);
@@ -77,7 +77,7 @@ module.exports ={
       });
     });
   },
-  updateUser: function(query,updateInfo,callback) {
+  updateCourse: function(query,updateInfo,callback) {
     // Connection URL
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
@@ -85,30 +85,10 @@ module.exports ={
       assert.equal(null, err);
       console.log("Connected correctly to mongodb");
       // Get the documents collection
-      var collection = db.collection('users');
+      var collection = db.collection('courses');
       collection.update(query,{
         $set: updateInfo,
         $currentDate: { lastModified: true }
-          }, function(err, result) {
-        callback(result);
-      });
-      //get user id and update the information coming form the form
-      //close connection
-      db.close();
-    });
-  },
-  updateStdReqs: function(query,updateInfo,callback) {
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
-    // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
-      // Get the documents collection
-      var collection = db.collection('users');
-      collection.update(query,{
-        $push: updateInfo,
-        $currentDate: { dateAdded: true }
           }, function(err, result) {
         callback(result);
       });

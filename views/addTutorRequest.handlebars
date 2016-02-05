@@ -1,6 +1,10 @@
 <div>
-    <h1>Add User</h1>
-    <form action="/adduserhandler" method="post">
+  <div>
+    <h1>Search Eligible Tutors</h1>
+  </div>
+  <div>
+    <h1>Add Tutor Request</h1>
+    <form action="/addtutorrequesthandler" method="post">
       <p>
         <label for="fName">First Name</label>
         <input type="text" name="firstName" id="fName" required="required">
@@ -14,17 +18,10 @@
         <input type="email" name="email" id="email" size="30" required="required">
       </p>
       <p>
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password" required="required">
-      </p>
-      <p>
         <label for="phone">Phone</label>
         <input type="text" min="10" name="phone" id="phone" required="required">
       </p>
-      <p>
-        <label for="idNumber">Student ID</label>
-        <input type="text" min="10" name="idNumber" id="idNumber" required="required">
-      </p>
+
       <p>
         <label for="degree">Degree</label>
         <select name="degree" required="required" id="degree">
@@ -45,11 +42,32 @@
         </select>
       </p>
       <p>
-        <input type="checkbox" name="admin" value="true">&nbsp;Administrator<br>
+        <label for="course">Course to Tutor</label>
+        <select name="courseToTutor" required="required" id="degree">
+          <option value="false">Select a Course</option>
+          {{#each courseList}}
+          <option value="{{this.courseCode}}">{{this.courseName}}</option>
+          {{/each}}
+        </select>
       </p>
       <p>
-        <input type="checkbox" name="textAlert" value="true">&nbsp;Text Alerts<br>
+        <label for="program">Program Type</label>
+        <select name="program">
+          <option value="false">Select a Program Type</option>
+          <option value="Online">Online</option>
+          <option value="Campus">Campus</option>
+        </select>
       </p>
-      <button type="submit" class="blue_button">Add User</button>
+      <p>
+        <label for="assignTutor">Assign Tutor</label>
+        <select name="assignTutor" required="required" id="assignTutor">
+          <option value="false">Select a Tutor</option>
+          {{#each tutorList}}
+          <option value="{{this.idNumber}}">{{this.firstName}}&nbsp;{{this.lastName}}</option>
+          {{/each}}
+        </select>
+      </p>
+      <button type="submit" class="blue_button">Add Tutor Request</button>
     </form>
+    </div>
 </div>

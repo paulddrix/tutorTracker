@@ -3,9 +3,10 @@
   <h1>Shift Requests</h1>
   <ul>
     {{#each systemData.shiftRequests}}
-    <li><b>Name</b>&nbsp; {{shiftRequest.shiftUser}} <b>Date&nbsp;{{shiftRequest.shiftDate}}</b></li>
+    <li><b>Name</b>&nbsp; {{this.firstName}}&nbsp;{{this.lastName}}&nbsp;<b>Date&nbsp;{{this.date}}</b></li>
     {{/each}}
   </ul>
+  <a href="/addtutorrequest">Add Tutor Request</a>
   {{!-- Start Tutor Side --}}
   {{else}}
   <div class="scheOff">
@@ -33,7 +34,7 @@
 
     {{#if userData.studentsToTutor}}
     {{#each userData.studentsToTutor}}
-    <li><b>Name</b>&nbsp;{{ this.name }} &nbsp;<b>Email</b>&nbsp;{{ this.email }}</li>
+    <li><b>Name</b>&nbsp;{{ this.firstName }}&nbsp;{{ this.lastName }} &nbsp;<b>Email</b>&nbsp;{{ this.email }}</li>
     {{/each}}
     {{else}}
       <span>You have no students to tutor.</span>

@@ -1,33 +1,36 @@
 <div>
-    <h1>Add User</h1>
-    <form action="/adduserhandler" method="post">
+    <h1>Edit User</h1>
+    <form action="/edituserhandler" method="post">
       <p>
         <label for="fName">First Name</label>
-        <input type="text" name="firstName" id="fName" required="required">
+        <input type="text" name="firstName" id="fName" required="required" value="{{userData.firstName}}">
       </p>
       <p>
         <label for="lName">Last Name</label>
-        <input type="text" name="lastName" id="lName" required="required">
+        <input type="text" name="lastName" id="lName" required="required" value="{{userData.lastName}}">
       </p>
       <p>
         <label for="email">Email</label>
-        <input type="email" name="email" id="email" size="30" required="required">
+        <input type="email" name="email" id="email" size="30" required="required" value="{{userData.email}}">
       </p>
       <p>
         <label for="password">Password</label>
-        <input type="password" name="password" id="password" required="required">
+        <input type="password" name="password" id="password" required="required" value="{{userData.password}}">
       </p>
       <p>
         <label for="phone">Phone</label>
-        <input type="text" min="10" name="phone" id="phone" required="required">
+        <input type="text" min="10" name="phone" id="phone" required="required" value="{{userData.phone}}">
       </p>
       <p>
         <label for="idNumber">Student ID</label>
-        <input type="text" min="10" name="idNumber" id="idNumber" required="required">
+        <input type="text" min="10" name="idNumber" id="idNumber" required="required" value="{{userData.idNumber}}">
       </p>
       <p>
         <label for="degree">Degree</label>
         <select name="degree" required="required" id="degree">
+          {{#if userData.degree }}
+          <option value="{{userData.degree}}" selected>{{userData.degree}}</option>
+          {{/if}}
           <option value="false">Select a Degree</option>
           <option value="Digital Arts &amp; Design">Digital Arts &amp; Design</option>
           <option value="Game Development">Game Development</option>
@@ -45,11 +48,19 @@
         </select>
       </p>
       <p>
-        <input type="checkbox" name="admin" value="true">&nbsp;Administrator<br>
+        {{#if userData.admin}}
+        <input type="checkbox" name="admin" checked="checked" value="true"> &nbsp; Administrator
+        {{else}}
+        <input type="checkbox" name="name" value="false"> &nbsp; Administrator
+        {{/if}}
       </p>
       <p>
-        <input type="checkbox" name="textAlert" value="true">&nbsp;Text Alerts<br>
+        {{#if userData.textAlert}}
+        <input type="checkbox" name="textAlert" checked="checked" value="true">&nbsp;Text Alerts
+        {{else}}
+        <input type="checkbox" name="textAlert" value="false">&nbsp;Text Alerts
+        {{/if}}
       </p>
-      <button type="submit" class="blue_button">Add User</button>
+      <button type="submit" class="blue_button">Save Changes</button>
     </form>
 </div>
