@@ -151,8 +151,9 @@ button{
 /*
 USERS LIST
 */
-.userList{
+.customList{
 	li{
+		list-style-type: none;
 		background-color: $pastel;
 		padding: 10px;
 		margin:5px;

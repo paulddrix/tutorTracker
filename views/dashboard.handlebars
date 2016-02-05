@@ -1,7 +1,7 @@
 <div>
   {{#if userData.admin}}
   <h1>Shift Requests</h1>
-  <ul>
+  <ul class="customList">
     {{#each systemData.shiftRequests}}
     <li><b>Name</b>&nbsp; {{this.firstName}}&nbsp;{{this.lastName}}&nbsp;<b>Date&nbsp;{{this.date}}</b></li>
     {{/each}}
@@ -9,7 +9,7 @@
   <a href="/addtutorrequest">Add Tutor Request</a>
   {{!-- Start Tutor Side --}}
   {{else}}
-  <div class="scheOff">
+  <div class="scheOff customList">
     <h1>Scheduled Office Hours</h1>
 
       {{#if userData.scheduledOfficeHours}}
@@ -29,7 +29,7 @@
         <span>0&nbsp;Hours</span>
       {{/if}}
   </div>
-  <div class="reqHelp">
+  <div class="reqHelp customList">
     <h1>Requested Help</h1>
 
     {{#if userData.studentsToTutor}}

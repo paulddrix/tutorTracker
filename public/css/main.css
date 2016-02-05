@@ -572,11 +572,12 @@ button {
 /*
 USERS LIST
 */
-.userList li {
+.customList li {
+  list-style-type: none;
   background-color: #EAEDB4;
   padding: 10px;
   margin: 5px; }
-.userList a {
+.customList a {
   text-decoration: none;
   color: #1B212F; }
 
