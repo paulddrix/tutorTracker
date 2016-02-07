@@ -6,15 +6,17 @@ var bodyParser =  require('body-parser'),
     //mandrill_client = new mandrill.Mandrill('R6xFyX_txF1on5jGLGWreQ'),
     jwt = require('jsonwebtoken'),
     fs = require('fs'),
-    userAccount = require('../models/Account');
-    courses = require('../models/Courses');
-    tutorRequests = require('../models/TutorRequests');
+    //models
+    userAccount = require('../models/Account'),
+    courses = require('../models/Courses'),
+    tutorRequests = require('../models/TutorRequests'),
+    officeHours = require('../models/OfficeHours');
     app.use(cookieParser());
 
     // =-=-=-=-=-=-=-=-=-=-=-=- Home =-=-=-=-=-=-=-=-=-=-=
     //Home page
     app.get('/',urlencodedParser, function(req, res){
-    	//the root route is going to have the dashboard.
+    	//the root route is going to redirect to  the dashboard.
     	// console.log('req.cookies.auth',req.cookies.auth);
     	// console.log('req.body',req.body);
     	if(req.cookies.auth === undefined){
@@ -47,7 +49,7 @@ var bodyParser =  require('body-parser'),
     			res.sendStatus(400);
     		}
     	else{
-    		//read form DB to see what type of account they have
+    		//read from DB to see what type of account they have
     		userAccount.getUser(req.body,function(result){
     			console.log('results from query',result);
     			if(result[0]=== undefined){
@@ -56,8 +58,8 @@ var bodyParser =  require('body-parser'),
     			else{
     				// sign with RSA SHA256
       				var cert = fs.readFileSync('./keys/private.key');  // get private key
-      		  		var token = jwt.sign({ alg: 'RS256',typ:'JWT',admin:result[0].admin, email:result[0].email }, cert, { algorithm: 'RS256',issuer:'system',expiresIn:86400000});
-      		  		res.cookie('auth', token, {expires: new Date(Date.now() + 900000),maxAge: 900000 });//secure: true
+      		  		var token = jwt.sign({ alg: 'RS256',typ:'JWT',admin:result[0].admin, userId:result[0].userId }, cert, { algorithm: 'RS256',issuer:'system',expiresIn:86400000});
+      		  		res.cookie('auth', token, {expires: new Date(Date.now() + 9000000),maxAge: 9000000 });//secure: true
       		  		res.redirect('/');
     			}
     		});
@@ -80,18 +82,19 @@ var bodyParser =  require('body-parser'),
               }
               //if the user is an admin
               else if(decoded['iss'] === "system" && decoded['admin'] == true){
-                userAccount.getUser({email:decoded.email},function(result){
-                  var data = {userData:result[0]};
-                  userAccount.getUsers({},function(results) {
-                   data['users']=results;
-                   res.render('dashboard',data);
+                  var data = {userData:{admin:true},loggedIn:true};
+                  userAccount.getUsers({admin:false},function(results) {
+                    data['tutorList']=results;
+                    courses.getCourses({},function(courseRes) {
+                      data['courseList']=courseRes;
+                      res.render('dashboard',data);
+                    });
                   });
-                });
               }
               //if the user is a tutor
               else{
-                userAccount.getUser({email:decoded.email},function(result){
-                  var data = {userData:result[0]};
+                userAccount.getUser({userId:decoded.userId},function(result){
+                  var data = {userData:result[0],loggedIn:true};
                    data['users']=result[0];
                    res.render('dashboard',data);
                 });
@@ -99,8 +102,8 @@ var bodyParser =  require('body-parser'),
           });
       }
     });
-    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= DASHBOARD > ADD TUTOR REQUEST =-=-=-=-=-=-=-=-=-=-=-=-=-=
-    app.get('/addtutorrequest',function(req,res) {
+    //=-=-=-=-=-=-=-=-=-=-=-=-=-=-= DASHBOARD > SEARCH TUTOR ELIGIBILITY =-=-=-=-=-=-=-=-=-=-=-=-=-=
+    app.get('/tutoreligibility/:coursename', urlencodedParser,function(req,res){
       if(req.cookies.auth === undefined){
         res.redirect('/login');
       }
@@ -109,20 +112,19 @@ var bodyParser =  require('body-parser'),
           // verify a token asymmetric
           var cert = fs.readFileSync('./keys/public.pem');
           jwt.verify(req.cookies.auth, cert, function(err, decoded){
-            console.log('decoded jwt',decoded);
+            console.log('decoded jwt in DASHBOARD Route',decoded);
               if(decoded == undefined){
                 res.redirect('/login');
               }
-              else if(decoded['iss'] === "system"){
-                var data = {};
-                userAccount.getUsers({admin:false},function(results) {
-                  data['tutorList']=results;
-                  courses.getCourses({},function(courseRes) {
-                    data['courseList']=courseRes;
-                    res.render('addTutorRequest',data);
-                  });
-
+              //if the user is an admin
+              else if(decoded['iss'] === "system" && decoded['admin'] == true){
+                userAccount.getUsers({"eligibleCourses.courseName": req.params.coursename},function(doc) {
+                  res.send(doc);
                 });
+              }
+              //if the user is a tutor
+              else{
+                res.redirect('/login');
               }
           });
       }
@@ -144,6 +146,7 @@ var bodyParser =  require('body-parser'),
               }
               else if(decoded['iss'] === "system"){
                 var comingTutor = parseInt(req.body.assignTutor);
+                var requestId = Math.floor((Math.random() * 99999999) + 10000000);
                 var newTutorRequest = {
                   "firstName": req.body.firstName,
                   "lastName": req.body.lastName,
@@ -153,14 +156,42 @@ var bodyParser =  require('body-parser'),
                   "courseToTutor": req.body.courseToTutor,
                   "program": req.body.program,
                   "assignTutor": comingTutor,
+                  "requestId":requestId
                 };
                 tutorRequests.createRequest(newTutorRequest,function(err,result){
                   console.log('error ',err);
                 });
-                userAccount.updateStdReqs({idNumber:comingTutor},{studentsToTutor:newTutorRequest},function(err,result){
+                userAccount.updateStdReqs({userId:comingTutor},{studentsToTutor:newTutorRequest},function(err,result){
                   console.log('error',err);
                 });
                 res.redirect('/dashboard');
+              }
+          });
+      }
+    });
+    // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= DASHBOARD > VIEW TUTOR REQUEST =-=-=-=-=-=-=-=-=-=-=-=-=-=
+    app.get('/tutorrequest/:requestid',urlencodedParser,function(req,res) {
+      if(req.cookies.auth === undefined){
+        res.redirect('/login');
+      }
+      else{
+        // we will check if the user requesting the page is a tutor or an admin
+          // verify a token asymmetric
+          var cert = fs.readFileSync('./keys/public.pem');
+          jwt.verify(req.cookies.auth, cert, function(err, decoded){
+            console.log('decoded jwt in VIEW TUTOR REQUEST',decoded);
+              if(decoded == undefined){
+                res.redirect('/login');
+              }
+              //if the user is an admin
+              else if(decoded['iss'] === "system"){
+                userAccount.getUser({userId:decoded.userId},function(result){
+                  var data = {userData:result[0],loggedIn:true};
+                  tutorRequests.getRequest({},function(results){
+                    data['tutorRequest'] = results[0];
+                    res.render('tutorRequestDetails',data);
+                  });
+                });
               }
           });
       }
@@ -180,11 +211,15 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                userAccount.getUser({email:decoded.email},function(result){
-                  var data = {userData:result[0]};
-                  userAccount.getUsers({},function(results) {
-                   data['users']=results;
-                   res.render('officeHours',data);
+                var data={};
+                userAccount.getUser({userId:decoded.userId},function(result){
+                  data['userData'] = result[0];
+                  data['loggedIn'] = true;
+                  officeHours.getOfficeHours({},function(results) {
+                    console.log('OFFICE DATA',results[0]);
+                    data['officeHours'] = results[0];
+
+                    res.render('officeHours',data);
                   });
                 });
               }
@@ -207,7 +242,7 @@ var bodyParser =  require('body-parser'),
               }
               else if(decoded['iss'] === "system"){
                 userAccount.getUser({email:decoded.email},function(result){
-                  var data = {userData:result[0]};
+                  var data = {userData:result[0],loggedIn:true};
                   userAccount.getUsers({},function(results) {
                    data['users']=results;
                    res.render('requestShift',data);
@@ -232,8 +267,8 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                userAccount.getUser({email:decoded.email},function(result){
-                  var data = {userData:result[0]};
+                userAccount.getUser({userId:decoded.userId},function(result){
+                  var data = {userData:result[0],loggedIn:true};
                   res.render('profile',data);
                 });
               }
@@ -255,8 +290,9 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                userAccount.getUser({email:decoded.email},function(result){
-                  var data = {userData:result[0]};
+                userAccount.getUser({userId:decoded.userId},function(result){
+                  console.log("edit profile page ",result[0]);
+                  var data = {userData:result[0],loggedIn:true};
                   res.render('editProfile',data);
                 });
               }
@@ -265,7 +301,7 @@ var bodyParser =  require('body-parser'),
     });
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= HANDLE EDIT PROFILE =-=-=-=-=-=-=-=-=-=-=-=-=-=
     app.post('/editprofilehandler',urlencodedParser,function(req,res) {
-      var comingID = parseInt(req.body.idNumber);
+      var comingUserId = parseInt(req.body.userId);
       if(req.cookies.auth === undefined){
         res.redirect('/login');
       }
@@ -284,10 +320,9 @@ var bodyParser =  require('body-parser'),
                     "lastName":req.body.lastName,
                     "email":req.body.email,
                     "password":req.body.password,
-                    "phone":req.body.phone,
-                    "idNumber":comingID,
+                    "phone":req.body.phone
                 };
-                userAccount.updateUser({ idNumber:comingID },editedProfile,function(result){
+                userAccount.updateUser({ userId:comingUserId },editedProfile,function(result){
                   console.log('result from update in editprofilehandler',result);
                   res.redirect('profile');
                 });
@@ -311,8 +346,8 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                userAccount.getUser({email:decoded.email},function(result){
-                  var data = {userData:result[0]};
+                userAccount.getUser({userId:decoded.userId},function(result){
+                  var data = {userData:result[0],loggedIn:true};
                   userAccount.getUsers({},function(results) {
                    data['users']=results;
                    res.render('users',data);
@@ -341,7 +376,7 @@ var bodyParser =  require('body-parser'),
               }
               else if(decoded['iss'] === "system"){
                 userAccount.getUser({idNumber:incomingNumber},function(result) {
-                var data={};
+                var data={loggedIn:true};
                  data['userProfile']=result[0];
                  res.render('userDetails',data);
                 });
@@ -363,9 +398,9 @@ var bodyParser =  require('body-parser'),
               if(decoded == undefined){
                 res.redirect('/login');
               }
-              else if(decoded['iss'] === "system"){
-                userAccount.getUser({email:decoded.email},function(result){
-                  var data = {userData:result[0]};
+              else if(decoded['iss'] === "system" && decoded['admin'] == true){
+                userAccount.getUser({userId:decoded.userId},function(result){
+                  var data = {userData:result[0],loggedIn:true};
                   res.render('addUser',data);
                 });
               }
@@ -391,6 +426,7 @@ var bodyParser =  require('body-parser'),
                 //check if the new user is an admin
                 if(req.body.admin === 'true'){
                   var comingAdmin = true;
+                  var userId = Math.floor((Math.random() * 99999999) + 10000000);
                   var comingID = parseInt(req.body.idNumber);
                   var comingTxt;
                   if(req.body.textAlert === 'true'){
@@ -409,6 +445,7 @@ var bodyParser =  require('body-parser'),
                   	"admin" : comingAdmin,
                     "textAlert":comingTxt,
                   	"idNumber":comingID,
+                    "userId":userId
                   };
                   userAccount.createUser(newUser,function(result, err){
                     res.redirect('/users');
@@ -416,6 +453,7 @@ var bodyParser =  require('body-parser'),
                 }
                 else{
                   var comingID = parseInt(req.body.idNumber);
+                  var userId = Math.floor((Math.random() * 99999999) + 10000000);
                   var comingTxt;
                   if(req.body.textAlert === 'true'){
                     comingTxt= true;
@@ -433,8 +471,11 @@ var bodyParser =  require('body-parser'),
                   	"admin" : false,
                     "textAlert":comingTxt,
                   	"idNumber":comingID,
+                    "userId":userId,
                     "scheduledOfficeHours":[],
                     "monthlyTotalHours":0,
+                    "monthlyTotalShiftHours": 0,
+                    "monthlyTotalSessionHours":0,
                     "studentsToTutor":[],
                     "timeSheet":[],
                     "eligibleCourses":[]
@@ -450,9 +491,9 @@ var bodyParser =  require('body-parser'),
 
     });
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= HANDLE DELETE USER =-=-=-=-=-=-=-=-=-=-=-=-=-=
-    app.get('/deleteuserhandler/:idNumber',urlencodedParser,function(req,res){
+    app.get('/deleteuserhandler/:userID',urlencodedParser,function(req,res){
       console.log(req.params);
-      var comingID = parseInt(req.params.idNumber);
+      var comingUserId = parseInt(req.params.userID);
       if(req.cookies.auth === undefined){
         res.redirect('/login');
       }
@@ -466,7 +507,7 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                userAccount.destroyUser({idNumber:comingID},function(result,err) {
+                userAccount.destroyUser({userId:comingUserId},function(result,err) {
                   res.redirect("/users");
                 });
               }
@@ -476,8 +517,8 @@ var bodyParser =  require('body-parser'),
 
     });
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= USERS > EDIT PAGE =-=-=-=-=-=-=-=-=-=-=-=-=-=
-    app.get('/edituser/:idNumber',function(req,res){
-      var comingID = parseInt(req.params.idNumber);
+    app.get('/edituser/:userId',function(req,res){
+      var comingUserId= parseInt(req.params.userId);
       if(req.cookies.auth === undefined){
         res.redirect('/login');
       }
@@ -491,8 +532,8 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                userAccount.getUser({idNumber:comingID},function(result){
-                  var data = {userData:result[0]};
+                userAccount.getUser({userId:comingUserId},function(result){
+                  var data = {userData:result[0],loggedIn:true};
                   res.render('editUser',data);
                 });
               }
@@ -501,7 +542,6 @@ var bodyParser =  require('body-parser'),
     });
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= HANDLE EDIT USER =-=-=-=-=-=-=-=-=-=-=-=-=-=
     app.post('/edituserhandler',urlencodedParser,function(req,res){
-      var comingID = parseInt(req.body.idNumber);
       if(req.cookies.auth === undefined){
         res.redirect('/login');
       }
@@ -515,7 +555,8 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                var comingID = parseInt(req.body.idNumber);
+                var comingIdNumber = parseInt(req.body.idNumber);
+                var comingUserId = parseInt(req.body.userId);
                 var comingTxt;
                 var comingAdmin;
                 if(req.body.textAlert === 'true'){
@@ -539,9 +580,9 @@ var bodyParser =  require('body-parser'),
                   "phone" : req.body.phone,
                   "admin" : comingAdmin,
                   "textAlert":comingTxt,
-                  "idNumber":comingID,
+                  "idNumber":comingIdNumber
                 };
-                userAccount.updateUser({ idNumber:comingID},editedUser,function(result){
+                userAccount.updateUser({ userId:comingUserId},editedUser,function(result){
 
                   res.redirect('/users');
                 });
@@ -565,8 +606,8 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                userAccount.getUser({email:decoded.email},function(result){
-                  var data = {userData:result[0]};
+                userAccount.getUser({userId:decoded.userId},function(result){
+                  var data = {userData:result[0],loggedIn:true};
                   userAccount.getUsers({admin:false},function(results) {
                    data['users']=results;
                    res.render('timeSheet',data);
@@ -589,8 +630,8 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                userAccount.getUser({email:decoded.email},function(result){
-                  var userInfo = {userData:result[0]};
+                userAccount.getUser({userId:decoded.userId},function(result){
+                  var userInfo = {userData:result[0],loggedIn:true};
                   userAccount.getUsers({},function(results) {
                    userInfo['users']=results;
                    res.render('helpSupport',userInfo);

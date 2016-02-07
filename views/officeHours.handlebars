@@ -1,21 +1,127 @@
 <div>
-  <h1>View {{ systemData.currentMonth}}'s Availability</h1>
-  {{#each systemData.month.week}}
-  <div class="week">
-    <div class="day">
-      <span>{{systemData.dayName}} &nbsp; {{systemData.dayDate}}</span>
-      {{#each systemData.dayShifts}}
-        <div class="shift">
-          <span>{{systemData.startTime}} &nbsp; {{systemData.endTime}}</span>
-        </div>
-      {{/each}}
-    </div>
-  </div>
-  {{/each}}
-
   {{#if userData.admin}}
-  <a href="/editshifts" class="blue_button">Edit Shifts</a>
+  <h1>Manage {{ officeHours.currentMonth}}'s Office Hours</h1>
+  <!-- Start Month -->
+  <div class="month">
+      <!-- Start Week 1 -->
+      <div class="week">
+          <h2>Week 1</h2>
+          <!-- Start Days -->
+          <div class="days">
+            <!-- Start Tuesday -->
+            <div class="day">
+              <h3>Tuesday &nbsp; {{ officeHours.weeks.week1.Tuesday.date}}</h3>
+              <!-- Start Shifts -->
+              <div class="shifts">
+                <!-- Start ShiftType -->
+                <div class="shiftType">
+                  <h4> 10AM-1PM</h4>
+                    {{#each officeHours.weeks.week1.Tuesday.shifts.10AM-1PM}}
+                      <div class="tutorShift">
+                        <div class="shift">
+                          {{this.tutorName}}
+                          <a href="/denyshift">Deny</a>
+                          <a href="/acceptshift">Accept</a>
+                        </div>
+                      </div>
+                    {{/each}}
+                </div>
+                <!-- End ShiftType -->
+                <!-- Start ShiftType -->
+                <div class="shiftType">
+                  <h4> 1PM-4PM</h4>
+                  {{#each officeHours.weeks.week1.Tuesday.shifts.1PM-4PM}}
+                    <div class="tutorShift">
+                      <div class="">
+                        {{this.tutorName}}
+                        <a href="/denyshift">Deny</a>
+                        <a href="/acceptshift">Accept</a>
+                      </div>
+                    </div>
+                  {{/each}}
+                </div>
+                <!-- End ShiftType -->
+              </div>
+              <!-- End Shifts -->
+            </div>
+            <!-- End Tuesday -->
+            <!-- Start Friday -->
+            <div class="day">
+              <h3>Friday &nbsp; {{ officeHours.weeks.week1.Friday.date}}</h3>
+              <!-- Start Shifts -->
+              <div class="shifts">
+                <!-- Start ShiftType -->
+                <div class="shiftType">
+                  <h4> 10AM-1PM</h4>
+                    {{#each officeHours.weeks.week1.Friday.shifts.10AM-1PM}}
+                      <div class="tutorShift">
+                        <div class="shift">
+                          {{this.tutorName}}
+                          <a href="/denyshift">Deny</a>
+                          <a href="/acceptshift">Accept</a>
+                        </div>
+                      </div>
+                    {{/each}}
+                </div>
+                <!-- End ShiftType -->
+                <!-- Start ShiftType -->
+                <div class="shiftType">
+                  <h4> 1PM-4PM</h4>
+                  {{#each officeHours.weeks.week1.Friday.shifts.1PM-4PM}}
+                    <div class="tutorShift">
+                      <div class="">
+                        {{this.tutorName}}
+                        <a href="/denyshift">Deny</a>
+                        <a href="/acceptshift">Accept</a>
+                      </div>
+                    </div>
+                  {{/each}}
+                </div>
+                <!-- End ShiftType -->
+              </div>
+              <!-- End Shifts -->
+            </div>
+            <!-- End Friday -->
+          </div>
+          <!-- End Days -->
+      </div>
+      <!-- End Week 1 -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      <div class="week">{{ officeHours.weeks.week2}}</div>
+      <div class="week">{{ officeHours.weeks.week3}}</div>
+      <div class="week">{{ officeHours.weeks.week4}}</div>
+  </div>
+  <!-- End Month -->
+  {{!-- Start Tutor Side --}}
   {{else}}
+  <h1>View {{ officeHours.currentMonth}}'s Office Hours</h1>
+  {{#each officeHours.weeks}}
+    <div class="week">
+        <div class="day">{{this.week1}}</div>
+        <div class="day">{{this.week2}}</div>
+    </div>
+  {{/each}}
   <a href="/requestshift" class="blue_button">Request Shift</a>
   {{/if}}
 </div>

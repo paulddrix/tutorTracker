@@ -133,7 +133,19 @@ BELOWNAV
   width:98%;
   margin: 8% 1.5%;
 }
-
+/*
+INPUTS
+*/
+label{
+	background-color: $black;
+	color:$white;
+	padding: 12px;
+}
+input{
+	margin-left: -5px;
+	padding:10px;
+	border: solid $black 2px;
+}
 /*
 CONTENT STYLES
 */
@@ -146,6 +158,7 @@ BUTTONS
 button{
 	padding: 10px;
 	border: none;
+	color:$white;
 	background-color:$coolBlue;
 }
 /*

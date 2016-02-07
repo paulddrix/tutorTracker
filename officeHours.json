@@ -1,0 +1,148 @@
+{
+	"currentMonth":"February",
+	"weeks":{
+		"week1":{
+			"Tuesday":{
+				"date":"02/02/2016",
+				"shifts":{
+					"10AM-1PM":[
+						{"tutorName":"Daniela Sora","status":"approved"},
+						{"tutorName":"Orlando Rodriguez"}
+					],
+					"1PM-4PM":[
+						{"tutorName":"Daniela Sora"},
+						{"tutorName":"Orlando Rodriguez"}
+					]
+				}
+			},
+			"Friday":{
+				"date":"02/15/2016",
+				"shifts":{
+					"10AM-1PM":[
+						{"tutorName":"Vinnie Zullo"},
+						{"tutorName":"Daniela Sora"},
+						{"tutorName":"Billye Sands"},
+						{"tutorName":"Nicolas Anderson"}
+					],
+					"1PM-4PM":[
+						{"tutorName":"Vinnie Zullo"},
+						{"tutorName":"Daniela Sora"},
+						{"tutorName":"Nick DeChurch"},
+						{"tutorName":"Nicolas Anderson"},
+						{"tutorName":"Marlon Castro"}
+					]
+				}
+			}
+		},
+		"week2":{
+			"Tuesday":{
+				"date":"02/09/2016",
+				"shifts":{
+					"10AM-1PM":[
+						{"tutorName":"Daniela Sora"},
+						{"tutorName":"Orlando Rodriguez"},
+						{"tutorName":"Pamela Varela"}
+					],
+					"1PM-4PM":[
+						{"tutorName":"Daniela Sora"},
+						{"tutorName":"Nick DeChurch"},
+						{"tutorName":"Orlando Rodriguez"},
+						{"tutorName":"Pamela Varela"}
+					]
+				}
+			},
+			"Friday":{
+				"date":"02/12/2016",
+				"shifts":{
+					"10AM-1PM":[
+						{"tutorName":"Billye Sands"},
+						{"tutorName":"Nicolas Anderson"},
+						{"tutorName":"Billye Sands"},
+						{"tutorName":"Marlon Castro"},
+						{"tutorName":"Brittany Black"}
+					],
+					"1PM-4PM":[
+						{"tutorName":"Nick DeChurch"},
+						{"tutorName":"Nicolas Anderson"},
+						{"tutorName":"Marlon Castro"},
+						{"tutorName":"Brittany Black"},
+						{"tutorName":"Pamela Varela"},
+					]
+				}
+			}
+		},
+		"week3":{
+			"Tuesday":{
+				"date":"02/16/2016",
+				"shifts":{
+					"10AM-1PM":[
+						{"tutorName":"Orlando Rodriguez"},
+						{"tutorName":"Brittany Black"}
+					],
+					"1PM-4PM":[
+						{"tutorName":"Nick DeChurch"},
+						{"tutorName":"Orlando Rodriguez"},
+						{"tutorName":"Brittany Black"},
+						{"tutorName":"Zac Sewell"},
+					]
+				}
+			},
+			"Friday":{
+				"date":"02/19/2016",
+				"shifts":{
+					"10AM-1PM":[
+						{"tutorName":"Billye Sands"},
+						{"tutorName":"Nicolas Anderson"},
+						{"tutorName":"Marlon Castro"},
+						{"tutorName":"Brittany Black"}
+					],
+					"1PM-4PM":[
+						{"tutorName":"Nick DeChurch"},
+						{"tutorName":"Nicolas Anderson"},
+						{"tutorName":"Marlon Castro"},
+						{"tutorName":"Zac Sewell"},
+						{"tutorName":"Pamela Varela"}
+					]
+				}
+			}
+		},
+		"week4":{
+			"Tuesday":{
+				"date":"02/23/2016",
+				"shifts":{
+					"10AM-1PM":[
+						{"tutorName":"Daniela Sora"},
+						{"tutorName":"Orlando Rodriguez"},
+						{"tutorName":"Brittany Black"}
+					],
+					"1PM-4PM":[
+						{"tutorName":"Daniela Sora"},
+						{"tutorName":"Nick DeChurch"},
+						{"tutorName":"Orlando Rodriguez"},
+						{"tutorName":"Brittany Black"},
+						{"tutorName":"Zac Sewell"}
+					]
+				}
+			},
+			"Friday":{
+				"date":"02/26/2016",
+				"shifts":{
+					"10AM-1PM":[
+						{"tutorName":"Daniela Sora"},
+						{"tutorName":"Billye Sands"},
+						{"tutorName":"Brittany Black"},
+						{"tutorName":"Nicolas Anderson"}
+					],
+					"1PM-4PM":[
+						{"tutorName":"Daniela Sora"},
+						{"tutorName":"Nick DeChurch"},
+						{"tutorName":"Brittany Black"},
+						{"tutorName":"Zac Sewell"},
+						{"tutorName":"Nicolas Anderson"},
+						{"tutorName":"Pamela Varela"}
+					]
+				}
+			}
+		}
+	}
+}

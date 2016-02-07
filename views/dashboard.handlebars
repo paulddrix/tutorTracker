@@ -1,25 +1,87 @@
 <div>
   {{#if userData.admin}}
-  <h1>Shift Requests</h1>
-  <ul class="customList">
-    {{#each systemData.shiftRequests}}
-    <li><b>Name</b>&nbsp; {{this.firstName}}&nbsp;{{this.lastName}}&nbsp;<b>Date&nbsp;{{this.date}}</b></li>
-    {{/each}}
-  </ul>
-  <a href="/addtutorrequest" class="blue_button">Add Tutor Request</a>
+    <div>
+      <h1>Search Eligible Tutors</h1>
+      <p>
+        <label for="courseName">Course Name</label>
+        <input type="text" name="courseName" id="courseName">
+        <button type="button" id="searchCourses">Search Course</button>
+      </p>
+      <div id="courseSearchRes">
+
+      </div>
+    </div>
+    <div>
+      <h1>Add Tutor Request</h1>
+      <form action="/addtutorrequesthandler" method="post">
+        <p>
+          <label for="fName">First Name</label>
+          <input type="text" name="firstName" id="fName" required="required">
+        </p>
+        <p>
+          <label for="lName">Last Name</label>
+          <input type="text" name="lastName" id="lName" required="required">
+        </p>
+        <p>
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" size="30" required="required">
+        </p>
+        <p>
+          <label for="phone">Phone</label>
+          <input type="text" min="10" name="phone" id="phone" required="required">
+        </p>
+
+        <p>
+          <label for="degree">Degree</label>
+          <select name="degree" required="required" id="degree">
+            <option value="false">Select a Degree</option>
+            <option value="Digital Arts &amp; Design">Digital Arts &amp; Design</option>
+            <option value="Game Development">Game Development</option>
+            <option value="Game Art">Game Art</option>
+            <option value="Computer Animation">Computer Animation</option>
+            <option value="Web Design &amp; Development">Web Design &amp; Development</option>
+            <option value="Show Production">Show Production</option>
+            <option value="Recording Arts">Recording Arts</option>
+            <option value="Music Production">Music Production</option>
+            <option value="Music Business">Music Business</option>
+            <option value="Film">Film</option>
+            <option value="Simuation &amp; Visualization">Simuation &amp; Visualization</option>
+            <option value="Mobile Development">Mobile Development</option>
+            <option value="Software Development">Software Development</option>
+          </select>
+        </p>
+        <p>
+          <label for="course">Course to Tutor</label>
+          <select name="courseToTutor" required="required" id="degree">
+            <option value="false">Select a Course</option>
+            {{#each courseList}}
+            <option value="{{this.courseName}}">{{this.courseName}}</option>
+            {{/each}}
+          </select>
+        </p>
+        <p>
+          <label for="program">Program Type</label>
+          <select name="program">
+            <option value="false">Select a Program Type</option>
+            <option value="Online">Online</option>
+            <option value="Campus">Campus</option>
+          </select>
+        </p>
+        <p>
+          <label for="assignTutor">Assign Tutor</label>
+          <select name="assignTutor" required="required" id="assignTutor">
+            <option value="false">Select a Tutor</option>
+            {{#each tutorList}}
+            <option value="{{this.userId}}">{{this.firstName}}&nbsp;{{this.lastName}}</option>
+            {{/each}}
+          </select>
+        </p>
+        <button type="submit" class="blue_button">Add Tutor Request</button>
+      </form>
+      </div>
+
   {{!-- Start Tutor Side --}}
   {{else}}
-  <div class="scheOff customList">
-    <h1>Scheduled Office Hours</h1>
-
-      {{#if userData.scheduledOfficeHours}}
-      {{#each userData.scheduledOfficeHours}}
-    	<li>{{ this.date }} &nbsp;</b>{{ this.startTime }}</li>
-      {{/each}}
-      {{else}}
-        <span>There are no scheduled shifts.</span>
-      {{/if}}
-  </div>
   <div class="totalHours">
     <h1>Monthly Total Hours</h1>
       {{#if userData.monthlyTotalHours}}
@@ -32,7 +94,7 @@
     <h1>Requested Help</h1>
     {{#if userData.studentsToTutor}}
     {{#each userData.studentsToTutor}}
-    <li><b>Name</b>&nbsp;{{ this.firstName }}&nbsp;{{ this.lastName }} &nbsp;<b>Email</b>&nbsp;{{ this.email }}</li>
+    <a href="/tutorrequest/{{this._id}}"><li><b>Name</b>&nbsp;{{ this.firstName }}&nbsp;{{ this.lastName }} &nbsp;<b>Email</b>&nbsp;{{ this.email }}</li></a>
     {{/each}}
     {{else}}
       <span>You have no students to tutor.</span>

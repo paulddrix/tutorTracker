@@ -448,7 +448,7 @@ Stylesheet: Base Mobile Stylesheet
 GENERAL STYLES
 */
 body {
-  font-family: "Source Sans Pro", sans-serif;
+  font-family: "Open Sans", sans-serif;
   font-size: 100%;
   line-height: 1.5;
   background-color: #EBEBEB; }
@@ -556,6 +556,19 @@ BELOWNAV
   margin: 8% 1.5%; }
 
 /*
+INPUTS
+*/
+label {
+  background-color: #1B212F;
+  color: #EBEBEB;
+  padding: 12px; }
+
+input {
+  margin-left: -5px;
+  padding: 10px;
+  border: solid #1B212F 2px; }
+
+/*
 CONTENT STYLES
 */
 #leftPanel {
@@ -567,6 +580,7 @@ BUTTONS
 button {
   padding: 10px;
   border: none;
+  color: #EBEBEB;
   background-color: #208A87; }
 
 /*

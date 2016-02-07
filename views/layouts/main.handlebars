@@ -5,7 +5,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
  <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700' rel='stylesheet' type='text/css'>
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.2/angular.min.js">
+  <!-- <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0-beta.2/angular.min.js"> -->
   <title>Tutor Tracker</title>
   <link rel="stylesheet" type="text/css" href="/css/main.css">
   <link rel="shortcut icon" type="image/vnd.microsoft.icon" href="/images/fav.ico">
@@ -14,17 +14,18 @@
   <div id="wrapper">
 	   <nav>
 		  <a href="/">Tutor Tracker</a>
-      {{#if userData}}
+      {{#if loggedIn}}
       <a href="/profile">Profile</a>
       <a href="/timesheet">Time Sheet</a>
       <a href="/users">Users</a>
       <a href="/officehours">Office Hours</a>
       <a href="#menu">
+        Menu
         <svg viewBox="0 0 50.1 30.5" height="30" fill="#EBEBEB">
           <rect x="5.1" y="3.1" width="40" height="4.4"/>
           <rect x="5.1" y="13.1" width="40" height="4.4"/>
           <rect x="5.1" y="23.1" width="40" height="4.4"/>
-        </svg>Menu</a>
+        </svg></a>
       {{/if}}
 	   </nav>
 
@@ -34,6 +35,6 @@
 
   </div>
     <footer><a href="/helpSupport">Help &amp; Support</a></footer>
-    <script src="/js/adminApp.js"></script>
+    <script src="/js/tutorApp.js"></script>
 </body>
 </html>
