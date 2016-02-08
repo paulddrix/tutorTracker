@@ -359,9 +359,9 @@ var bodyParser =  require('body-parser'),
     });
 
     // =-=-=-=-=-=-=-=-=-=-=-=-=-=-= USERS > PROFILE =-=-=-=-=-=-=-=-=-=-=-=-=-=
-    app.get('/userprofiles/:idNumber',function(req,res) {
+    app.get('/userprofiles/:userId',function(req,res) {
       //making idNumber an integer
-      var incomingNumber = parseInt(req.params.idNumber);
+      var incomingNumber = parseInt(req.params.userId);
       if(req.cookies.auth === undefined){
         res.redirect('/login');
       }
@@ -375,7 +375,7 @@ var bodyParser =  require('body-parser'),
                 res.redirect('/login');
               }
               else if(decoded['iss'] === "system"){
-                userAccount.getUser({idNumber:incomingNumber},function(result) {
+                userAccount.getUser({userId:incomingNumber},function(result) {
                 var data={loggedIn:true};
                  data['userProfile']=result[0];
                  res.render('userDetails',data);

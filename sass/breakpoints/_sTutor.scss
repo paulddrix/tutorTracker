@@ -9,11 +9,10 @@ NAVIGATION STYLES
 nav a:nth-of-type(n+2){
 	display:none;
 }
-nav span{
-	a[href="#menu"]{
+nav{
+	span{
 		display: block;
 	}
-  display: block;
 }
 
 /* BelowNav */
