@@ -1,17 +1,24 @@
 <div>
   {{#if userData.admin}}
     <div>
-      <h1>Search Eligible Tutors</h1>
-      <p>
-        <label for="courseName">Course Name</label>
-        <input type="text" name="courseName" id="courseName">
-        <button type="button" id="searchCourses">Search Course</button>
-      </p>
-      <div id="courseSearchRes">
+      <p>Search Eligible Tutors</p>
+      <div class="float-clear">
+        <input type="text" class="float-left" name="courseName" id="courseName" placeholder="Course Name">
+        <div id="searchCourses" class="float-left">
+          <svg viewBox="0 0 46.5 46.5" width="25" fill="#EBEBEB">
+            <path d="M17.9,32.5c-3.9,0-7.6-1.5-10.3-4.3s-4.3-6.4-4.3-10.3s1.5-7.6,4.3-10.3c2.8-2.8,6.4-4.3,10.3-4.3s7.6,1.5,10.3,4.3
+            c5.7,5.7,5.7,15,0,20.7C25.4,31,21.8,32.5,17.9,32.5z M17.9,5.7c-3.2,0-6.3,1.3-8.6,3.6c-2.3,2.3-3.6,5.3-3.6,8.6s1.3,6.3,3.6,8.6
+            c2.3,2.3,5.3,3.6,8.6,3.6s6.3-1.3,8.6-3.6c4.7-4.7,4.7-12.5,0-17.2C24.2,7,21.1,5.7,17.9,5.7z
+            M42,43.3c-0.3,0-0.6-0.1-0.9-0.4L26.5,28.2c-0.5-0.5-0.5-1.3,0-1.7c0.5-0.5,1.3-0.5,1.7,0l14.7,14.7c0.5,0.5,0.5,1.3,0,1.7
+            C42.7,43.2,42.4,43.3,42,43.3z"/>
+          </svg>
+        </div>
+      </div>
+      <div id="courseSearchRes" class="float-clear">
 
       </div>
     </div>
-    <div>
+    <div class="float-clear">
       <h1>Add Tutor Request</h1>
       <form action="/addtutorrequesthandler" method="post">
         <p>
@@ -76,7 +83,11 @@
             {{/each}}
           </select>
         </p>
-        <button type="submit" class="blue_button">Add Tutor Request</button>
+        <button type="submit" class="blue_button">
+           <svg viewBox="0 0 46.5 46.5" height="20" fill="#EBEBEB">
+             <path d="M42.4,21.7H24.3V3.6c0-0.6-0.5-1-1-1c-0.6,0-1,0.5-1,1v18.1H4.2c-0.6,0-1,0.5-1,1s0.5,1,1,1h18.1v18c0,0.6,0.5,1,1,1
+	c0.6,0,1-0.5,1-1v-18h18c0.6,0,1-0.5,1-1S43,21.7,42.4,21.7z"/>
+            </svg>Add Tutor Request</button>
       </form>
       </div>
 
@@ -93,9 +104,19 @@
   <div class="reqHelp customList">
     <h1>Requested Help</h1>
     {{#if userData.studentsToTutor}}
+    <div class="listCont">
     {{#each userData.studentsToTutor}}
-    <a href="/tutorrequest/{{this._id}}"><li><b>Name</b>&nbsp;{{ this.firstName }}&nbsp;{{ this.lastName }} &nbsp;<b>Email</b>&nbsp;{{ this.email }}</li></a>
+      <a href="/tutorrequest/{{this._id}}" class="userLi float-left">
+        <div class="float-left">
+          <b>Name&nbsp;</b>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
+          {{#if this.degree}}
+          <b>Course to Tutor&nbsp;</b> {{this.courseToTutor}} &nbsp;
+          {{/if}}
+        </div>
+      </a>
+
     {{/each}}
+    </div>
     {{else}}
       <span>You have no students to tutor.</span>
     {{/if}}

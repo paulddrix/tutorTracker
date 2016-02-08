@@ -448,6 +448,7 @@ Stylesheet: Base Mobile Stylesheet
 GENERAL STYLES
 */
 body {
+  color: #666;
   font-family: "Open Sans", sans-serif;
   font-size: 100%;
   line-height: 1.5;
@@ -455,72 +456,50 @@ body {
 
 #wrapper {
   max-width: 1038px;
-  margin: 0 auto; }
+  margin: 0 auto;
+  clear: both; }
 
-/*
-H1, H2, H3, H4, H5 STYLES
-*/
-h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5 {
-  /*color:$coolBlue;*/
-  font-weight: 500;
-  /*
-  if you're going to use webfonts, be sure to check your weights
-  http://css-tricks.com/watch-your-font-weight/
-  */
-  /* removing text decoration from all headline links */ }
-  h1 a, .h1 a, h2 a, .h2 a, h3 a, .h3 a, h4 a, .h4 a, h5 a, .h5 a {
-    text-decoration: none; }
-
-h1, .h1 {
-  font-size: 2.5em;
-  line-height: 1.333em; }
-
-h2, .h2 {
-  font-size: 1.75em;
-  line-height: 1.4em;
-  margin-bottom: 0.375em; }
-
-h3, .h3 {
-  font-size: 1.125em; }
-
-h4, .h4 {
-  font-size: 1.1em;
-  font-weight: 700; }
-
-h5, .h5 {
-  font-size: 0.846em;
-  line-height: 2.09em;
-  text-transform: uppercase;
-  letter-spacing: 2px; }
+h1, h2, h3, h4, h5 {
+  font-weight: initial; }
 
 /*
 NAVIGATION STYLES
 **/
 nav {
+  line-height: 58px;
+  height: 58px;
+  clear: both;
   width: 100%;
   overflow: hidden;
   position: fixed;
   top: 0;
   left: 0;
-  background-color: #FF6500; }
-  nav a[href="#menu"] {
-    display: none; }
+  background-color: #314756; }
+  nav a[href='/users'] {
+    width: 9%; }
   nav a {
+    margin-left: 3%;
     float: right;
-    width: 15%;
-    text-align: center;
+    width: 11%;
     margin: 0;
-    display: block;
-    line-height: 58px;
-    height: 58px;
+    vertical-align: middle;
+    display: inline-block;
     text-decoration: none;
     color: #EBEBEB; }
+    nav a svg {
+      margin: 13px 6px 0 19px;
+      float: left;
+      height: 30px; }
+    nav a span {
+      display: block; }
     nav a:link, nav a:visited {
       color: #EBEBEB; }
     nav a:hover {
-      background-color: #F97932;
+      border-bottom: solid #FF6500 1px;
       cursor: pointer;
-      color: #1B212F; }
+      color: #FF6500; }
+      nav a:hover svg {
+        fill: #FF6500; }
   nav a:first-child {
     float: left;
     width: 258px;
@@ -547,13 +526,19 @@ div[id="mobileNav"] {
     div[id="mobileNav"] a:hover {
       color: #1FDB1F; }
 
+.activeNav svg path {
+  fill: #FF6500; }
+.activeNav span {
+  color: #FF6500; }
+
 /*
 BELOWNAV
 */
 #belowNav {
   max-width: 1338px;
   width: 98%;
-  margin: 8% 1.5%; }
+  margin: 8% 1.5%;
+  clear: both; }
 
 /*
 INPUTS
@@ -574,6 +559,17 @@ CONTENT STYLES
 #leftPanel {
   background-color: #FF6500; }
 
+#searchCourses {
+  background-color: #208A87;
+  padding: 10px;
+  width: 46px;
+  height: 42px; }
+  #searchCourses:hover {
+    cursor: pointer; }
+
+#courseSearchRes {
+  padding-top: 1px; }
+
 /*
 BUTTONS
 */
@@ -584,48 +580,60 @@ button {
   background-color: #208A87; }
 
 /*
-BLUE BUTTON
+LINK BUTTON
 */
-.blue_button {
+.button {
   text-align: center;
-  display: block;
-  padding: 10px;
-  border: none;
-  text-decoration: none;
   width: 120px;
+  text-decoration: none;
+  display: block;
+  padding: 8px;
+  border: none;
+  margin: 2px 10px 0 0; }
+
+/*
+aquarius BUTTON
+*/
+.aquarius {
   background-color: #208A87;
   color: #EBEBEB; }
 
 /*
 ORANGE BUTTON
 */
-.orange_button {
-  text-align: center;
-  width: 120px;
-  text-decoration: none;
-  display: block;
-  padding: 10px;
-  border: none;
+.fsorange {
   background-color: #FF6500;
   color: #EBEBEB; }
 
 /*
 USERS LIST
 */
-.customList li {
-  list-style-type: none;
-  background-color: #EAEDB4;
+.listCont {
+  clear: both;
+  overflow: hidden; }
+
+.userLi {
+  clear: both;
+  display: block;
+  width: 98%;
   padding: 10px;
-  margin: 5px; }
-.customList a {
-  text-decoration: none;
+  color: #1B212F;
+  overflow: hidden;
+  border-top: solid #b8c4c4 2px; }
+  .userLi:hover {
+    background-color: #E0E0E0; }
+  .userLi:nth-of-type(1) {
+    border-top: none; }
+
+.text-wrap {
+  line-height: 2.5em;
   color: #1B212F; }
 
 /*
 FOOTER
 */
 footer {
-  background-color: #FF6500;
+  background-color: #484f59;
   text-align: center; }
   footer a {
     text-decoration: none;
@@ -633,6 +641,15 @@ footer {
     footer a:hover {
       color: #1B212F;
       text-decoration: underline; }
+
+.float-left {
+  float: left; }
+
+.float-right {
+  float: right; }
+
+.float-clear {
+  clear: both; }
 
 @media only screen and (min-width: 320px) and (max-width: 490px) {
   /*
@@ -647,8 +664,6 @@ footer {
 
   nav span {
     display: block; }
-    nav span a[href="#menu"] {
-      display: block; }
 
   /* BelowNav */
   #belowNav {
@@ -693,11 +708,10 @@ footer {
   /*
   NAGIVATION
   */
-  nav a {
-    width: 18.2%; }
-
   nav span {
-    display: none; } }
+    display: none; }
+  nav a {
+    width: 18.2%; } }
 @media only screen and (min-width: 1025px) {
   /*
   Stylesheet: min 1025px

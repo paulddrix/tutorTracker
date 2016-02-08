@@ -5,6 +5,7 @@ Stylesheet: Base Mobile Stylesheet
 GENERAL STYLES
 */
 body {
+	color: #666;
 	font-family:$base-font-family;
 	font-size: 100%;
 	line-height: 1.5;
@@ -14,83 +15,56 @@ body {
 #wrapper{
 max-width: 1038px;
 margin: 0 auto;
+clear: both;
 }
 
-/*
-H1, H2, H3, H4, H5 STYLES
-*/
-
-h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5 {
-	/*color:$coolBlue;*/
-	font-weight: 500;
-	/*
-	if you're going to use webfonts, be sure to check your weights
-	http://css-tricks.com/watch-your-font-weight/
-	*/
-
-	/* removing text decoration from all headline links */
-	a {
-		text-decoration: none;
-	}
+h1,h2,h3,h4,h5{
+	font-weight: initial;
 }
-
-h1, .h1 {
-	font-size: 2.5em;
-	line-height: 1.333em;
-}
-
-h2, .h2 {
-	font-size: 1.75em;
-	line-height: 1.4em;
-	margin-bottom: 0.375em;
-}
-
-h3, .h3 {
-	font-size: 1.125em;
-}
-
-h4, .h4 {
-	font-size: 1.1em;
-	font-weight: 700;
-}
-
-h5, .h5 {
-	font-size: 0.846em;
-	line-height: 2.09em;
-	text-transform: uppercase;
-	letter-spacing: 2px;
-}
-
 /*
 NAVIGATION STYLES
 **/
 nav{
+	line-height: 58px;
+	height: 58px;
+	clear: both;
   width: 100%;
   overflow: hidden;
   position: fixed;
   top: 0;
   left:0;
-  background-color: $orange;
-	a[href="#menu"]{
-		display: none;
+  background-color: $coolBlue;
+	a[href='/users']{
+		width: 9%;
 	}
   a{
+		svg{
+			margin: 13px 6px 0 19px;
+			float:left;
+			height:30px;
+
+		}
+		span{
+			display: block;
+		}
+		margin-left: 3%;
     float:right;
-    width: 15%;
-    text-align:center;
+    width: 11%;
     margin: 0;
-    display: block;
-    line-height: 58px;
-    height: 58px;
+		vertical-align:middle;
+    display: inline-block;
     text-decoration: none;
     color:$white;
     &:link, &:visited {
       color:$white;
     }
     &:hover{
-			background-color: #F97932;
+			svg{
+				fill:$orange;
+			}
+			border-bottom:solid $orange 1px;
       cursor: pointer;
-      color: $black;
+      color: $orange;
     }
   }
   a:first-child{
@@ -117,13 +91,19 @@ nav{
     line-height: 58px;
     height: 58px;
     display: block;
-    &:link, &:visited {
-
-    }
     &:hover{
       color: #1FDB1F;
     }
   }
+}
+.activeNav{
+	svg path{
+		fill:$orange;
+	}
+	span{
+		color:$orange;
+	}
+
 }
 /*
 BELOWNAV
@@ -132,6 +112,7 @@ BELOWNAV
   max-width:1338px ;
   width:98%;
   margin: 8% 1.5%;
+	clear: both;
 }
 /*
 INPUTS
@@ -152,6 +133,18 @@ CONTENT STYLES
 #leftPanel{
   background-color: $orange;
 }
+#searchCourses{
+	background-color: $aquarius;
+	padding: 10px;
+	width: 46px;
+	height: 42px;
+	&:hover{
+		cursor: pointer;
+	}
+}
+#courseSearchRes{
+	padding-top: 1px;
+}
 /*
 BUTTONS
 */
@@ -159,54 +152,66 @@ button{
 	padding: 10px;
 	border: none;
 	color:$white;
-	background-color:$coolBlue;
+	background-color:$aquarius;
 }
 /*
-BLUE BUTTON
+LINK BUTTON
 */
-.blue_button{
+.button{
 	text-align: center;
-	display: block;
-	padding: 10px;
-	border: none;
-	text-decoration: none;
 	width: 120px;
-	background-color:$coolBlue;
+	text-decoration: none;
+	display: block;
+	padding: 8px;
+	border: none;
+	margin: 2px 10px 0 0;
+}
+/*
+aquarius BUTTON
+*/
+.aquarius{
+	background-color:$aquarius;
 	color:$white;
 }
 /*
 ORANGE BUTTON
 */
-.orange_button{
-	text-align: center;
-	width: 120px;
-	text-decoration: none;
-	display: block;
-	padding: 10px;
-	border: none;
+.fsorange{
 	background-color:$orange;
 	color:$white;
 }
 /*
 USERS LIST
 */
-.customList{
-	li{
-		list-style-type: none;
-		background-color: $pastel;
-		padding: 10px;
-		margin:5px;
+.listCont{
+	clear: both;
+	overflow: hidden;
+}
+.userLi{
+	clear: both;
+	display: block;
+	width: 98%;
+	padding: 10px;
+	color: $black;
+	overflow: hidden;
+	border-top: solid #b8c4c4 2px;
+	&:hover{
+		background-color: $list-line;
 	}
-	a{
-		text-decoration: none;
-		color:$black;
+	&:nth-of-type(1){
+		border-top: none;
 	}
+}
+
+.text-wrap{
+	line-height: 2.5em;
+	color: $black;
 }
 /*
 FOOTER
 */
 footer{
-	background-color: $orange;
+	background-color: $purple-grey;
 	text-align: center;
 	a{
 		text-decoration: none;
@@ -216,4 +221,14 @@ footer{
 			text-decoration: underline;
 		}
 	}
+}
+
+.float-left{
+	float: left;
+}
+.float-right{
+	float: right;
+}
+.float-clear{
+	clear: both;
 }
