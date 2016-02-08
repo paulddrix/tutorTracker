@@ -526,6 +526,11 @@ div[id="mobileNav"] {
     div[id="mobileNav"] a:hover {
       color: #1FDB1F; }
 
+.activeNav svg path {
+  fill: #FF6500; }
+.activeNav span {
+  color: #FF6500; }
+
 /*
 BELOWNAV
 */

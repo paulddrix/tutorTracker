@@ -91,13 +91,19 @@ nav{
     line-height: 58px;
     height: 58px;
     display: block;
-    &:link, &:visited {
-
-    }
     &:hover{
       color: #1FDB1F;
     }
   }
+}
+.activeNav{
+	svg path{
+		fill:$orange;
+	}
+	span{
+		color:$orange;
+	}
+
 }
 /*
 BELOWNAV
