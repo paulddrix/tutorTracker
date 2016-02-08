@@ -1,6 +1,9 @@
 <div>
 	<h1>Users</h1>
 	{{#if userData.admin}}
+	<p>
+		Click on a user's name to view details
+	</p>
   <a href="/users/adduser" class="button aquarius">Add User</a>
 	<br/>
 	<div class="listCont">
@@ -25,6 +28,9 @@
 		{{/each}}
 	</div>
   {{else}}
+	<p>
+		Click on a user to view details.
+	</p>
 	<div class="listCont">
 	{{#each users}}
 		<a href="users/userprofiles/{{userId}}" class="userLi float-left">

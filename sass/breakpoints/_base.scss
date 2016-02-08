@@ -213,11 +213,12 @@ FOOTER
 footer{
 	background-color: $purple-grey;
 	text-align: center;
+	color: $white;
 	a{
 		text-decoration: none;
 		color:$white;
 		&:hover{
-			color:$black;
+			color:$orange;
 			text-decoration: underline;
 		}
 	}

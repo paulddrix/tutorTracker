@@ -652,7 +652,7 @@ module.exports = function(app) {
       jwt.verify(req.cookies.auth, cert, function(err, decoded){
         console.log('decoded jwt',decoded);
         if(decoded == undefined){
-          res.redirect('/login');
+          res.render('helpSupport');
         }
         else if(decoded['iss'] === "system"){
           userAccount.getUser({userId:decoded.userId},function(result){
@@ -665,7 +665,7 @@ module.exports = function(app) {
         }
       });
     }
-    else if(req.cookies.auth === undefined){
+    else{
       res.render('helpSupport');
     }
   });

@@ -634,12 +634,13 @@ FOOTER
 */
 footer {
   background-color: #484f59;
-  text-align: center; }
+  text-align: center;
+  color: #EBEBEB; }
   footer a {
     text-decoration: none;
     color: #EBEBEB; }
     footer a:hover {
-      color: #1B212F;
+      color: #FF6500;
       text-decoration: underline; }
 
 .float-left {
