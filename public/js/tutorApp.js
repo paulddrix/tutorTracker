@@ -12,7 +12,7 @@
 		    if (xhttp.readyState == 4 && xhttp.status == 200) {
 					console.log(xhttp);
 					var response = JSON.parse(xhttp.responseText);
-					var resultsHtml ='<ul class="customList">';
+					var resultsHtml ='<ul class="userLi">';
 					for (var i = 0; i < response.length; i++) {
 						resultsHtml+= "<li><b>Name</b>&nbsp;"+response[i]['firstName']+" "+ response[i]['lastName'] +" "+ " <b>Total Hours </b>" +response[i]['monthlyTotalHours'] +"</li>";
 					}
