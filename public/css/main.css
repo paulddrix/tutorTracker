@@ -448,7 +448,6 @@ Stylesheet: Base Mobile Stylesheet
 GENERAL STYLES
 */
 body {
-  color: #666;
   font-family: "Open Sans", sans-serif;
   font-size: 100%;
   line-height: 1.5;
@@ -460,6 +459,7 @@ body {
   clear: both; }
 
 h1, h2, h3, h4, h5 {
+  color: #666;
   font-weight: initial; }
 
 /*

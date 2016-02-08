@@ -1,12 +1,12 @@
 <div>
 	<h1>Users</h1>
 	{{#if userData.admin}}
-  <a href="/adduser" class="button aquarius">Add User</a>
+  <a href="/users/adduser" class="button aquarius">Add User</a>
 	<br/>
 	<div class="listCont">
 		{{#each users}}
 		<div class="userLi">
-			<a href="/userprofiles/{{userId}}" class="float-left">
+			<a href="/users/userprofiles/{{userId}}" class="float-left">
 				<div class="float-left text-wrap">
 					<b>Name&nbsp;</b>{{firstName}}&nbsp;{{lastName}}&nbsp;
 					{{#if this.degree}}
@@ -17,8 +17,8 @@
 					<b>Administrator&nbsp;</b>
 					{{/if}}
 				</div>
-				<a href="/deleteuserhandler/{{idNumber}}" class="button fsorange float-right">Delete</a>&nbsp;
-				<a href="/edituser/{{userId}}" class="button aquarius float-right">Edit User</a>
+				<a href="/users/deleteuserhandler/{{idNumber}}" class="button fsorange float-right">Delete</a>&nbsp;
+				<a href="/users/edituser/{{userId}}" class="button aquarius float-right">Edit User</a>
 			</a>
 		</div>
 
@@ -27,7 +27,7 @@
   {{else}}
 	<div class="listCont">
 	{{#each users}}
-		<a href="/userprofiles/{{userId}}" class="userLi float-left">
+		<a href="users/userprofiles/{{userId}}" class="userLi float-left">
 		<div class="float-left">
 			<b>Name&nbsp;</b>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
 			{{#if this.degree}}
