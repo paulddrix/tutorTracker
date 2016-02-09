@@ -643,6 +643,62 @@ module.exports = function(app) {
     }
   });
   /*
+  TIME SHEET > ADD SESSION PAGE
+  */
+  app.get('/timesheet/addsession',function(req,res) {
+    if(req.cookies.auth === undefined){
+      res.redirect('/login');
+    }
+    else{
+      // we will check if the user requesting the page is a tutor or an admin
+      // verify a token asymmetric
+      var cert = fs.readFileSync('./keys/public.pem');
+      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+        console.log('decoded jwt in timesheet',decoded);
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          userAccount.getUser({userId:decoded.userId},function(result){
+            var data = {userData:result[0],loggedIn:true};
+             res.render('addSession',data);
+          });
+        }
+      });
+    }
+  });
+  /*
+  TIME SHEET > ADD SESSION HANDLER
+  */
+  app.post('/timesheet/addsessionhandler',urlencodedParser,function(req,res){
+    console.log('req body ',req.body);
+    if(req.cookies.auth === undefined){
+      res.redirect('/login');
+    }
+    else{
+      // verify a token asymmetric
+      var cert = fs.readFileSync('./keys/public.pem');
+      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+        console.log('decoded jwt in editprofilehandler',decoded);
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          var comingUserId = parseInt(req.body.userId);
+          var sessionData = {
+            "sessionDate" : req.body.email,
+            "sessionStartTime" : req.body.password,
+            "sessionEndTime" : req.body.degree,
+            "sessionTotal":0
+          };
+          // userAccount.updateStdSessions({ userId:comingUserId},sessionData,function(result){
+          //   res.redirect('/timesheet');
+          // });
+        }
+      });
+    }
+  });
+  /*
   HELP & SUPORT
   */
   app.get('/helpSupport',function(req,res) {

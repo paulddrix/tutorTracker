@@ -1,0 +1,19 @@
+<div>
+    <h1>Add Session</h1>
+    <form action="addsessionhandler" method="post">
+      <p>
+        <label for="sessionDate">Date</label>
+        <input type="date" name="sessionDate" id="sessionDate">
+      </p>
+      <p>
+        <label for="sessionStartTime">Start Time</label>
+        <input type="time" name="sessionStartTime" id="sessionStartTime">
+      </p>
+      <p>
+        <label for="sessionEndTime">End Time</label>
+        <input type="time" name="sessionEndTime" id="sessionEndTime">
+      </p>
+      <input type="hidden" name="userId" value="{{userData.userId}}">
+      <button type="submit" class="aquarius">Add Session</button>
+    </form>
+</div>

@@ -97,7 +97,29 @@ module.exports ={
       db.close();
     });
   },
+  //update student requests
   updateStdReqs: function(query,updateInfo,callback) {
+    // Connection URL
+    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
+    // Use connect method to connect to the Server
+    MongoClient.connect(mongoUrl, function(err, db) {
+      assert.equal(null, err);
+      console.log("Connected correctly to mongodb");
+      // Get the documents collection
+      var collection = db.collection('users');
+      collection.update(query,{
+        $push: updateInfo,
+        $currentDate: { dateAdded: true }
+          }, function(err, result) {
+        callback(result);
+      });
+      //get user id and update the information coming form the form
+      //close connection
+      db.close();
+    });
+  },
+  //update tutor's sessions
+  updateStdSessions: function(query,updateInfo,callback) {
     // Connection URL
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
