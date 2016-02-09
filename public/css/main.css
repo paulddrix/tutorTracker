@@ -458,8 +458,10 @@ body {
   margin: 0 auto;
   clear: both; }
 
+h1 {
+  color: #666; }
+
 h1, h2, h3, h4, h5 {
-  color: #666;
   font-weight: initial; }
 
 /*
@@ -571,6 +573,44 @@ CONTENT STYLES
   padding-top: 1px; }
 
 /*
+OFFICE HOURS
+*/
+.week {
+  background-color: #E0E0E0;
+  text-align: center;
+  padding: 10px;
+  margin: 10px auto; }
+
+.days {
+  overflow: hidden; }
+
+.day {
+  width: 50%;
+  float: left; }
+  .day h3 {
+    text-align: center; }
+
+.shifts {
+  overflow: hidden;
+  clear: both; }
+
+.shiftType {
+  width: 48%;
+  margin: 0 0 0 5px;
+  float: left; }
+  .shiftType h4 {
+    text-align: center; }
+  .shiftType .shift {
+    border: solid #1B212F 2px;
+    margin: 5px 0 0 0;
+    clear: both;
+    display: block;
+    width: 98%;
+    padding: 10px;
+    color: #1B212F;
+    overflow: hidden; }
+
+/*
 BUTTONS
 */
 button {
@@ -580,13 +620,13 @@ button {
   background-color: #208A87; }
 
 /*
-LINK BUTTON
+ANCHOR BUTTON
 */
 .button {
   text-align: center;
   width: 120px;
   text-decoration: none;
-  display: block;
+  display: inline-block;
   padding: 8px;
   border: none;
   margin: 2px 10px 0 0; }
@@ -625,10 +665,6 @@ USERS LIST
   .userLi:nth-of-type(1) {
     border-top: none; }
 
-.text-wrap {
-  line-height: 2.5em;
-  color: #1B212F; }
-
 /*
 FOOTER
 */
@@ -642,6 +678,13 @@ footer {
     footer a:hover {
       color: #FF6500;
       text-decoration: underline; }
+
+/*
+MIXINS
+*/
+.text-wrap {
+  line-height: 2.5em;
+  color: #1B212F; }
 
 .float-left {
   float: left; }

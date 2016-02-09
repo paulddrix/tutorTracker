@@ -3,15 +3,21 @@
     <form action="" method="post">
       <p>
         <label for="shiftDate">Date</label>
-        <input type="date" id="shiftDate" name="date">
+        <select name="shiftDate" id="shiftDate">
+          <option value="false">Select a Date</option>
+          <option value="Online">10AM-1PM</option>
+          <option value="Campus">1PM-4PM</option>
+          <option value="both">Both</option>
+        </select>
       </p>
       <p>
-        <label for="shiftStartTime">Start Time</label>
-        <input type="time" name="startTime">
-      </p>
-      <p>
-        <label for="shiftEndTime">End Time</label>
-        <input type="time" name="endTime">
+        <label for="shift">Shift</label>
+        <select name="shift" id="shift">
+          <option value="false">Select a Shift</option>
+          <option value="Online">10AM-1PM</option>
+          <option value="Campus">1PM-4PM</option>
+          <option value="both">Both</option>
+        </select>
       </p>
       <p>
         <label for="shiftNotes">Notes</label>

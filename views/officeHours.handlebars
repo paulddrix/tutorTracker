@@ -18,10 +18,12 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week1.Tuesday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
-                          <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                          <a href="/acceptshift" class="button aquarius float-right">Accept</a>
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
+                          <div>
+                            <a href="/denyshift" class="button fsorange">Deny</a>
+                            <a href="/acceptshift" class="button aquarius">Accept</a>
+                          </div>
                         </div>
                       </div>
                     {{/each}}
@@ -32,8 +34,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week1.Tuesday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                         <a href="/denyshift" class="button fsorange float-right">Deny</a>
                         <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                       </div>
@@ -55,8 +57,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week1.Friday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                           <a href="/denyshift" class="button fsorange float-right">Deny</a>
                           <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                         </div>
@@ -69,8 +71,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week1.Friday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                         <a href="/denyshift" class="button fsorange float-right">Deny</a>
                         <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                       </div>
@@ -102,8 +104,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week2.Tuesday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                           <a href="/denyshift" class="button fsorange float-right">Deny</a>
                           <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                         </div>
@@ -116,8 +118,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week2.Tuesday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                         <a href="/denyshift" class="button fsorange float-right">Deny</a>
                         <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                       </div>
@@ -139,8 +141,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week2.Friday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                           <a href="/denyshift" class="button fsorange float-right">Deny</a>
                           <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                         </div>
@@ -153,8 +155,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week2.Friday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                         <a href="/denyshift" class="button fsorange float-right">Deny</a>
                         <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                       </div>
@@ -186,8 +188,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week3.Tuesday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                           <a href="/denyshift" class="button fsorange float-right">Deny</a>
                           <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                         </div>
@@ -200,8 +202,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week3.Tuesday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                         <a href="/denyshift" class="button fsorange float-right">Deny</a>
                         <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                       </div>
@@ -223,8 +225,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week3.Friday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                           <a href="/denyshift" class="button fsorange float-right">Deny</a>
                           <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                         </div>
@@ -237,8 +239,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week3.Friday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                         <a href="/denyshift" class="button fsorange float-right">Deny</a>
                         <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                       </div>
@@ -270,8 +272,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week4.Tuesday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                           <a href="/denyshift" class="button fsorange float-right">Deny</a>
                           <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                         </div>
@@ -284,8 +286,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week4.Tuesday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                         <a href="/denyshift" class="button fsorange float-right">Deny</a>
                         <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                       </div>
@@ -307,8 +309,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week4.Friday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                           <a href="/denyshift" class="button fsorange float-right">Deny</a>
                           <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                         </div>
@@ -321,8 +323,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week4.Friday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                         <a href="/denyshift" class="button fsorange float-right">Deny</a>
                         <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                       </div>
@@ -362,8 +364,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week1.Tuesday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                         </div>
                       </div>
                     {{/each}}
@@ -374,8 +376,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week1.Tuesday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                       </div>
                     </div>
                   {{/each}}
@@ -395,8 +397,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week1.Friday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                         </div>
                       </div>
                     {{/each}}
@@ -407,8 +409,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week1.Friday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                       </div>
                     </div>
                   {{/each}}
@@ -438,8 +440,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week2.Tuesday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                         </div>
                       </div>
                     {{/each}}
@@ -450,8 +452,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week2.Tuesday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                       </div>
                     </div>
                   {{/each}}
@@ -471,8 +473,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week2.Friday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                         </div>
                       </div>
                     {{/each}}
@@ -483,8 +485,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week2.Friday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                       </div>
                     </div>
                   {{/each}}
@@ -514,8 +516,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week3.Tuesday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                         </div>
                       </div>
                     {{/each}}
@@ -526,8 +528,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week3.Tuesday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                       </div>
                     </div>
                   {{/each}}
@@ -547,8 +549,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week3.Friday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                         </div>
                       </div>
                     {{/each}}
@@ -559,8 +561,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week3.Friday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                       </div>
                     </div>
                   {{/each}}
@@ -590,8 +592,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week4.Tuesday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                         </div>
                       </div>
                     {{/each}}
@@ -602,8 +604,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week4.Tuesday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                       </div>
                     </div>
                   {{/each}}
@@ -623,8 +625,8 @@
                   <h4> 10AM-1PM</h4>
                     {{#each officeHours.weeks.week4.Friday.shifts.10AM-1PM}}
                       <div class="tutorShift">
-                        <div class="userLi">
-                          {{this.tutorName}}
+                        <div class="shift">
+                          <span>{{this.tutorName}}</span>
                         </div>
                       </div>
                     {{/each}}
@@ -635,8 +637,8 @@
                   <h4> 1PM-4PM</h4>
                   {{#each officeHours.weeks.week4.Friday.shifts.1PM-4PM}}
                     <div class="tutorShift">
-                      <div class="userLi">
-                        {{this.tutorName}}
+                      <div class="shift">
+                        <span>{{this.tutorName}}</span>
                       </div>
                     </div>
                   {{/each}}

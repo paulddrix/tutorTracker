@@ -16,9 +16,11 @@ max-width: 1038px;
 margin: 0 auto;
 clear: both;
 }
-
-h1,h2,h3,h4,h5{
+h1{
 	color: #666;
+}
+h1,h2,h3,h4,h5{
+
 	font-weight: initial;
 }
 /*
@@ -146,6 +148,50 @@ CONTENT STYLES
 	padding-top: 1px;
 }
 /*
+OFFICE HOURS
+*/
+.weeks{
+
+}
+.week{
+	background-color:$list-line;
+	text-align: center;
+	padding: 10px;
+	margin:10px auto;
+}
+.days{
+	overflow: hidden;
+}
+.day{
+	width: 50%;
+	float: left;
+	h3{
+		text-align: center ;
+	}
+}
+.shifts{
+	overflow: hidden;
+	clear: both;
+}
+.shiftType{
+	width: 48%;
+	margin:0 0 0 5px;
+	float: left;
+	h4{
+		text-align:center;
+	}
+	.shift{
+		border: solid $black 2px;
+		margin: 5px 0 0 0;
+		clear: both;
+		display: block;
+		width: 98%;
+		padding: 10px;
+		color: $black;
+		overflow: hidden;
+	}
+}
+/*
 BUTTONS
 */
 button{
@@ -155,13 +201,13 @@ button{
 	background-color:$aquarius;
 }
 /*
-LINK BUTTON
+ANCHOR BUTTON
 */
 .button{
 	text-align: center;
 	width: 120px;
 	text-decoration: none;
-	display: block;
+	display: inline-block;
 	padding: 8px;
 	border: none;
 	margin: 2px 10px 0 0;
@@ -202,11 +248,6 @@ USERS LIST
 		border-top: none;
 	}
 }
-
-.text-wrap{
-	line-height: 2.5em;
-	color: $black;
-}
 /*
 FOOTER
 */
@@ -223,7 +264,13 @@ footer{
 		}
 	}
 }
-
+/*
+MIXINS
+*/
+.text-wrap{
+	line-height: 2.5em;
+	color: $black;
+}
 .float-left{
 	float: left;
 }

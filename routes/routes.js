@@ -146,12 +146,13 @@ module.exports = function(app) {
       // verify a token asymmetric
       var cert = fs.readFileSync('./keys/public.pem');
       jwt.verify(req.cookies.auth, cert, function(err, decoded){
-        console.log('decoded jwt',decoded);
+        console.log('decoded jwt at addtutorrequesthandler',decoded);
         if(decoded == undefined){
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
           var comingTutor = parseInt(req.body.assignTutor);
+          console.log("tutor n ",comingTutor);
           var requestId = Math.floor((Math.random() * 99999999) + 10000000);
           var newTutorRequest = {
             "firstName": req.body.firstName,
