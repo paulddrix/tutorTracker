@@ -3,15 +3,15 @@
     <form action="addsessionhandler" method="post">
       <p>
         <label for="sessionDate">Date</label>
-        <input type="date" name="sessionDate" id="sessionDate">
+        <input type="date" name="sessionDate" id="sessionDate" required="required">
       </p>
       <p>
         <label for="sessionStartTime">Start Time</label>
-        <input type="time" name="sessionStartTime" id="sessionStartTime">
+        <input type="time" name="sessionStartTime" id="sessionStartTime" step=900 title="time by quarters">
       </p>
       <p>
         <label for="sessionEndTime">End Time</label>
-        <input type="time" name="sessionEndTime" id="sessionEndTime">
+        <input type="time" name="sessionEndTime" step=900 id="sessionEndTime" title="time by quarters">
       </p>
       <input type="hidden" name="userId" value="{{userData.userId}}">
       <button type="submit" class="aquarius">Add Session</button>

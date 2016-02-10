@@ -98,7 +98,7 @@ module.exports ={
     });
   },
   //update student requests
-  updateStdReqs: function(query,updateInfo,callback) {
+  updateStdReqs: function(query,reqInfo,callback) {
     // Connection URL
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
@@ -108,7 +108,7 @@ module.exports ={
       // Get the documents collection
       var collection = db.collection('users');
       collection.update(query,{
-        $push: updateInfo,
+        $push: reqInfo,
         $currentDate: { dateAdded: true }
           }, function(err, result) {
         callback(result);
@@ -119,7 +119,7 @@ module.exports ={
     });
   },
   //update tutor's sessions
-  updateStdSessions: function(query,updateInfo,callback) {
+  updateStdSessions: function(query,sessionInfo,callback) {
     // Connection URL
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
@@ -129,7 +129,7 @@ module.exports ={
       // Get the documents collection
       var collection = db.collection('users');
       collection.update(query,{
-        $push: updateInfo,
+        $push: sessionInfo,
         $currentDate: { dateAdded: true }
           }, function(err, result) {
         callback(result);

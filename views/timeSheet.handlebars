@@ -10,8 +10,8 @@
   <!-- Tutor Side -->
 	<ul class="customList">
     <a href="/timesheet/addsession" class="button aquarius">Add Session</a>
-		{{#each session}}
-		<li><b>Date&nbsp;</b>{{ date }} &nbsp;<b>Email&nbsp;</b> {{email}}</li>
+		{{#each userData.timeSheet}}
+		<li><b>Date&nbsp;</b>{{ this.sessionDate }} &nbsp;<b>Start Time&nbsp;</b> {{this.sessionStartTime}}&nbsp;<b>End Time&nbsp;</b> {{this.sessionEndTime}}&nbsp;<b>Total Hours&nbsp;</b> {{this.sessionTotal}}</li>
 		{{/each}}
 	</ul>
   {{/if}}

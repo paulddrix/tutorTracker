@@ -3,6 +3,7 @@ module.exports = function(app) {
   urlencodedParser = bodyParser.urlencoded({ extended: false }),
   cookieParser = require('cookie-parser'),
   mandrill = require('mandrill-api/mandrill'),
+  moment = require('moment'),
   //mandrill_client = new mandrill.Mandrill('R6xFyX_txF1on5jGLGWreQ'),
   jwt = require('jsonwebtoken'),
   fs = require('fs'),
@@ -685,15 +686,18 @@ module.exports = function(app) {
         }
         else if(decoded['iss'] === "system"){
           var comingUserId = parseInt(req.body.userId);
+          var startTime = moment(req.body.sessionDate + " " + req.body.sessionStartTime);
+          var endTime = moment(req.body.sessionDate + " " + req.body.sessionEndTime);
+          var totalHours = endTime.diff(startTime,'minutes')/60;
           var sessionData = {
-            "sessionDate" : req.body.email,
-            "sessionStartTime" : req.body.password,
-            "sessionEndTime" : req.body.degree,
-            "sessionTotal":0
+            "sessionDate" : req.body.sessionDate,
+            "sessionStartTime" : startTime.format('h:mm A'),
+            "sessionEndTime" : endTime.format('h:mm A'),
+            "sessionTotal":totalHours
           };
-          // userAccount.updateStdSessions({ userId:comingUserId},sessionData,function(result){
-          //   res.redirect('/timesheet');
-          // });
+          userAccount.updateStdSessions({ userId:comingUserId},{timeSheet:sessionData},function(result){
+            res.redirect('/timesheet');
+          });
         }
       });
     }
