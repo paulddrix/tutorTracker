@@ -41,11 +41,9 @@
 				console.log("anchor sub "+anchor[i].href.split('/')[3]);
 				console.log("current "+current);
       if(anchor[i].href.split('/')[3] == current) {
-
           anchor[i].className = "activeNav";
       }
 			else{
-				console.log("fuck");
 				anchor[i].className = "";
 			}
   }
