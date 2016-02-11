@@ -696,8 +696,9 @@ module.exports = function(app) {
             "sessionTotal":totalHours
           };
           userAccount.updateStdSessions({ userId:comingUserId},{timeSheet:sessionData},function(result){
-            res.redirect('/timesheet');
+            // /res.redirect('/timesheet');
           });
+          // do aggregate func to get the sum of all the sessions and add them tp the tutor's total.
         }
       });
     }

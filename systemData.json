@@ -1,30 +1,27 @@
 {
-	"shiftRequests":[],
-	"currentMonth":{
-		"monthName":"",
-		"weeks":{
-			"week1":{
-				"weekStartDate":"",
-				"TuesdayShifts":[],
-				"FridayShifts":[],
-			},
-			"week3":{
-				"weekStartDate":"",
-				"TuesdayShifts":[],
-				"FridayShifts":[],
-			},
-			"week3":{
-				"weekStartDate":"",
-				"TuesdayShifts":[],
-				"FridayShifts":[],
-			},
-			"week4":{
-				"weekStartDate":"",
-				"TuesdayShifts":[],
-				"FridayShifts":[],
-			}
-		}
+	"startDate":""
+	"monthName":"",
+	"week1":{
+		"weekStartDate":"",
+		"TuesdayShifts":[],
+		"FridayShifts":[],
+	},
+	"week3":{
+		"weekStartDate":"",
+		"TuesdayShifts":[],
+		"FridayShifts":[],
+	},
+	"week3":{
+		"weekStartDate":"",
+		"TuesdayShifts":[],
+		"FridayShifts":[],
+	},
+	"week4":{
+		"weekStartDate":"",
+		"TuesdayShifts":[],
+		"FridayShifts":[],
 	},
 	"helpTickets":[],
-	"tutorRequests":[]
+	"tutorRequests":[],
+	"shiftRequests":[]
 }
