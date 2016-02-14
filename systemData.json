@@ -1,27 +1,248 @@
 {
-	"startDate":""
+	"startDate":"2016-02-14",
+	"endTime":"2016-03-12",
+	"nonWorkingDates":[],
 	"monthName":"",
-	"week1":{
-		"weekStartDate":"",
-		"TuesdayShifts":[],
-		"FridayShifts":[],
-	},
-	"week3":{
-		"weekStartDate":"",
-		"TuesdayShifts":[],
-		"FridayShifts":[],
-	},
-	"week3":{
-		"weekStartDate":"",
-		"TuesdayShifts":[],
-		"FridayShifts":[],
-	},
-	"week4":{
-		"weekStartDate":"",
-		"TuesdayShifts":[],
-		"FridayShifts":[],
-	},
-	"helpTickets":[],
-	"tutorRequests":[],
-	"shiftRequests":[]
+	"weeks":[
+	{
+		"weekDays":[
+			{
+				"dayName":"Tuesday",
+				"dayDate":"2016-02-16",
+				"shifts":[
+						{
+							"times": "10AM-1PM",
+							"shiftHours":3,
+							"tutors": [
+								{
+									"tutorName":"Paul Diederichs",
+									"userId":16920059,
+									"status":"pending"
+								}
+							]
+						},
+						{
+							"times": "1PM-4PM",
+							"shiftHours":3,
+							"tutors": [
+								{
+									"tutorName":"Paul Diederichs",
+									"userId":16920059,
+									"status":"pending"
+								}
+							]
+						}
+					]
+				},
+				{
+					"dayName":"Friday",
+					"dayDate":"2016-02-19",
+					"shifts":[
+							{
+								"times": "10AM-1PM",
+								"shiftHours":3,
+								"tutors": [
+									{
+										"tutorName":"Daniela Sora",
+										"userId":67807941,
+										"status":"pending"
+									}
+								]
+							},
+							{
+								"times": "1PM-4PM",
+								"shiftHours":3,
+								"tutors": [
+									{
+										"tutorName":"Paul Diederichs",
+										"userId":16920059,
+										"status":"pending"
+									}
+								]
+							}
+						]
+					},
+			]
+		},
+		{
+			"weekDays":[
+				{
+					"dayName":"Tuesday",
+					"dayDate":"2016-02-23",
+					"shifts":[
+							{
+								"times": "10AM-1PM",
+								"shiftHours":3,
+								"tutors": [
+									{
+										"tutorName":"Paul Diederichs",
+										"userId":16920059,
+										"status":"pending"
+									}
+								]
+							},
+							{
+								"times": "1PM-4PM",
+								"shiftHours":3,
+								"tutors": [
+									{
+										"tutorName":"Paul Diederichs",
+										"userId":16920059,
+										"status":"pending"
+									}
+								]
+							}
+						]
+					},
+					{
+						"dayName":"Friday",
+						"dayDate":"2016-02-26",
+						"shifts":[
+								{
+									"times": "10AM-1PM",
+									"shiftHours":3,
+									"tutors": [
+										{
+											"tutorName":"Daniela Sora",
+											"userId":67807941,
+											"status":"pending"
+										}
+									]
+								},
+								{
+									"times": "1PM-4PM",
+									"shiftHours":3,
+									"tutors": [
+										{
+											"tutorName":"Paul Diederichs",
+											"userId":16920059,
+											"status":"pending"
+										}
+									]
+								}
+							]
+						},
+				]
+			},
+			{
+				"weekDays":[
+					{
+						"dayName":"Tuesday",
+						"dayDate":"2016-03-01",
+						"shifts":[
+								{
+									"times": "10AM-1PM",
+									"shiftHours":3,
+									"tutors": [
+										{
+											"tutorName":"Paul Diederichs",
+											"userId":16920059,
+											"status":"pending"
+										}
+									]
+								},
+								{
+									"times": "1PM-4PM",
+									"shiftHours":3,
+									"tutors": [
+										{
+											"tutorName":"Paul Diederichs",
+											"userId":16920059,
+											"status":"pending"
+										}
+									]
+								}
+							]
+						},
+						{
+							"dayName":"Friday",
+							"dayDate":"2016-03-04",
+							"shifts":[
+									{
+										"times": "10AM-1PM",
+										"shiftHours":3,
+										"tutors": [
+											{
+												"tutorName":"Daniela Sora",
+												"userId":67807941,
+												"status":"pending"
+											}
+										]
+									},
+									{
+										"times": "1PM-4PM",
+										"shiftHours":3,
+										"tutors": [
+											{
+												"tutorName":"Paul Diederichs",
+												"userId":16920059,
+												"status":"pending"
+											}
+										]
+									}
+								]
+							},
+					]
+				},
+				{
+					"weekDays":[
+						{
+							"dayName":"Tuesday",
+							"dayDate":"2016-03-08",
+							"shifts":[
+									{
+										"times": "10AM-1PM",
+										"shiftHours":3,
+										"tutors": [
+											{
+												"tutorName":"Paul Diederichs",
+												"userId":16920059,
+												"status":"pending"
+											}
+										]
+									},
+									{
+										"times": "1PM-4PM",
+										"shiftHours":3,
+										"tutors": [
+											{
+												"tutorName":"Paul Diederichs",
+												"userId":16920059,
+												"status":"pending"
+											}
+										]
+									}
+								]
+							},
+							{
+								"dayName":"Friday",
+								"dayDate":"2016-03-11",
+								"shifts":[
+										{
+											"times": "10AM-1PM",
+											"shiftHours":3,
+											"tutors": [
+												{
+													"tutorName":"Daniela Sora",
+													"userId":67807941,
+													"status":"pending"
+												}
+											]
+										},
+										{
+											"times": "1PM-4PM",
+											"shiftHours":3,
+											"tutors": [
+												{
+													"tutorName":"Paul Diederichs",
+													"userId":16920059,
+													"status":"pending"
+												}
+											]
+										}
+									]
+								},
+						]
+		}
+	]
 }

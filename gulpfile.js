@@ -14,7 +14,7 @@ gulp.task('mongod', function() { 
 });
 // Run app.js with nodemon
 gulp.task('dev', function () {
-  nodemon({ script: 'apiServer.js'
+  nodemon({ script: 'app.js'
           , ext: 'js' }).on('restart', function () {
       console.log('restarted!')
   });

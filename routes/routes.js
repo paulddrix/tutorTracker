@@ -58,6 +58,10 @@ module.exports = function(app) {
   				res.redirect('/login');
   			}
   			else{
+          //*******************************************
+          //CHECK IF THE CURRENT MONTH NAME IS CORRECT
+          //*******************************************
+
   				// sign with RSA SHA256
   				var cert = fs.readFileSync('./keys/private.key');  // get private key
   	  		var token = jwt.sign({ alg: 'RS256',typ:'JWT',admin:result[0].admin, userId:result[0].userId }, cert, { algorithm: 'RS256',issuer:'system',expiresIn:86400000});
@@ -155,7 +159,9 @@ module.exports = function(app) {
           var comingTutor = parseInt(req.body.assignTutor);
           console.log("tutor n ",comingTutor);
           var requestId = Math.floor((Math.random() * 99999999) + 10000000);
+          var dateAdded = moment().format("dddd, MMMM Do YYYY, h:mm a");
           var newTutorRequest = {
+            "dateAdded":dateAdded,
             "firstName": req.body.firstName,
             "lastName": req.body.lastName,
             "email": req.body.email,
@@ -238,7 +244,7 @@ module.exports = function(app) {
     }
   });
   /*
-  REQUEST SHIFT
+  OFFICE HOURS > REQUEST SHIFT
   */
   app.get('/officehours/requestshift',function(req,res) {
     if(req.cookies.auth === undefined){
@@ -431,7 +437,7 @@ module.exports = function(app) {
     }
   });
   /*
-  HANDLE ADD USER
+  USERS > ADD USER HANDLER
   */
   app.post('/adduserhandler',urlencodedParser,function(req,res){
     if(req.cookies.auth === undefined){
@@ -448,76 +454,47 @@ module.exports = function(app) {
         }
         else if(decoded['iss'] === "system"){
           //check if the new user is an admin
-          if(req.body.admin === 'true'){
-            var comingAdmin = true;
-            var userId = Math.floor((Math.random() * 99999999) + 10000000);
-            var comingID = parseInt(req.body.idNumber);
-            var comingTxt;
-            if(req.body.textAlert === 'true'){
-              comingTxt= true;
-            }
-            else{
-              comingTxt= false;
-            }
-            var newUser = {
-              "email" : req.body.email,
-            	"password" : req.body.password,
-            	"degree" : false,
-            	"firstName" : req.body.firstName,
-              "lastName":req.body.lastName,
-            	"phone" : req.body.phone,
-            	"admin" : comingAdmin,
-              "textAlert":comingTxt,
-            	"idNumber":comingID,
-              "userId":userId
-            };
-            userAccount.createUser(newUser,function(result, err){
-              res.redirect('/users');
-            });
+          var userId = Math.floor((Math.random() * 99999999) + 10000000);
+          var comingID = parseInt(req.body.idNumber);
+          var comingTxt;
+          if(req.body.textAlert === 'true'){
+            comingTxt= true;
           }
           else{
-            var comingID = parseInt(req.body.idNumber);
-            var userId = Math.floor((Math.random() * 99999999) + 10000000);
-            var comingTxt;
-            if(req.body.textAlert === 'true'){
-              comingTxt= true;
-            }
-            else{
-              comingTxt= false;
-            }
-            var newUser = {
-              "email" : req.body.email,
-            	"password" : req.body.password,
-            	"degree" : req.body.degree,
-            	"firstName" : req.body.firstName,
-              "lastName":req.body.lastName,
-            	"phone" : req.body.phone,
-            	"admin" : false,
-              "textAlert":comingTxt,
-            	"idNumber":comingID,
-              "userId":userId,
-              "scheduledOfficeHours":[],
-              "monthlyTotalHours":0,
-              "monthlyTotalShiftHours": 0,
-              "monthlyTotalSessionHours":0,
-              "studentsToTutor":[],
-              "timeSheet":[],
-              "eligibleCourses":[]
-            };
-            userAccount.createUser(newUser,function(result, err){
-              res.redirect('/users');
-            });
+            comingTxt= false;
           }
+          var newUser = {
+            "email" : req.body.email,
+          	"password" : req.body.password,
+          	"firstName" : req.body.firstName,
+            "lastName":req.body.lastName,
+          	"phone" : req.body.phone,
+            "textAlert":comingTxt,
+          	"idNumber":comingID,
+            "userId":userId
+          };
+          if (req.body.admin == true) {
+            newUser['admin']= true;
+          }
+          else{
+            newUser['admin']= false;
+          }
+          if (req.body.degree) {
+            newUser['degree']= req.body.degree;
+          }
+          userAccount.createUser(newUser,function(result, err){
+            res.redirect('/users');
+          });
         }
       });
     }
   });
   /*
-  HANDLE DELETE USER
+  USERS > DELETE USER HANDLER
   */
-  app.get('/deleteuserhandler/:userID',urlencodedParser,function(req,res){
+  app.get('/users/deleteuserhandler/:userId',urlencodedParser,function(req,res){
     console.log(req.params);
-    var comingUserId = parseInt(req.params.userID);
+    var comingUserId = parseInt(req.params.userId);
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -565,7 +542,7 @@ module.exports = function(app) {
     }
   });
   /*
-  HANDLE EDIT USER
+  USERS > EDIT USER HANDLER
   */
   app.post('/edituserhandler',urlencodedParser,function(req,res){
     if(req.cookies.auth === undefined){
@@ -600,7 +577,6 @@ module.exports = function(app) {
           var editedUser = {
             "email" : req.body.email,
             "password" : req.body.password,
-            "degree" : req.body.degree,
             "firstName" : req.body.firstName,
             "lastName":req.body.lastName,
             "phone" : req.body.phone,
@@ -608,6 +584,9 @@ module.exports = function(app) {
             "textAlert":comingTxt,
             "idNumber":comingIdNumber
           };
+          if (req.body.degree !=false) {
+            editedUser['degree']= req.body.degree;
+          }
           userAccount.updateUser({ userId:comingUserId},editedUser,function(result){
             res.redirect('/users');
           });
@@ -696,7 +675,22 @@ module.exports = function(app) {
             "sessionTotal":totalHours
           };
           userAccount.updateStdSessions({ userId:comingUserId},{timeSheet:sessionData},function(result){
-            // /res.redirect('/timesheet');
+          //add the session to the timeSheet array.
+            userAccount.sumStdSessions(comingUserId,function(sumRes) {
+              //sum up all the session hour totals
+              console.log("SUM ",sumRes);
+              console.log(sumRes[0].total);
+              userAccount.updateUser({userId:comingUserId},{monthlyTotalSessionHours:sumRes[0].total},function(result) {
+              //insert the total in the tutor's monthlyTotalSessionHours.
+              //FIX ME: how to make the monthlyTotalHours always add the values
+              //for monthlyTotalSessionHours and monthlyTotalShiftHours
+                //userAccount.updateUser({userId:comingUserId},,function(result) {
+                  //add the monthlyTotalSessionHours to the tutor's monthlyTotalHours
+                  //console.log(result);
+                  res.redirect('/timesheet');
+                //});
+              });
+            });
           });
           // do aggregate func to get the sum of all the sessions and add them tp the tutor's total.
         }

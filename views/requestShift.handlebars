@@ -3,12 +3,7 @@
     <form action="" method="post">
       <p>
         <label for="shiftDate">Date</label>
-        <select name="shiftDate" id="shiftDate">
-          <option value="false">Select a Date</option>
-          <option value="Online">10AM-1PM</option>
-          <option value="Campus">1PM-4PM</option>
-          <option value="both">Both</option>
-        </select>
+        <input type="date" name="shiftDate" id="shiftDate">
       </p>
       <p>
         <label for="shift">Shift</label>
@@ -18,10 +13,6 @@
           <option value="Campus">1PM-4PM</option>
           <option value="both">Both</option>
         </select>
-      </p>
-      <p>
-        <label for="shiftNotes">Notes</label>
-        <textarea name="shiftNotes" rows="8" cols="40" placeholder="optional notes"></textarea>
       </p>
       <button type="submit" class="aquarius">Submit</button>
     </form>

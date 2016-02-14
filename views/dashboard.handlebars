@@ -94,12 +94,10 @@
   {{!-- Start Tutor Side --}}
   {{else}}
   <div class="totalHours">
-    <h1>Monthly Total Hours</h1>
-      {{#if userData.monthlyTotalHours}}
-      <span>{{userData.monthlyTotalHours}} &nbsp; Hours</span>
-      {{else}}
-        <span>0&nbsp;Hours</span>
-      {{/if}}
+    <h1>Total Session Hours</h1>
+      <span>{{userData.monthlyTotalSessionHours}} &nbsp; Hours</span>
+    <h1>Total Office Hours</h1>
+      <span>{{userData.monthlyTotalShiftHours}} &nbsp; Hours</span>
   </div>
   <div class="reqHelp customList">
     <h1>Requested Help</h1>
@@ -112,6 +110,7 @@
           {{#if this.degree}}
           <b>Course to Tutor&nbsp;</b> {{this.courseToTutor}} &nbsp;
           {{/if}}
+          <b>Date Added&nbsp;</b> {{this.dateAdded}} &nbsp;
         </div>
       </a>
 
