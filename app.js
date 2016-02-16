@@ -1,5 +1,6 @@
+"use strict";
 //modules
-var express = require('express'),
+const express = require('express'),
 	app = express(),
 	exphbs  = require('express-handlebars');
 // View engine
@@ -8,7 +9,7 @@ app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
 
 // =-=-=-=-=-=-=-=-=-= Config vars =-=-=-=-=-=-=-=-=-=-=-=
-var port = process.env.PORT || 8080;
+let port = process.env.PORT || 8080;
 
 // =-=-=-=-=-=-=-=-=-= Routes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 require('./routes/routes')(app);

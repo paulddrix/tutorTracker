@@ -1,658 +1,98 @@
 <div>
   {{#if userData.admin}}
-  <h1>Manage {{ officeHours.currentMonth}}'s Office Hours</h1>
+  <h1>Manage {{ officeHours.monthName}}'s Office Hours</h1>
   <!-- Start Month -->
   <div class="month">
-      <!-- Start Week 1 -->
+      <!-- Start Week  -->
+      {{#each officeHours.weeks}}
       <div class="week">
-          <h2>Week 1</h2>
-          <!-- Start Days -->
-          <div class="days">
-            <!-- Start Tuesday -->
-            <div class="day">
-              <h3>Tuesday &nbsp; {{ officeHours.weeks.week1.Tuesday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week1.Tuesday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                          <div>
-                            <a href="/denyshift" class="button fsorange">Deny</a>
-                            <a href="/acceptshift" class="button aquarius">Accept</a>
-                          </div>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week1.Tuesday.shifts.1PM-4PM}}
+        <h2>Week {{@index}}</h2>
+        <!-- Start Days -->
+        <div class="days">
+          {{#each this.weekDays}}
+          <!-- Start Day -->
+          <div class="day">
+            <h3>{{this.dayName}}&nbsp; {{ this.dayDate}}</h3>
+            <!-- Start Shifts -->
+            <div class="shifts">
+              {{#each this.shifts}}
+              <div class="shiftType">
+                <h4> {{this.times}}</h4>
+                  {{#each this.tutors}}
                     <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                        <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                        <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Tuesday -->
-            <!-- Start Friday -->
-            <div class="day">
-              <h3>Friday &nbsp; {{ officeHours.weeks.week1.Friday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week1.Friday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
+                      {{#if this.pending}}
+                        <div class="shift pending">
                           <span>{{this.tutorName}}</span>
                           <a href="/denyshift" class="button fsorange float-right">Deny</a>
                           <a href="/acceptshift" class="button aquarius float-right">Accept</a>
                         </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week1.Friday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                        <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                        <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                      </div>
+                      {{/if}}
+                      {{#if this.approved}}
+                        <div class="shift approved">
+                          <span>{{this.tutorName}}</span>
+                        </div>
+                      {{/if}}
                     </div>
                   {{/each}}
-                </div>
-                <!-- End ShiftType -->
               </div>
-              <!-- End Shifts -->
+              {{/each}}
             </div>
-            <!-- End Friday -->
+            <!-- End Shifts -->
           </div>
-          <!-- End Days -->
+          <!-- End Day -->
+          {{/each}}
+        </div>
+        <!-- End Days -->
       </div>
-      <!-- End Week 1 -->
-
-      <!-- Start Week 2 -->
-      <div class="week">
-          <h2>Week 2</h2>
-          <!-- Start Days -->
-          <div class="days">
-            <!-- Start Tuesday -->
-            <div class="day">
-              <h3>Tuesday &nbsp; {{ officeHours.weeks.week2.Tuesday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week2.Tuesday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                          <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                          <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week2.Tuesday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                        <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                        <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Tuesday -->
-            <!-- Start Friday -->
-            <div class="day">
-              <h3>Friday &nbsp; {{ officeHours.weeks.week2.Friday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week2.Friday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                          <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                          <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week2.Friday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                        <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                        <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Friday -->
-          </div>
-          <!-- End Days -->
-      </div>
-      <!-- End Week 2 -->
-
-      <!-- Start Week 3 -->
-      <div class="week">
-          <h2>Week 3</h2>
-          <!-- Start Days -->
-          <div class="days">
-            <!-- Start Tuesday -->
-            <div class="day">
-              <h3>Tuesday &nbsp; {{ officeHours.weeks.week3.Tuesday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week3.Tuesday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                          <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                          <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week3.Tuesday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                        <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                        <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Tuesday -->
-            <!-- Start Friday -->
-            <div class="day">
-              <h3>Friday &nbsp; {{ officeHours.weeks.week3.Friday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week3.Friday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                          <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                          <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week3.Friday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                        <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                        <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Friday -->
-          </div>
-          <!-- End Days -->
-      </div>
-      <!-- End Week 3 -->
-
-      <!-- Start Week 4 -->
-      <div class="week">
-          <h2>Week 4</h2>
-          <!-- Start Days -->
-          <div class="days">
-            <!-- Start Tuesday -->
-            <div class="day">
-              <h3>Tuesday &nbsp; {{ officeHours.weeks.week4.Tuesday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week4.Tuesday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                          <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                          <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week4.Tuesday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                        <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                        <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Tuesday -->
-            <!-- Start Friday -->
-            <div class="day">
-              <h3>Friday &nbsp; {{ officeHours.weeks.week4.Friday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week4.Friday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                          <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                          <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week4.Friday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                        <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                        <a href="/acceptshift" class="button aquarius float-right">Accept</a>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Friday -->
-          </div>
-          <!-- End Days -->
-      </div>
-      <!-- End Week 4 -->
-
+      <!-- End Week -->
+      {{/each}}
   </div>
   <!-- End Month -->
   {{!-- Start Tutor Side --}}
   {{else}}
   <a href="/officehours/requestshift" class="button aquarius">Request Shift</a>
-  <h1>View {{ officeHours.currentMonth}}'s Office Hours</h1>
+  <h1>View {{ officeHours.monthName}}'s Office Hours</h1>
   <!-- Start Month -->
   <div class="month">
-      <!-- Start Week 1 -->
+      <!-- Start Week  -->
+      {{#each officeHours.weeks}}
       <div class="week">
-          <h2>Week 1</h2>
-          <!-- Start Days -->
-          <div class="days">
-            <!-- Start Tuesday -->
-            <div class="day">
-              <h3>Tuesday &nbsp; {{ officeHours.weeks.week1.Tuesday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week1.Tuesday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week1.Tuesday.shifts.1PM-4PM}}
+        <h2>Week {{@index}}</h2>
+        <!-- Start Days -->
+        <div class="days">
+          {{#each this.weekDays}}
+          <!-- Start Day -->
+          <div class="day">
+            <h3>{{this.dayName}}&nbsp; {{ this.dayDate}}</h3>
+            <!-- Start Shifts -->
+            <div class="shifts">
+              {{#each this.shifts}}
+              <div class="shiftType">
+                <h4> {{this.times}}</h4>
+                  {{#each this.tutors}}
                     <div class="tutorShift">
-                      <div class="shift">
+                      {{#if this.pending}}
+                        <div class="shift pending">
+                      {{/if}}
+                      {{#if this.approved}}
+                        <div class="shift approved">
+                      {{/if}}
                         <span>{{this.tutorName}}</span>
                       </div>
                     </div>
                   {{/each}}
-                </div>
-                <!-- End ShiftType -->
               </div>
-              <!-- End Shifts -->
+              {{/each}}
             </div>
-            <!-- End Tuesday -->
-            <!-- Start Friday -->
-            <div class="day">
-              <h3>Friday &nbsp; {{ officeHours.weeks.week1.Friday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week1.Friday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week1.Friday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Friday -->
+            <!-- End Shifts -->
           </div>
-          <!-- End Days -->
+          <!-- End Day -->
+          {{/each}}
+        </div>
+        <!-- End Days -->
       </div>
-      <!-- End Week 1 -->
-
-      <!-- Start Week 2 -->
-      <div class="week">
-          <h2>Week 2</h2>
-          <!-- Start Days -->
-          <div class="days">
-            <!-- Start Tuesday -->
-            <div class="day">
-              <h3>Tuesday &nbsp; {{ officeHours.weeks.week2.Tuesday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week2.Tuesday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week2.Tuesday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Tuesday -->
-            <!-- Start Friday -->
-            <div class="day">
-              <h3>Friday &nbsp; {{ officeHours.weeks.week2.Friday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week2.Friday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week2.Friday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Friday -->
-          </div>
-          <!-- End Days -->
-      </div>
-      <!-- End Week 2 -->
-
-      <!-- Start Week 3 -->
-      <div class="week">
-          <h2>Week 3</h2>
-          <!-- Start Days -->
-          <div class="days">
-            <!-- Start Tuesday -->
-            <div class="day">
-              <h3>Tuesday &nbsp; {{ officeHours.weeks.week3.Tuesday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week3.Tuesday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week3.Tuesday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Tuesday -->
-            <!-- Start Friday -->
-            <div class="day">
-              <h3>Friday &nbsp; {{ officeHours.weeks.week3.Friday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week3.Friday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week3.Friday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Friday -->
-          </div>
-          <!-- End Days -->
-      </div>
-      <!-- End Week 3 -->
-
-      <!-- Start Week 4 -->
-      <div class="week">
-          <h2>Week 4</h2>
-          <!-- Start Days -->
-          <div class="days">
-            <!-- Start Tuesday -->
-            <div class="day">
-              <h3>Tuesday &nbsp; {{ officeHours.weeks.week4.Tuesday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week4.Tuesday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week4.Tuesday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Tuesday -->
-            <!-- Start Friday -->
-            <div class="day">
-              <h3>Friday &nbsp; {{ officeHours.weeks.week4.Friday.date}}</h3>
-              <!-- Start Shifts -->
-              <div class="shifts">
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 10AM-1PM</h4>
-                    {{#each officeHours.weeks.week4.Friday.shifts.10AM-1PM}}
-                      <div class="tutorShift">
-                        <div class="shift">
-                          <span>{{this.tutorName}}</span>
-                        </div>
-                      </div>
-                    {{/each}}
-                </div>
-                <!-- End ShiftType -->
-                <!-- Start ShiftType -->
-                <div class="shiftType">
-                  <h4> 1PM-4PM</h4>
-                  {{#each officeHours.weeks.week4.Friday.shifts.1PM-4PM}}
-                    <div class="tutorShift">
-                      <div class="shift">
-                        <span>{{this.tutorName}}</span>
-                      </div>
-                    </div>
-                  {{/each}}
-                </div>
-                <!-- End ShiftType -->
-              </div>
-              <!-- End Shifts -->
-            </div>
-            <!-- End Friday -->
-          </div>
-          <!-- End Days -->
-      </div>
-      <!-- End Week 4 -->
-
+      <!-- End Week -->
+      {{/each}}
   </div>
   <!-- End Month -->
 

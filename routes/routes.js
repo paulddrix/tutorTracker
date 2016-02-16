@@ -1,6 +1,5 @@
 module.exports = function(app) {
-  var bodyParser =  require('body-parser'),
-  urlencodedParser = bodyParser.urlencoded({ extended: false }),
+  const urlencodedParser =  require('body-parser').urlencoded({ extended: false }),
   cookieParser = require('cookie-parser'),
   mandrill = require('mandrill-api/mandrill'),
   moment = require('moment'),
@@ -13,6 +12,11 @@ module.exports = function(app) {
   tutorRequests = require('../models/TutorRequests'),
   officeHours = require('../models/OfficeHours');
   app.use(cookieParser());
+  //keys
+  //public key
+  const puCert = fs.readFileSync('./keys/public.pem');
+  //Private Key
+  const prCert = fs.readFileSync('./keys/private.key');
 
   /*
   LANDING PAGE
@@ -26,8 +30,7 @@ module.exports = function(app) {
     //if they do, decode it.
   	else{
   		// verify a token asymmetric
-  		var cert = fs.readFileSync('./keys/public.pem');
-  		jwt.verify(req.cookies.auth, cert, function(err, decoded){
+  		jwt.verify(req.cookies.auth, puCert, function(err, decoded){
   			console.log('decoded jwt',decoded);
       		if(decoded == undefined){
         		res.redirect('/login');
@@ -62,9 +65,7 @@ module.exports = function(app) {
           //CHECK IF THE CURRENT MONTH NAME IS CORRECT
           //*******************************************
 
-  				// sign with RSA SHA256
-  				var cert = fs.readFileSync('./keys/private.key');  // get private key
-  	  		var token = jwt.sign({ alg: 'RS256',typ:'JWT',admin:result[0].admin, userId:result[0].userId }, cert, { algorithm: 'RS256',issuer:'system',expiresIn:86400000});
+  	  		var token = jwt.sign({ alg: 'RS256',typ:'JWT',admin:result[0].admin, userId:result[0].userId }, prCert, { algorithm: 'RS256',issuer:'system',expiresIn:86400000});
   	  		res.cookie('auth', token, {expires: new Date(Date.now() + 9000000),maxAge: 9000000 });//secure: true
   	  		res.redirect('/');
   			}
@@ -81,8 +82,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in DASHBOARD Route',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -119,8 +119,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in DASHBOARD Route',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -149,8 +148,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt at addtutorrequesthandler',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -193,8 +191,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in VIEW TUTOR REQUEST',decoded);
           if(decoded == undefined){
             res.redirect('/login');
@@ -222,8 +219,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt',decoded);
           if(decoded == undefined){
             res.redirect('/login');
@@ -253,20 +249,54 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt',decoded);
           if(decoded == undefined){
             res.redirect('/login');
           }
           else if(decoded['iss'] === "system"){
-            userAccount.getUser({email:decoded.email},function(result){
+            userAccount.getUser({userId:decoded.userId},function(result){
               var data = {userData:result[0],loggedIn:true};
-              userAccount.getUsers({},function(results) {
-               data['users']=results;
-               res.render('requestShift',data);
-              });
+              res.render('requestShift',data);
             });
+          }
+      });
+    }
+  });
+  /*
+  OFFICE HOURS > REQUEST SHIFT HANDLER
+  */
+  app.post('/requesthandler',urlencodedParser,function(req,res) {
+    if(req.cookies.auth === undefined){
+      res.redirect('/login');
+    }
+    else{
+      // we will check if the user requesting the page is a tutor or an admin
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
+        console.log('decoded jwt',decoded);
+          if(decoded == undefined){
+            res.redirect('/login');
+          }
+          else if(decoded['iss'] === "system"){
+            console.log(req.body);
+            var shiftDate = moment(req.body.shiftDate).format("MM/DD/YYYY");
+            var newShift = {
+              "tutorName" : req.body.tutorName,
+              "userId" : parseInt(req.body.userId),
+              "status" : "pending"
+            };
+            // FIXME: need to query to insert the shift in the right day and shifttype.
+            // officeHours.addShift({},{weeks:newShift},function(){
+            //
+            // });
+            // userAccount.getUser({email:decoded.email},function(result){
+            //   var data = {userData:result[0],loggedIn:true};
+            //   userAccount.getUsers({},function(results) {
+            //    data['users']=results;
+            //    res.render('requestShift',data);
+            //   });
+            // });
           }
       });
     }
@@ -281,8 +311,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
         // verify a token asymmetric
-        var cert = fs.readFileSync('./keys/public.pem');
-        jwt.verify(req.cookies.auth, cert, function(err, decoded){
+        jwt.verify(req.cookies.auth, puCert, function(err, decoded){
           console.log('decoded jwt',decoded);
             if(decoded == undefined){
               res.redirect('/login');
@@ -306,8 +335,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt',decoded);
           if(decoded == undefined){
             res.redirect('/login');
@@ -333,8 +361,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in editprofilehandler',decoded);
           if(decoded == undefined){
             res.redirect('/login');
@@ -365,8 +392,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -395,8 +421,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -421,8 +446,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -446,8 +470,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in adduserhandler',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -501,8 +524,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in deleteuserhandler',decoded);
           if(decoded == undefined){
             res.redirect('/login');
@@ -526,8 +548,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in edituser',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -551,8 +572,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in editprofilehandler',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -604,8 +624,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in timesheet',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -632,8 +651,7 @@ module.exports = function(app) {
     else{
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in timesheet',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -657,8 +675,7 @@ module.exports = function(app) {
     }
     else{
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in editprofilehandler',decoded);
         if(decoded == undefined){
           res.redirect('/login');
@@ -668,8 +685,9 @@ module.exports = function(app) {
           var startTime = moment(req.body.sessionDate + " " + req.body.sessionStartTime);
           var endTime = moment(req.body.sessionDate + " " + req.body.sessionEndTime);
           var totalHours = endTime.diff(startTime,'minutes')/60;
+          var sessionDate = moment(req.body.sessionDate).format("MM/DD/YYYY");
           var sessionData = {
-            "sessionDate" : req.body.sessionDate,
+            "sessionDate" :sessionDate ,
             "sessionStartTime" : startTime.format('h:mm A'),
             "sessionEndTime" : endTime.format('h:mm A'),
             "sessionTotal":totalHours
@@ -704,8 +722,7 @@ module.exports = function(app) {
     if(req.cookies.auth != undefined){
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric
-      var cert = fs.readFileSync('./keys/public.pem');
-      jwt.verify(req.cookies.auth, cert, function(err, decoded){
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt',decoded);
         if(decoded == undefined){
           res.render('helpSupport');
