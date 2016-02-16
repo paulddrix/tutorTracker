@@ -3,7 +3,7 @@
     <div>
       <p>Search Eligible Tutors</p>
       <div class="float-clear">
-        <input type="text" class="float-left" name="courseName" id="courseName" placeholder="Course Name">
+        <input type="text" class="float-left" name="courseName" list="courseNames" id="courseName" placeholder="Course Name">
         <div id="searchCourses" class="float-left">
           <svg viewBox="0 0 46.5 46.5" width="25" fill="#EBEBEB">
             <path d="M17.9,32.5c-3.9,0-7.6-1.5-10.3-4.3s-4.3-6.4-4.3-10.3s1.5-7.6,4.3-10.3c2.8-2.8,6.4-4.3,10.3-4.3s7.6,1.5,10.3,4.3
@@ -13,6 +13,11 @@
             C42.7,43.2,42.4,43.3,42,43.3z"/>
           </svg>
         </div>
+        <datalist id="courseNames">
+          {{#each courseList}}
+            <option value="{{this.courseName}}">{{this.courseName}}</option>
+          {{/each}}
+        </datalist>
       </div>
       <div id="courseSearchRes" class="float-clear">
 
@@ -76,7 +81,7 @@
         </p>
         <p>
           <label for="assignTutor">Assign Tutor</label>
-          <select name="assignTutor" required="required" id="assignTutor">
+          <select name="assignTutor" required="required" id="assignTutor" class="assignTutor">
             <option value="false">Select a Tutor</option>
             {{#each tutorList}}
             <option value="{{this.userId}}">{{this.firstName}}&nbsp;{{this.lastName}}</option>
@@ -89,6 +94,9 @@
 	c0.6,0,1-0.5,1-1v-18h18c0.6,0,1-0.5,1-1S43,21.7,42.4,21.7z"/>
             </svg>Add Tutor Request</button>
       </form>
+      </div>
+      <div>
+        <h1>Rejected Requests</h1>
       </div>
 
   {{!-- Start Tutor Side --}}
