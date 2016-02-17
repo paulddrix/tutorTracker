@@ -180,14 +180,9 @@ OFFICE HOURS
 	h4{
 		text-align:center;
 	}
-	.pending{
-		background-color: #BAB44A;
-	}
-	.approved{
-		background-color: green;
-	}
 	.shift{
 		margin: 5px 0 0 0;
+		background-color: $white;
 		clear: both;
 		display: block;
 		width: 98%;

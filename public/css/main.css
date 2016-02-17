@@ -600,12 +600,9 @@ OFFICE HOURS
   float: left; }
   .shiftType h4 {
     text-align: center; }
-  .shiftType .pending {
-    background-color: #BAB44A; }
-  .shiftType .approved {
-    background-color: green; }
   .shiftType .shift {
     margin: 5px 0 0 0;
+    background-color: #EBEBEB;
     clear: both;
     display: block;
     width: 98%;

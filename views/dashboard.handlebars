@@ -112,7 +112,7 @@
     {{#if userData.studentsToTutor}}
     <div class="listCont">
     {{#each userData.studentsToTutor}}
-      <a href="/tutorrequest/{{this._id}}" class="userLi float-left">
+      <a href="/tutorrequest/{{this.requestId}}" class="userLi float-left">
         <div class="float-left">
           <b>Name&nbsp;</b>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
           {{#if this.degree}}
