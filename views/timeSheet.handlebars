@@ -1,11 +1,19 @@
 <div>
 	<h1>Time Sheet</h1>
 	{{#if userData.admin}}
-	<ul class="listCont">
-		{{#each users}}
-		<li class="userLi"><b>Name&nbsp;</b>{{ firstName }}&nbsp;{{ lastName }} &nbsp;<b>Total Session Hours&nbsp;</b> {{monthlyTotalSessionHours}}</li>
-		{{/each}}
-	</ul>
+	<div class="listCont">
+	{{#each users}}
+	<div class="userLi">
+		<a href="/timesheet/tutortimesheetdetails/{{userId}}" class="float-left">
+			<div class="float-left text-wrap">
+				<b>Name&nbsp;</b>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
+				<b>Total Session Hours&nbsp;</b> {{this.monthlyTotalSessionHours}}
+			</div>
+		</a>
+	</div>
+	{{/each}}
+</div>
+
   {{else}}
   <!-- Tutor Side -->
 	<a href="/timesheet/addsession" class="button aquarius">Add Session</a>

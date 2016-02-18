@@ -642,6 +642,34 @@ module.exports = function(app) {
     }
   });
   /*
+  TIME SHEET > TUTOS TIME SHEET DETAILS
+  */
+  app.get('/timesheet/tutortimesheetdetails/:userId',urlencodedParser,function(req,res) {
+    if(req.cookies.auth === undefined){
+      res.redirect('/login');
+    }
+    else{
+      // we will check if the user requesting the page is a tutor or an admin
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
+        console.log('decoded jwt in timesheet',decoded);
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          userAccount.getUser({userId:decoded.userId},function(result){
+            var data = {userData:result[0],loggedIn:true};
+            var userID = parseInt(req.params.userId);
+            userAccount.getUser({userId:userID},function(results) {
+             data['tutor']=results[0];
+             res.render('timeSheetDetails',data);
+            });
+          });
+        }
+      });
+    }
+  });
+  /*
   TIME SHEET > ADD SESSION PAGE
   */
   app.get('/timesheet/addsession',function(req,res) {

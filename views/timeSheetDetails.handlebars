@@ -1,0 +1,13 @@
+<h1>{{ tutor.firstName }}&nbsp;{{ tutor.lastName }}'s Tutor Sessions</h1>
+
+<div class="listCont">
+{{#each tutor.timeSheet}}
+<div class="userLi">
+  <a href="/timesheet/tutortimesheetdetails/{{userId}}" class="float-left">
+    <div class="float-left text-wrap">
+      <b>Date&nbsp;</b>{{ this.sessionDate }} &nbsp;<b>Start Time&nbsp;</b> {{this.sessionStartTime}}&nbsp;<b>End Time&nbsp;</b> {{this.sessionEndTime}}&nbsp;<b>Total Hours&nbsp;</b> {{this.sessionTotal}}
+    </div>
+  </a>
+</div>
+{{/each}}
+</div>
