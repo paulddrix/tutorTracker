@@ -7,6 +7,8 @@
   <p><b>Degree &nbsp;</b>{{ tutorRequest.degree }}</p>
 	<p><b>Course to Tutor &nbsp;</b>{{ tutorRequest.courseToTutor }}</p>
   <p><b>Program &nbsp;</b>{{ tutorRequest.program }}</p>
-	<a href="#" class="button aquarius">Accept</a>
-	<a href="#" class="button fsorange">Deny</a>
+	{{#if tutorRequest.pendingStatus}}
+	<a href="/tutorrequest/accept/{{tutorRequest.requestId}}/{{tutorRequest.assignTutor}}" class="button aquarius">Accept</a>
+	<a href="/tutorrequest/deny/{{tutorRequest.requestId}}/{{tutorRequest.assignTutor}}" class="button fsorange">Deny</a>
+	{{/if}}
 </div>

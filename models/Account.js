@@ -163,5 +163,52 @@ module.exports ={
         db.close();
       });
     });
+  },
+  //get a specific tutor request
+  tutorRequestDetails: function(userID,requestId,callback) {
+    console.log(userID);
+    // Connection URL
+    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
+    // Use connect method to connect to the Server
+    MongoClient.connect(mongoUrl, function(err, db) {
+      assert.equal(null, err);
+      console.log("Connected correctly to mongodb");
+      // Get the documents collection
+      var collection = db.collection('users');
+      collection.aggregate([
+        {$match:{userId:userID}},
+        {$project:{studentsToTutor:1}},
+        {$unwind : "$studentsToTutor" },
+        {$match : {"studentsToTutor.requestId":requestId}}
+      ],function(err,result) {
+        if (err) {
+          console.log(err);
+        }
+        callback(result);
+        //close connection
+        db.close();
+      });
+    });
+  },
+  //update a specific tutor request
+  updatetutorRequestDetails: function(query,requestStatus,callback) {
+    // Connection URL
+    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
+    // Use connect method to connect to the Server
+    MongoClient.connect(mongoUrl, function(err, db) {
+      assert.equal(null, err);
+      console.log("Connected correctly to mongodb");
+      // Get the documents collection
+      var collection = db.collection('users');
+      collection.update(query,{
+        $set: requestStatus,
+          }, function(err, result) {
+        callback(result);
+      });
+      //get user id and update the information coming form the form
+      //close connection
+      db.close();
+    });
   }
+
 }//end export

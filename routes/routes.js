@@ -61,9 +61,6 @@ module.exports = function(app) {
   				res.redirect('/login');
   			}
   			else{
-          //*******************************************
-          //CHECK IF THE CURRENT MONTH NAME IS CORRECT
-          //*******************************************
 
   	  		var token = jwt.sign({ alg: 'RS256',typ:'JWT',admin:result[0].admin, userId:result[0].userId }, prCert, { algorithm: 'RS256',issuer:'system',expiresIn:86400000});
   	  		res.cookie('auth', token, {expires: new Date(Date.now() + 9000000),maxAge: 9000000 });//secure: true
@@ -102,8 +99,7 @@ module.exports = function(app) {
         else{
           userAccount.getUser({userId:decoded.userId},function(result){
             var data = {userData:result[0],loggedIn:true};
-             data['users']=result[0];
-             res.render('dashboard',data);
+               res.render('dashboard',data);
           });
         }
       });
@@ -168,7 +164,8 @@ module.exports = function(app) {
             "courseToTutor": req.body.courseToTutor,
             "program": req.body.program,
             "assignTutor": comingTutor,
-            "requestId":requestId
+            "requestId":requestId,
+            "pendingStatus":true
           };
           tutorRequests.createRequest(newTutorRequest,function(err,result){
             console.log('error ',err);
@@ -198,13 +195,46 @@ module.exports = function(app) {
           }
           //if the user is an admin
           else if(decoded['iss'] === "system"){
-            userAccount.getUser({userId:decoded.userId},function(result){
+            var incomingRequestId = parseInt(req.params.requestid);
+            userAccount.getUser({userId:decoded['userId']},function(result){
               var data = {userData:result[0],loggedIn:true};
-              tutorRequests.getRequest({},function(results){
-                data['tutorRequest'] = results[0];
+              var incomingRequestId = parseInt(req.params.requestid);
+              userAccount.tutorRequestDetails(decoded['userId'],incomingRequestId,function(tutorRequest){
+                data['tutorRequest']=tutorRequest[0]['studentsToTutor'];
                 res.render('tutorRequestDetails',data);
               });
             });
+          }
+      });
+    }
+  });
+  /*
+  DASHBOARD > ACCEPT TUTOR REQUEST
+  */
+  app.get('/tutorrequest/accept/:requestid/:assignTutor',urlencodedParser,function(req,res) {
+    if(req.cookies.auth === undefined){
+      res.redirect('/login');
+    }
+    else{
+      // we will check if the user requesting the page is a tutor or an admin
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
+        console.log('decoded jwt in VIEW TUTOR REQUEST',decoded);
+          if(decoded == undefined){
+            res.redirect('/login');
+          }
+          //if the user is an admin
+          else if(decoded['iss'] === "system"){
+            var incomingRequestId = parseInt(req.params.requestid);
+            var incomingAssignTutor = parseInt(req.params.assignTutor);
+              userAccount.updatetutorRequestDetails({userId:incomingAssignTutor,"studentsToTutor.requestId":incomingRequestId},
+                {"studentsToTutor.$.pendingStatus":false},function(result){
+                  //**************************************************
+                  //let the admin know the tutor accepted the request.
+                  //**************************************************
+                res.redirect('back');
+              });
+
           }
       });
     }
