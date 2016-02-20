@@ -97,6 +97,27 @@
       </div>
       <div>
         <h1>Rejected Requests</h1>
+        {{#if rejectedDocs}}
+        <div class="listCont">
+
+          {{!-- NEEDS TO BE FIXED TO ASSIGN A TUTOR TO THE REJECTED REQUEST --}}
+        {{#each rejectedDocs}}
+          <a href="/tutorrequest/{{this.requestId}}" class="userLi float-left">
+            <div class="float-left">
+              <b>Name&nbsp;</b>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
+              {{#if this.degree}}
+              <b>Course to Tutor&nbsp;</b> {{this.courseToTutor}} &nbsp;
+              {{/if}}
+              <b>Date Added&nbsp;</b> {{this.dateAdded}} &nbsp;
+            </div>
+          </a>
+
+        {{/each}}
+        {{else}}
+        <p>
+          There are no rejected requests.
+        </p>
+        {{/if}}
       </div>
 
   {{!-- Start Tutor Side --}}

@@ -91,8 +91,12 @@ module.exports = function(app) {
             data['tutorList']=results;
             courses.getCourses({},function(courseRes) {
               data['courseList']=courseRes;
-              res.render('dashboard',data);
+              tutorRequests.getTutorRequests({rejected:true},function(rejectedDocs){
+                data['rejectedDocs'] = rejectedDocs;
+                res.render('dashboard',data);
+              });
             });
+            //query the tutor requests to have the ones that have a field of rejected
           });
         }
         //if the user is a tutor
@@ -170,7 +174,7 @@ module.exports = function(app) {
           tutorRequests.createRequest(newTutorRequest,function(err,result){
             console.log('error ',err);
           });
-          userAccount.updateStdReqs({userId:comingTutor},{studentsToTutor:newTutorRequest},function(err,result){
+          userAccount.addStdReq({userId:comingTutor},{studentsToTutor:newTutorRequest},function(err,result){
             console.log('error',err);
           });
           res.redirect('/dashboard');
@@ -229,12 +233,42 @@ module.exports = function(app) {
             var incomingAssignTutor = parseInt(req.params.assignTutor);
               userAccount.updatetutorRequestDetails({userId:incomingAssignTutor,"studentsToTutor.requestId":incomingRequestId},
                 {"studentsToTutor.$.pendingStatus":false},function(result){
+
                   //**************************************************
                   //let the admin know the tutor accepted the request.
                   //**************************************************
                 res.redirect('back');
               });
 
+          }
+      });
+    }
+  });
+  /*
+  DASHBOARD > DENY TUTOR REQUEST
+  */
+  app.get('/tutorrequest/deny/:requestid/:assignTutor',urlencodedParser,function(req,res) {
+    if(req.cookies.auth === undefined){
+      res.redirect('/login');
+    }
+    else{
+      // we will check if the user requesting the page is a tutor or an admin
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
+        console.log('decoded jwt in VIEW TUTOR REQUEST',decoded);
+          if(decoded == undefined){
+            res.redirect('/login');
+          }
+          //if the user is an admin
+          else if(decoded['iss'] === "system"){
+            var incomingRequestId = parseInt(req.params.requestid);
+            var incomingAssignTutor = parseInt(req.params.assignTutor);
+            userAccount.destroyStdReq({userId:incomingAssignTutor},{ studentsToTutor: { requestId: incomingRequestId } } ,function(err,result){
+              console.log('error',err);
+              tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:true},function(result){
+                res.redirect('/dashboard');
+              });
+            });
           }
       });
     }

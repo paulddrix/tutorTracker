@@ -2,7 +2,7 @@ var MongoClient = require('mongodb').MongoClient,
 assert = require('assert');
 module.exports ={
 
-  getRequests: function(query,callback) {
+  getTutorRequests: function(query,callback) {
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the DB Server
     MongoClient.connect(mongoUrl, function(err, db) {
@@ -87,10 +87,8 @@ module.exports ={
       console.log("Connected correctly to mongodb");
       // Get the documents collection
       var collection = db.collection('tutorRequests');
-      collection.update(query,{
-        $set: {updateInfo},
-        $currentDate: { dateAdded: true }
-          }, function(err, result) {
+      collection.update(query,
+        {$set: updateInfo }, function(err, result) {
         callback(result);
       });
       //get user id and update the information coming form the form

@@ -97,8 +97,8 @@ module.exports ={
       db.close();
     });
   },
-  //update student requests
-  updateStdReqs: function(query,reqInfo,callback) {
+  //add student request
+  addStdReq: function(query,reqInfo,callback) {
     // Connection URL
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
@@ -116,6 +116,24 @@ module.exports ={
       //get user id and update the information coming form the form
       //close connection
       db.close();
+    });
+  },
+  //remove student request
+  destroyStdReq: function(query,reqToDestroy,callback) {
+    // Connection URL
+    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
+    // Use connect method to connect to the Server
+    MongoClient.connect(mongoUrl, function(err, db) {
+      assert.equal(null, err);
+      console.log("Connected correctly to mongodb");
+      // Get the documents collection
+      var collection = db.collection('users');
+      collection.update(query,{
+        $pull: reqToDestroy}, function(err, result) {
+        callback(result);
+        //close connection
+        db.close();
+      });
     });
   },
   //update tutor's sessions
