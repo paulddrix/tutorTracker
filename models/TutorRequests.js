@@ -22,7 +22,7 @@ module.exports ={
 
     });
   },
-  getRequest: function(userInfo,callback) {
+  getRequest: function(reqInfo,callback) {
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the DB Server
     MongoClient.connect(mongoUrl, function(err, db) {
@@ -31,7 +31,7 @@ module.exports ={
       // Get the documents collection
       var collection = db.collection('tutorRequests');
       // Find some documents
-      collection.find(userInfo).toArray(function(err, docs) {
+      collection.find(reqInfo).toArray(function(err, docs) {
         //console.log("logging out one user");
         //console.dir(docs);
         //parsing mongoDoc

@@ -135,7 +135,7 @@ CONTENT STYLES
 #leftPanel{
   background-color: $orange;
 }
-#searchCourses{
+.searchButton{
 	background-color: $aquarius;
 	padding: 10px;
 	width: 46px;
@@ -253,12 +253,12 @@ USERS LIST
 FOOTER
 */
 footer{
-	background-color: $purple-grey;
 	text-align: center;
-	color: $white;
+	color: $black;
+	padding: 10px;
 	a{
 		text-decoration: none;
-		color:$white;
+		color:$black;
 		&:hover{
 			color:$orange;
 			text-decoration: underline;

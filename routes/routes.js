@@ -96,7 +96,6 @@ module.exports = function(app) {
                 res.render('dashboard',data);
               });
             });
-            //query the tutor requests to have the ones that have a field of rejected
           });
         }
         //if the user is a tutor
@@ -198,8 +197,24 @@ module.exports = function(app) {
             res.redirect('/login');
           }
           //if the user is an admin
-          else if(decoded['iss'] === "system"){
-            var incomingRequestId = parseInt(req.params.requestid);
+          else if(decoded['iss'] === "system" && decoded['admin'] ==true){
+            userAccount.getUser({userId:decoded['userId']},function(result){
+              var data = {userData:result[0],loggedIn:true};
+              var incomingRequestId = parseInt(req.params.requestid);
+              tutorRequests.getTutorRequests({requestId:incomingRequestId},function(request){
+                data['tutorRequest'] = request[0];
+
+                userAccount.getUsers({admin:false},function(results) {
+                  data['tutorList']=results;
+                      courses.getCourses({},function(courseRes) {
+                      data['courseList']=courseRes;
+                      res.render('tutorRequestDetails',data);
+                    });
+                });
+              });
+            });
+          }
+          else if (decoded['iss'] === "system" && decoded['admin'] ==false) {
             userAccount.getUser({userId:decoded['userId']},function(result){
               var data = {userData:result[0],loggedIn:true};
               var incomingRequestId = parseInt(req.params.requestid);
@@ -270,6 +285,45 @@ module.exports = function(app) {
               });
             });
           }
+      });
+    }
+  });
+  /*
+  DASHBOARD > RE-ASSIGN TUTOR REQUEST HANDLER
+  */
+  app.get('/reassigntutor/:tutorId/:requestid', urlencodedParser, function(req,res) {
+    console.log('req params',req.params);
+    if(req.cookies.auth === undefined){
+      res.redirect('/login');
+    }
+    else{
+      // we will check if the user requesting the page is a tutor or an admin
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
+        console.log('decoded jwt at reassigntutor',decoded);
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          var incomingRequestId = parseInt(req.params.requestid);
+          var incomingTutorId = parseInt(req.params.tutorId);
+          tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:false,assignTutor:incomingTutorId},function(result){
+            //must query for the tutor request to add ************
+            tutorRequests.getRequest({requestId:incomingRequestId},function(result){
+              //hold the req and make the necessary changes to it
+              var targetReq = result[0];
+              targetReq['assignTutor']= incomingTutorId;
+              //targetReq['rejected']= false;
+              console.log('EDITTED REQ ',targetReq);
+
+              userAccount.addStdReq({userId:incomingTutorId},{studentsToTutor:targetReq},function(err,result){
+                console.log('error',err);
+                res.redirect('/dashboard');
+              });
+            });
+
+          });
+        }
       });
     }
   });

@@ -561,12 +561,12 @@ CONTENT STYLES
 #leftPanel {
   background-color: #FF6500; }
 
-#searchCourses {
+.searchButton {
   background-color: #208A87;
   padding: 10px;
   width: 46px;
   height: 42px; }
-  #searchCourses:hover {
+  .searchButton:hover {
     cursor: pointer; }
 
 #courseSearchRes {
@@ -669,12 +669,12 @@ USERS LIST
 FOOTER
 */
 footer {
-  background-color: #484f59;
   text-align: center;
-  color: #EBEBEB; }
+  color: #1B212F;
+  padding: 10px; }
   footer a {
     text-decoration: none;
-    color: #EBEBEB; }
+    color: #1B212F; }
     footer a:hover {
       color: #FF6500;
       text-decoration: underline; }
