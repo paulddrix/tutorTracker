@@ -149,10 +149,11 @@
     {{#each userData.studentsToTutor}}
       <a href="/tutorrequest/{{this.requestId}}" class="userLi float-left">
         <div class="float-left">
-          <b>Name&nbsp;</b>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
-          {{#if this.degree}}
-          <b>Course to Tutor&nbsp;</b> {{this.courseToTutor}} &nbsp;
+          {{#if this.pendingStatus}}
+          <b class="newLabel">NEW!</b>
           {{/if}}
+          <b>Name&nbsp;</b>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
+          <b>Course to Tutor&nbsp;</b> {{this.courseToTutor}} &nbsp;
           <b>Date Added&nbsp;</b> {{this.dateAdded}} &nbsp;
         </div>
       </a>
