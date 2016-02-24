@@ -1,7 +1,13 @@
 <div>
   {{#if userData.admin}}
     <div>
-      <p>Search Eligible Tutors</p>
+      <p>
+        Search tutor eligibility and total hours. Based upon that, add a request to a tutor.
+      </p>
+      <h2>Search Eligible Tutors</h2>
+      <p>
+        Simply search by course name, and click the assign button to add the tutor to the request form. If you did this correctly, the will be a number for the assign tutor field.
+      </p>
       <div class="float-clear">
         <input type="text" class="float-left" name="courseName" list="courseNames" id="courseName" placeholder="Course Name">
         <div id="searchCourses" class="float-left searchButton">
@@ -135,6 +141,9 @@
   </div>
   <div class="reqHelp customList">
     <h1>Requested Help</h1>
+    <p>
+      Click on a student request to view more information.
+    </p>
     {{#if userData.studentsToTutor}}
     <div class="listCont">
     {{#each userData.studentsToTutor}}

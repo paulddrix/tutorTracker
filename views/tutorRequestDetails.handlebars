@@ -10,7 +10,10 @@
   <p><b>Program &nbsp;</b>{{ tutorRequest.program }}</p>
 	<p><b>Deny Reason &nbsp;</b>{{ tutorRequest.denyReason }}</p>
 	<input type="hidden" id="rejectedReqId" value="{{tutorRequest.requestId}}">
-	<p>Search Eligible Tutors</p>
+	<h2>Search Eligible Tutors</h2>
+	<p>
+		Simply search by course name, and click the assign button to re-assign the request to the tutor.
+	</p>
 	<div class="float-clear">
 		<input type="text" class="float-left" name="courseName" list="courseNames2" id="courseName2" placeholder="Course Name">
 		<div id="searchCourses2" class="float-left searchButton">
@@ -34,6 +37,9 @@
 	{{!-- START TUTOR SIDEs --}}
 	{{else}}
 	<h1>Student's Details</h1>
+	<p>
+		If have not already done so, accept or deny the request. If you accept it, your are responsible to reach out to the student. If you deny it, you must specifiy a valid reason why.
+	</p>
 	<p><b>Name &nbsp;</b>{{ tutorRequest.firstName }}&nbsp;{{ tutorRequest.lastName }}</p>
 	<p><b>Email &nbsp;</b>{{ tutorRequest.email }}</p>
   <p><b>Phone &nbsp;</b>{{ tutorRequest.phone }}</p>
