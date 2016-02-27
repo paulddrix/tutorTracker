@@ -1,0 +1,264 @@
+{
+    "_id" : ObjectId("56b53ea4e75553b9f4566330"),
+    "startDate" : "02/14/2016",
+    "endTime" : "03/12/2016",
+    "nonWorkingDates" : [
+
+    ],
+    "weeks" : [
+        {
+            "weekDays" : [
+                {
+                    "dayName" : "Tuesday",
+                    "dayDate" : "02/16/2016"
+                    "10AM-1PM":[
+                          "shiftHours" : NumberInt(3),
+                          "tutors" : [
+                              {
+                                  "tutorName" : "Paul Diederichs",
+                                  "userId" : NumberInt(16920059),
+                                  "pending" : true,
+                                  "approved" : false
+                              }
+                          ]
+                      ]
+                        {
+                            "times" : "1PM-4PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Paul Diederichs",
+                                    "userId" : NumberInt(16920059),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        }
+
+                },
+                {
+                    "dayName" : "Friday",
+                    "dayDate" : "02/19/2016",
+                    "shifts" : [
+                        {
+                            "times" : "10AM-1PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Daniela Sora",
+                                    "userId" : NumberInt(67807941),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        },
+                        {
+                            "times" : "1PM-4PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Paul Diederichs",
+                                    "userId" : NumberInt(16920059),
+                                    "pending" : false,
+                                    "approved" : true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "weekDays" : [
+                {
+                    "dayName" : "Tuesday",
+                    "dayDate" : "02/23/2016",
+                    "shifts" : [
+                        {
+                            "times" : "10AM-1PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Paul Diederichs",
+                                    "userId" : NumberInt(16920059),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        },
+                        {
+                            "times" : "1PM-4PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Paul Diederichs",
+                                    "userId" : NumberInt(16920059),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "dayName" : "Friday",
+                    "dayDate" : "02/26/206",
+                    "shifts" : [
+                        {
+                            "times" : "10AM-1PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Daniela Sora",
+                                    "userId" : NumberInt(67807941),
+                                    "pending" : false,
+                                    "approved" : true
+                                }
+                            ]
+                        },
+                        {
+                            "times" : "1PM-4PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Paul Diederichs",
+                                    "userId" : NumberInt(16920059),
+                                    "pending" : false,
+                                    "approved" : true
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "weekDays" : [
+                {
+                    "dayName" : "Tuesday",
+                    "dayDate" : "03/01/2016",
+                    "shifts" : [
+                        {
+                            "times" : "10AM-1PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Paul Diederichs",
+                                    "userId" : NumberInt(16920059),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        },
+                        {
+                            "times" : "1PM-4PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Paul Diederichs",
+                                    "userId" : NumberInt(16920059),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "dayName" : "Friday",
+                    "dayDate" : "03/04/2016",
+                    "shifts" : [
+                        {
+                            "times" : "10AM-1PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Daniela Sora",
+                                    "userId" : NumberInt(67807941),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        },
+                        {
+                            "times" : "1PM-4PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Paul Diederichs",
+                                    "userId" : NumberInt(16920059),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "weekDays" : [
+                {
+                    "dayName" : "Tuesday",
+                    "dayDate" : "03/08/2016",
+                    "shifts" : [
+                        {
+                            "times" : "10AM-1PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Paul Diederichs",
+                                    "userId" : NumberInt(16920059),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        },
+                        {
+                            "times" : "1PM-4PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Paul Diederichs",
+                                    "userId" : NumberInt(16920059),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "dayName" : "Friday",
+                    "dayDate" : "03/11/2016",
+                    "shifts" : [
+                        {
+                            "times" : "10AM-1PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Daniela Sora",
+                                    "userId" : NumberInt(67807941),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        },
+                        {
+                            "times" : "1PM-4PM",
+                            "shiftHours" : NumberInt(3),
+                            "tutors" : [
+                                {
+                                    "tutorName" : "Paul Diederichs",
+                                    "userId" : NumberInt(16920059),
+                                    "pending" : true,
+                                    "approved" : false
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

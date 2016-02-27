@@ -1,7 +1,8 @@
 module.exports = function(app) {
+  "use strict";
   const urlencodedParser =  require('body-parser').urlencoded({ extended: false }),
   cookieParser = require('cookie-parser'),
-  mandrill = require('mandrill-api/mandrill'),
+  //mandrill = require('mandrill-api/mandrill'),
   moment = require('moment'),
   //mandrill_client = new mandrill.Mandrill('R6xFyX_txF1on5jGLGWreQ'),
   jwt = require('jsonwebtoken'),
@@ -22,52 +23,53 @@ module.exports = function(app) {
   LANDING PAGE
   */
   app.get('/',urlencodedParser, function(req, res){
-  	//the root route is going to redirect to  the dashboard.
+    //the root route is going to redirect to  the dashboard.
     //check if the user has the auth cookie.
-  	if(req.cookies.auth === undefined){
-  		res.redirect('/login');
-  	}
+    if(req.cookies.auth === undefined){
+      res.redirect('/login');
+    }
     //if they do, decode it.
-  	else{
-  		// verify a token asymmetric
-  		jwt.verify(req.cookies.auth, puCert, function(err, decoded){
-  			console.log('decoded jwt',decoded);
-      		if(decoded == undefined){
-        		res.redirect('/login');
-      		}
-      		else if(decoded['iss'] === "system"){
-            res.redirect('/dashboard');
-      		}
-  		});
-  	}
+    else{
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
+        console.log('decoded jwt',decoded);
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          res.redirect('/dashboard');
+
+        };
+      });
+    }
   });
   /*
   LOGIN
   */
   app.get('/login',function(req,res){
-  	res.render('login');
+    res.render('login');
   });
   //Verify credentials
   app.post('/verify',urlencodedParser,function(req,res){
-  	console.log('req.body',req.body);
-  	if(!req.body){
-  			res.sendStatus(400);
-  	}
-  	else{
-  		//read from DB to see what type of account they have
-  		userAccount.getUser(req.body,function(result){
-  			console.log('results from query',result);
-  			if(result[0]=== undefined){
-  				res.redirect('/login');
-  			}
-  			else{
+    console.log('req.body',req.body);
+    if(!req.body){
+      res.sendStatus(400);
+    }
+    else{
+      //read from DB to see what type of account they have
+      userAccount.getUser(req.body,function(result){
+        console.log('results from query',result);
+        if(result[0]=== undefined){
+          res.redirect('/login');
+        }
+        else{
 
-  	  		var token = jwt.sign({ alg: 'RS256',typ:'JWT',admin:result[0].admin, userId:result[0].userId }, prCert, { algorithm: 'RS256',issuer:'system',expiresIn:86400000});
-  	  		res.cookie('auth', token, {expires: new Date(Date.now() + 9000000),maxAge: 9000000 });//secure: true
-  	  		res.redirect('/');
-  			}
-  		});
-  	}
+          var token = jwt.sign({ alg: 'RS256',typ:'JWT',admin:result[0].admin, userId:result[0].userId }, prCert, { algorithm: 'RS256',issuer:'system',expiresIn:86400000});
+          res.cookie('auth', token, {expires: new Date(Date.now() + 9000000),maxAge: 9000000 });//secure: true
+          res.redirect('/');
+        }
+      });
+    }
   });
   /*
   DASHBOARD
@@ -102,7 +104,7 @@ module.exports = function(app) {
         else{
           userAccount.getUser({userId:decoded.userId},function(result){
             var data = {userData:result[0],loggedIn:true};
-               res.render('dashboard',data);
+            res.render('dashboard',data);
           });
         }
       });
@@ -193,37 +195,37 @@ module.exports = function(app) {
       // verify a token asymmetric
       jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in VIEW TUTOR REQUEST',decoded);
-          if(decoded == undefined){
-            res.redirect('/login');
-          }
-          //if the user is an admin
-          else if(decoded['iss'] === "system" && decoded['admin'] ==true){
-            userAccount.getUser({userId:decoded['userId']},function(result){
-              var data = {userData:result[0],loggedIn:true};
-              var incomingRequestId = parseInt(req.params.requestid);
-              tutorRequests.getTutorRequests({requestId:incomingRequestId},function(request){
-                data['tutorRequest'] = request[0];
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        //if the user is an admin
+        else if(decoded['iss'] === "system" && decoded['admin'] ==true){
+          userAccount.getUser({userId:decoded['userId']},function(result){
+            var data = {userData:result[0],loggedIn:true};
+            var incomingRequestId = parseInt(req.params.requestid);
+            tutorRequests.getTutorRequests({requestId:incomingRequestId},function(request){
+              data['tutorRequest'] = request[0];
 
-                userAccount.getUsers({admin:false},function(results) {
-                  data['tutorList']=results;
-                      courses.getCourses({},function(courseRes) {
-                      data['courseList']=courseRes;
-                      res.render('tutorRequestDetails',data);
-                    });
+              userAccount.getUsers({admin:false},function(results) {
+                data['tutorList']=results;
+                courses.getCourses({},function(courseRes) {
+                  data['courseList']=courseRes;
+                  res.render('tutorRequestDetails',data);
                 });
               });
             });
-          }
-          else if (decoded['iss'] === "system" && decoded['admin'] ==false) {
-            userAccount.getUser({userId:decoded['userId']},function(result){
-              var data = {userData:result[0],loggedIn:true};
-              var incomingRequestId = parseInt(req.params.requestid);
-              userAccount.tutorRequestDetails(decoded['userId'],incomingRequestId,function(tutorRequest){
-                data['tutorRequest']=tutorRequest[0]['studentsToTutor'];
-                res.render('tutorRequestDetails',data);
-              });
+          });
+        }
+        else if (decoded['iss'] === "system" && decoded['admin'] ==false) {
+          userAccount.getUser({userId:decoded['userId']},function(result){
+            var data = {userData:result[0],loggedIn:true};
+            var incomingRequestId = parseInt(req.params.requestid);
+            userAccount.tutorRequestDetails(decoded['userId'],incomingRequestId,function(tutorRequest){
+              data['tutorRequest']=tutorRequest[0]['studentsToTutor'];
+              res.render('tutorRequestDetails',data);
             });
-          }
+          });
+        }
       });
     }
   });
@@ -239,23 +241,23 @@ module.exports = function(app) {
       // verify a token asymmetric
       jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in VIEW TUTOR REQUEST',decoded);
-          if(decoded == undefined){
-            res.redirect('/login');
-          }
-          //if the user is an admin
-          else if(decoded['iss'] === "system"){
-            var incomingRequestId = parseInt(req.params.requestid);
-            var incomingAssignTutor = parseInt(req.params.assignTutor);
-              userAccount.updatetutorRequestDetails({userId:incomingAssignTutor,"studentsToTutor.requestId":incomingRequestId},
-                {"studentsToTutor.$.pendingStatus":false},function(result){
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        //if the user is an admin
+        else if(decoded['iss'] === "system"){
+          var incomingRequestId = parseInt(req.params.requestid);
+          var incomingAssignTutor = parseInt(req.params.assignTutor);
+          userAccount.updatetutorRequestDetails({userId:incomingAssignTutor,"studentsToTutor.requestId":incomingRequestId},
+          {"studentsToTutor.$.pendingStatus":false},function(result){
 
-                  //**************************************************
-                  //let the admin know the tutor accepted the request.
-                  //**************************************************
-                res.redirect('back');
-              });
+            //**************************************************
+            //let the admin know the tutor accepted the request.
+            //**************************************************
+            res.redirect('back');
+          });
 
-          }
+        }
       });
     }
   });
@@ -271,20 +273,20 @@ module.exports = function(app) {
       // verify a token asymmetric
       jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in VIEW TUTOR REQUEST',decoded);
-          if(decoded == undefined){
-            res.redirect('/login');
-          }
-          //if the user is an admin
-          else if(decoded['iss'] === "system"){
-            var incomingRequestId = parseInt(req.params.requestid);
-            var incomingAssignTutor = parseInt(req.params.assignTutor);
-            userAccount.destroyStdReq({userId:incomingAssignTutor},{ studentsToTutor: { requestId: incomingRequestId } } ,function(err,result){
-              console.log('error',err);
-              tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:true},function(result){
-                res.redirect('/dashboard');
-              });
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        //if the user is an admin
+        else if(decoded['iss'] === "system"){
+          var incomingRequestId = parseInt(req.params.requestid);
+          var incomingAssignTutor = parseInt(req.params.assignTutor);
+          userAccount.destroyStdReq({userId:incomingAssignTutor},{ studentsToTutor: { requestId: incomingRequestId } } ,function(err,result){
+            console.log('error',err);
+            tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:true},function(result){
+              res.redirect('/dashboard');
             });
-          }
+          });
+        }
       });
     }
   });
@@ -339,21 +341,21 @@ module.exports = function(app) {
       // verify a token asymmetric
       jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt',decoded);
-          if(decoded == undefined){
-            res.redirect('/login');
-          }
-          else if(decoded['iss'] === "system"){
-            var data={};
-            userAccount.getUser({userId:decoded.userId},function(result){
-              data['userData'] = result[0];
-              data['loggedIn'] = true;
-              officeHours.getOfficeHours({},function(results) {
-                console.log('OFFICE DATA',results[0]);
-                data['officeHours'] = results[0];
-                res.render('officeHours',data);
-              });
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          var data={};
+          userAccount.getUser({userId:decoded.userId},function(result){
+            data['userData'] = result[0];
+            data['loggedIn'] = true;
+            officeHours.getOfficeHours({},function(results) {
+              console.log('OFFICE DATA',results[0]);
+              data['officeHours'] = results[0];
+              res.render('officeHours',data);
             });
-          }
+          });
+        }
       });
     }
   });
@@ -369,15 +371,15 @@ module.exports = function(app) {
       // verify a token asymmetric
       jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt',decoded);
-          if(decoded == undefined){
-            res.redirect('/login');
-          }
-          else if(decoded['iss'] === "system"){
-            userAccount.getUser({userId:decoded.userId},function(result){
-              var data = {userData:result[0],loggedIn:true};
-              res.render('requestShift',data);
-            });
-          }
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          userAccount.getUser({userId:decoded.userId},function(result){
+            var data = {userData:result[0],loggedIn:true};
+            res.render('requestShift',data);
+          });
+        }
       });
     }
   });
@@ -393,29 +395,28 @@ module.exports = function(app) {
       // verify a token asymmetric
       jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt',decoded);
-          if(decoded == undefined){
-            res.redirect('/login');
-          }
-          else if(decoded['iss'] === "system"){
-            console.log(req.body);
-            var shiftDate = moment(req.body.shiftDate).format("MM/DD/YYYY");
-            var newShift = {
-              "tutorName" : req.body.tutorName,
-              "userId" : parseInt(req.body.userId),
-              "status" : "pending"
-            };
-            // FIXME: need to query to insert the shift in the right day and shifttype.
-            // officeHours.addShift({},{weeks:newShift},function(){
-            //
-            // });
-            // userAccount.getUser({email:decoded.email},function(result){
-            //   var data = {userData:result[0],loggedIn:true};
-            //   userAccount.getUsers({},function(results) {
-            //    data['users']=results;
-            //    res.render('requestShift',data);
-            //   });
-            // });
-          }
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+
+          var shiftDate = moment(req.body.shiftDate).format("MM/DD/YYYY");
+          var shiftDay = moment(req.body.shiftDate).format("dddd");
+          var newShift = { 
+                    "dayName" : shiftDay, 
+                    "dayDate" :shiftDate , 
+                    "shift" : req.body.shift, 
+                    "tutorName" : req.body.tutorName, 
+                    "shiftHours" : 3, 
+                    "userId" : parseInt(req.body.userId), 
+                    "pending" : true, 
+                    "approved" : false
+           };
+          officeHours.createShift(newShift,function(results){
+              res.redirect('/officehours');
+          });
+          
+        }
       });
     }
   });
@@ -428,19 +429,19 @@ module.exports = function(app) {
     }
     else{
       // we will check if the user requesting the page is a tutor or an admin
-        // verify a token asymmetric
-        jwt.verify(req.cookies.auth, puCert, function(err, decoded){
-          console.log('decoded jwt',decoded);
-            if(decoded == undefined){
-              res.redirect('/login');
-            }
-            else if(decoded['iss'] === "system"){
-              userAccount.getUser({userId:decoded.userId},function(result){
-                var data = {userData:result[0],loggedIn:true};
-                res.render('profile',data);
-              });
-            }
-        });
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
+        console.log('decoded jwt',decoded);
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          userAccount.getUser({userId:decoded.userId},function(result){
+            var data = {userData:result[0],loggedIn:true};
+            res.render('profile',data);
+          });
+        }
+      });
     }
   });
   /*
@@ -455,16 +456,16 @@ module.exports = function(app) {
       // verify a token asymmetric
       jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt',decoded);
-          if(decoded == undefined){
-            res.redirect('/login');
-          }
-          else if(decoded['iss'] === "system"){
-            userAccount.getUser({userId:decoded.userId},function(result){
-              console.log("edit profile page ",result[0]);
-              var data = {userData:result[0],loggedIn:true};
-              res.render('editProfile',data);
-            });
-          }
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          userAccount.getUser({userId:decoded.userId},function(result){
+            console.log("edit profile page ",result[0]);
+            var data = {userData:result[0],loggedIn:true};
+            res.render('editProfile',data);
+          });
+        }
       });
     }
   });
@@ -481,22 +482,22 @@ module.exports = function(app) {
       // verify a token asymmetric
       jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in editprofilehandler',decoded);
-          if(decoded == undefined){
-            res.redirect('/login');
-          }
-          else if(decoded['iss'] === "system"){
-            var editedProfile = {
-                "firstName":req.body.firstName,
-                "lastName":req.body.lastName,
-                "email":req.body.email,
-                "password":req.body.password,
-                "phone":req.body.phone
-            };
-            userAccount.updateUser({ userId:comingUserId },editedProfile,function(result){
-              console.log('result from update in editprofilehandler',result);
-              res.redirect('profile');
-            });
-          }
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          var editedProfile = {
+            "firstName":req.body.firstName,
+            "lastName":req.body.lastName,
+            "email":req.body.email,
+            "password":req.body.password,
+            "phone":req.body.phone
+          };
+          userAccount.updateUser({ userId:comingUserId },editedProfile,function(result){
+            console.log('result from update in editprofilehandler',result);
+            res.redirect('profile');
+          });
+        }
       });
     }
   });
@@ -519,8 +520,8 @@ module.exports = function(app) {
           userAccount.getUser({userId:decoded.userId},function(result){
             var data = {userData:result[0],loggedIn:true};
             userAccount.getUsers({},function(results) {
-             data['users']=results;
-             res.render('users',data);
+              data['users']=results;
+              res.render('users',data);
             });
           });
         }
@@ -546,9 +547,9 @@ module.exports = function(app) {
         }
         else if(decoded['iss'] === "system"){
           userAccount.getUser({userId:incomingNumber},function(result) {
-          var data={loggedIn:true};
-           data['userProfile']=result[0];
-           res.render('userDetails',data);
+            var data={loggedIn:true};
+            data['userProfile']=result[0];
+            res.render('userDetails',data);
           });
         }
       });
@@ -606,12 +607,12 @@ module.exports = function(app) {
           }
           var newUser = {
             "email" : req.body.email,
-          	"password" : req.body.password,
-          	"firstName" : req.body.firstName,
+            "password" : req.body.password,
+            "firstName" : req.body.firstName,
             "lastName":req.body.lastName,
-          	"phone" : req.body.phone,
+            "phone" : req.body.phone,
             "textAlert":comingTxt,
-          	"idNumber":comingID,
+            "idNumber":comingID,
             "userId":userId
           };
           if (req.body.admin == true) {
@@ -644,14 +645,14 @@ module.exports = function(app) {
       // verify a token asymmetric
       jwt.verify(req.cookies.auth, puCert, function(err, decoded){
         console.log('decoded jwt in deleteuserhandler',decoded);
-          if(decoded == undefined){
-            res.redirect('/login');
-          }
-          else if(decoded['iss'] === "system"){
-            userAccount.destroyUser({userId:comingUserId},function(result,err) {
-              res.redirect("/users");
-            });
-          }
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          userAccount.destroyUser({userId:comingUserId},function(result,err) {
+            res.redirect("/users");
+          });
+        }
       });
     }
   });
@@ -751,8 +752,8 @@ module.exports = function(app) {
           userAccount.getUser({userId:decoded.userId},function(result){
             var data = {userData:result[0],loggedIn:true};
             userAccount.getUsers({admin:false},function(results) {
-             data['users']=results;
-             res.render('timeSheet',data);
+              data['users']=results;
+              res.render('timeSheet',data);
             });
           });
         }
@@ -779,8 +780,8 @@ module.exports = function(app) {
             var data = {userData:result[0],loggedIn:true};
             var userID = parseInt(req.params.userId);
             userAccount.getUser({userId:userID},function(results) {
-             data['tutor']=results[0];
-             res.render('timeSheetDetails',data);
+              data['tutor']=results[0];
+              res.render('timeSheetDetails',data);
             });
           });
         }
@@ -805,7 +806,7 @@ module.exports = function(app) {
         else if(decoded['iss'] === "system"){
           userAccount.getUser({userId:decoded.userId},function(result){
             var data = {userData:result[0],loggedIn:true};
-             res.render('addSession',data);
+            res.render('addSession',data);
           });
         }
       });
@@ -839,19 +840,19 @@ module.exports = function(app) {
             "sessionTotal":totalHours
           };
           userAccount.updateStdSessions({ userId:comingUserId},{timeSheet:sessionData},function(result){
-          //add the session to the timeSheet array.
+            //add the session to the timeSheet array.
             userAccount.sumStdSessions(comingUserId,function(sumRes) {
               //sum up all the session hour totals
               console.log("SUM ",sumRes);
               console.log(sumRes[0].total);
               userAccount.updateUser({userId:comingUserId},{monthlyTotalSessionHours:sumRes[0].total},function(result) {
-              //insert the total in the tutor's monthlyTotalSessionHours.
-              //FIX ME: how to make the monthlyTotalHours always add the values
-              //for monthlyTotalSessionHours and monthlyTotalShiftHours
+                //insert the total in the tutor's monthlyTotalSessionHours.
+                //FIX ME: how to make the monthlyTotalHours always add the values
+                //for monthlyTotalSessionHours and monthlyTotalShiftHours
                 //userAccount.updateUser({userId:comingUserId},,function(result) {
-                  //add the monthlyTotalSessionHours to the tutor's monthlyTotalHours
-                  //console.log(result);
-                  res.redirect('/timesheet');
+                //add the monthlyTotalSessionHours to the tutor's monthlyTotalHours
+                //console.log(result);
+                res.redirect('/timesheet');
                 //});
               });
             });
@@ -877,8 +878,8 @@ module.exports = function(app) {
           userAccount.getUser({userId:decoded.userId},function(result){
             var userInfo = {userData:result[0],loggedIn:true};
             userAccount.getUsers({},function(results) {
-             userInfo['users']=results;
-             res.render('helpSupport',userInfo);
+              userInfo['users']=results;
+              res.render('helpSupport',userInfo);
             });
           });
         }

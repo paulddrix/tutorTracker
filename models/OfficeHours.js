@@ -22,23 +22,24 @@ module.exports ={
 
     });
   },
-  createOfficeHours: function(doc,callback) {
+  //add student request
+  createShift: function(shiftReq,callback) {
+    // Connection URL
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
     MongoClient.connect(mongoUrl, function(err, db) {
       assert.equal(null, err);
-      //console.log("Connected correctly to mongodb");
+      console.log("Connected correctly to mongodb");
       // Get the documents collection
-      var collection = db.collection('officeHours');
-      // Insert some documents
-      collection.insertOne(doc, function(err, result) {
-        //console.log("error? ",err);
-        callback(result, err);
-        //close connection
+      var collection = db.collection('officeShifts');
+      collection.insert(shiftReq, function(err, result) {
+            console.log('error In createShift Func',err);
+        callback(result);
         db.close();
       });
     });
   },
+  
   destroyOfficeHours: function(shift,callback) {
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
@@ -72,27 +73,6 @@ module.exports ={
           }, function(err, result) {
         callback(result);
       });
-      //close connection
-      db.close();
-    });
-  },
-  //update student requests
-  addShift: function(query,shiftInfo,callback) {
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
-    // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
-      // Get the documents collection
-      var collection = db.collection('users');
-      collection.update(query,{
-        $push: shiftInfo,
-        $currentDate: { dateAdded: true }
-          }, function(err, result) {
-        callback(result);
-      });
-      //get user id and update the information coming form the form
       //close connection
       db.close();
     });
