@@ -344,14 +344,33 @@ module.exports = function(app) {
         if(decoded == undefined){
           res.redirect('/login');
         }
-        else if(decoded['iss'] === "system"){
-          var data={};
+        else if(decoded['iss'] === "system" && decoded['admin'] == true){
+          
           userAccount.getUser({userId:decoded.userId},function(result){
+              var data={};
             data['userData'] = result[0];
             data['loggedIn'] = true;
-            officeHours.getOfficeHours({},function(results) {
-              console.log('OFFICE DATA',results[0]);
-              data['officeHours'] = results[0];
+            officeHours.getShifts({},function(results) {
+              console.log('OFFICE DATA',results);
+              data['officeShifts'] = results;
+              res.render('officeHours',data);
+            });
+          });
+        }
+        else if(decoded['iss'] === "system" && decoded['admin'] == false){
+           
+          userAccount.getUser({userId:decoded.userId},function(result){
+              var data={};
+            data['userData'] = result[0];
+            data['loggedIn'] = true;
+            officeHours.getShifts({userId:decoded.userId},function(shifts) {
+              console.log('OFFICE DATA',shifts);
+              if (shifts.length <= 0){
+                  data['noShifts'] = true;
+              }
+              else{
+                  data['officeShifts'] = shifts;
+              }
               res.render('officeHours',data);
             });
           });
@@ -887,6 +906,34 @@ module.exports = function(app) {
     }
     else{
       res.render('helpSupport');
+    }
+  });
+   /*
+  HELP & SUPORT > FAQ
+  */
+  app.get('/helpSupport/faq',function(req,res) {
+      
+    if(req.cookies.auth != undefined){
+      // we will check if the user requesting the page is a tutor or an admin
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
+        console.log('decoded jwt',decoded);
+        if(decoded == undefined){
+          res.render('faq');
+        }
+        else if(decoded['iss'] === "system"){
+          userAccount.getUser({userId:decoded.userId},function(result){
+            var userInfo = {userData:result[0],loggedIn:true};
+            userAccount.getUsers({},function(results) {
+              userInfo['users']=results;
+              res.render('faq',userInfo);
+            });
+          });
+        }
+      });
+    }
+    else{
+      res.render('faq');
     }
   });
   /*

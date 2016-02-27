@@ -2,19 +2,19 @@ var MongoClient = require('mongodb').MongoClient,
 assert = require('assert');
 module.exports ={
 
-  getOfficeHours: function(query,callback) {
+  getShifts: function(query,callback) {
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the DB Server
     MongoClient.connect(mongoUrl, function(err, db) {
       assert.equal(null, err);
       //console.log("Connected correctly to mongodb");
       // Get the documents collection
-      var collection = db.collection('officeHours');
+      var collection = db.collection('officeShifts');
       // Find some documents
       collection.find(query).toArray(function(err, docs) {
-        //console.log("logging out all users");
+        console.log('error In getShifts Func',err);
         //console.dir(docs);
-        //parsing mongoDoc
+        //send results
         callback(docs);
         //close connection
         db.close();
