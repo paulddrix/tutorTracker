@@ -359,35 +359,68 @@ module.exports = function(app) {
                    
                    officeHours.organizedShifts(currentMonth[0].startDate,currentMonth[0].endDate,function(officeShifts){
                        //parse shifts into a month object
-                      // console.log('FUCKSHIT2',officeShifts);
+
                        var weeks = [];
                        
                        for (let i = 0; i < officeShifts.length; i++) {
-                        
-                           let week = {"weekDays":[]};
-                           let weekDay={};
-                           weekDay['dayName']= officeShifts[i]['_id'].dayName;
-                           weekDay['dayDate']= officeShifts[i]['_id'].dayDate;
-                           weekDay['10AM-1PM']=[];
-                           weekDay['1PM-4PM']=[];
-                           
-                           for (let x = 0; x < officeShifts[i].shifts.length; x++) {
+                            //if this is an odd loop, make the variable to hold a week
+                            if((i+1)%2 !=  0){
+                                var week = {"weekDays":[]};
+                                var weekDay={};
+                                weekDay['dayName']= officeShifts[i]['_id'].dayName;
+                                weekDay['dayDate']= officeShifts[i]['_id'].dayDate;
+                                weekDay['10AM-1PM']=[];
+                                 weekDay['1PM-4PM']=[];
+                                 for (let x = 0; x < officeShifts[i].shifts.length; x++) {
                               
-                               if(officeShifts[i].shifts[x].shift == '10AM-1PM'){
-                                    weekDay['10AM-1PM'].push(officeShifts[i].shifts[x]);
-                               }
-                               if(officeShifts[i].shifts[x].shift == '1PM-4PM'){
-                                    weekDay['1PM-4PM'].push(officeShifts[i].shifts[x]);
-                               }
-                               
-                               
+                                        if(officeShifts[i].shifts[x].shift == '10AM-1PM'){
+                                                weekDay['10AM-1PM'].push(officeShifts[i].shifts[x]);
+                                        }
+                                        if(officeShifts[i].shifts[x].shift == '1PM-4PM'){
+                                                weekDay['1PM-4PM'].push(officeShifts[i].shifts[x]);
+                                        }
+                                 }
+                                 //push the weekDay into the array of weekDays
+                                  week['weekDays'].push(weekDay);
+                                  //clean variable
+                                  weekDay={};
                            }
+                            //if this is an even loop, add the week to the array and clear the variables.
+                            else if ((i+1)%2 ==0){
+                                
+                                var weekDay={};
+                                weekDay['dayName']= officeShifts[i]['_id'].dayName;
+                                weekDay['dayDate']= officeShifts[i]['_id'].dayDate;
+                                weekDay['10AM-1PM']=[];
+                                 weekDay['1PM-4PM']=[];
+                                 for (let x = 0; x < officeShifts[i].shifts.length; x++) {
+                              
+                                        if(officeShifts[i].shifts[x].shift == '10AM-1PM'){
+                                                weekDay['10AM-1PM'].push(officeShifts[i].shifts[x]);
+                                        }
+                                        if(officeShifts[i].shifts[x].shift == '1PM-4PM'){
+                                                weekDay['1PM-4PM'].push(officeShifts[i].shifts[x]);
+                                        }
+                                 }
+                                 //push the weekDay into the array of weekDays
+                                 week['weekDays'].push(weekDay);
+                                 //clear weekDay
+                                weekDay={};
+                                //push week to weeks array
+                                 weeks.push(week);
+                                
+                                //clearing week
+                                week = {}
+                            }
+                           
+                           
+                       
                            console.log('this is i ',i+1);
                            var testing = (i+1)%2;
                            console.log(testing);
                            
-                           week['weekDays'].push(weekDay);
-                           weeks.push(week);
+                          // week['weekDays'].push(weekDay);
+                           //weeks.push(week);
                            
                        }
                         
