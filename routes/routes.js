@@ -350,13 +350,62 @@ module.exports = function(app) {
               var data={};
             data['userData'] = result[0];
             data['loggedIn'] = true;
-            officeHours.getShifts({},function(results) {
-              console.log('OFFICE DATA',results);
-              data['officeShifts'] = results;
-              res.render('officeHours',data);
+            //current date
+            var currentDate = moment().format("MM/DD/YYYY");
+            // Get the current month based on today's date
+            officeHours.getCurrentMonth(currentDate,function(currentMonth){
+                   //get all the shifts for this month
+
+                   
+                   officeHours.organizedShifts(currentMonth[0].startDate,currentMonth[0].endDate,function(officeShifts){
+                       //parse shifts into a month object
+                      // console.log('FUCKSHIT2',officeShifts);
+                       var weeks = [];
+                       
+                       for (let i = 0; i < officeShifts.length; i++) {
+                        
+                           let week = {"weekDays":[]};
+                           let weekDay={};
+                           weekDay['dayName']= officeShifts[i]['_id'].dayName;
+                           weekDay['dayDate']= officeShifts[i]['_id'].dayDate;
+                           weekDay['10AM-1PM']=[];
+                           weekDay['1PM-4PM']=[];
+                           
+                           for (let x = 0; x < officeShifts[i].shifts.length; x++) {
+                              
+                               if(officeShifts[i].shifts[x].shift == '10AM-1PM'){
+                                    weekDay['10AM-1PM'].push(officeShifts[i].shifts[x]);
+                               }
+                               if(officeShifts[i].shifts[x].shift == '1PM-4PM'){
+                                    weekDay['1PM-4PM'].push(officeShifts[i].shifts[x]);
+                               }
+                               
+                               
+                           }
+                           console.log('this is i ',i+1);
+                           var testing = (i+1)%2;
+                           console.log(testing);
+                           
+                           week['weekDays'].push(weekDay);
+                           weeks.push(week);
+                           
+                       }
+                        
+                       console.log(weeks);
+                     
+                          data['weeks'] = weeks;
+                          console.log('FUCKINGCOCK ',data['weeks']);
+                          
+                          res.render('officeHours',data);
+                      
+                   });
+                   
             });
+            
+            
           });
         }
+        
         else if(decoded['iss'] === "system" && decoded['admin'] == false){
            
           userAccount.getUser({userId:decoded.userId},function(result){
