@@ -7,13 +7,14 @@
       </p>
       <p>
         <label for="shift">Shift</label>
-        <select name="shift" id="shift">
-          <option value="false">Select a Shift</option>
+        <input name="shift" id="shift" list="shiftTimes">
+        <datalist id="shiftTimes">
           <option value="10AM-1PM">10AM-1PM</option>
           <option value="1PM-4PM">1PM-4PM</option>
-          <option value="both">Both</option>
-        </select>
+          <option value="Both">Both</option>
+        </datalist>
       </p>
+
       <input type="hidden" name="userId" value="{{userData.userId}}">
       <input type="hidden" name="tutorName" value="{{userData.firstName}} {{userData.lastName}}">
       <button type="submit" class="aquarius">Submit</button>
