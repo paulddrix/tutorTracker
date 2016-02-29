@@ -3,16 +3,12 @@
   <h1>Manage Office Hours</h1>
   <!-- Start Month -->
   <div class="month">
-      <!-- Start Week  -->
-      {{#each weeks}}
-      <div class="week">
-        <h2>Week </h2>
         <!-- Start Days -->
         <div class="days">
-          {{#each this.weekDays}}
+          {{#each this.days}}
           <!-- Start Day -->
           <div class="day">
-            <h3>{{this.dayName}}&nbsp; {{ this.dayDate}}</h3>
+            <h3>{{this.dayName}}&nbsp; {{ this.dayDate}} </h3>
             <!-- Start Shifts -->
             <div class="shifts">
 
@@ -36,8 +32,8 @@
                           		c1,0.7,2,1.5,2.8,2.6c0,0,0,0,0,0c0.2,0.3,0.6,0.5,0.9,0.5s0.7-0.2,0.9-0.5c0,0,0,0,0,0c0.8-1,1.9-1.9,2.8-2.6
                           		C27.7,14.7,27.9,14.1,27.7,13.7z"/>
                           </svg>
-                          <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                          <a href="/acceptshift" class="button aquarius float-right">Accept</a>
+                          <a href="/acceptshift/{{this.userId}}/{{this.shiftId}}" class="button aquarius float-right">Accept</a>
+                          <a href="/denyshift/{{this.userId}}/{{this.shiftId}}" class="button fsorange float-right">Deny</a>
                         </div>
                       {{/if}}
                       {{#if this.approved}}
@@ -50,7 +46,9 @@
 		L15.7,40.4z"/>
 
                             </svg>
+                            <a href="/remove/{{this.userId}}/{{this.shiftId}}" class="button fsorange float-right">Remove</a>
                           </span>
+
                         </div>
                       {{/if}}
                     </div>
@@ -78,8 +76,8 @@
                           		c1,0.7,2,1.5,2.8,2.6c0,0,0,0,0,0c0.2,0.3,0.6,0.5,0.9,0.5s0.7-0.2,0.9-0.5c0,0,0,0,0,0c0.8-1,1.9-1.9,2.8-2.6
                           		C27.7,14.7,27.9,14.1,27.7,13.7z"/>
                           </svg>
-                          <a href="/denyshift" class="button fsorange float-right">Deny</a>
-                          <a href="/acceptshift" class="button aquarius float-right">Accept</a>
+                          <a href="/acceptshift/{{this.userId}}/{{this.shiftId}}" class="button aquarius float-right">Accept</a>
+                          <a href="/denyshift/{{this.userId}}/{{this.shiftId}}" class="button fsorange float-right">Deny</a>
                         </div>
                       {{/if}}
                       {{#if this.approved}}
@@ -92,6 +90,7 @@
 		L15.7,40.4z"/>
 
                             </svg>
+                            <a href="/remove/{{this.userId}}/{{this.shiftId}}" class="button fsorange float-right">Remove</a>
                           </span>
                         </div>
                       {{/if}}
@@ -107,9 +106,7 @@
           {{/each}}
         </div>
         <!-- End Days -->
-      </div>
-      <!-- End Week -->
-      {{/each}}
+
   </div>
   <!-- End Month -->
   {{!-- Start Tutor Side --}}
@@ -117,17 +114,21 @@
   <a href="/officehours/requestshift" class="button aquarius">Request Shift</a>
   <h1>View  Office Hours</h1>
   <p>If you have any office shifts they will be displayed below.</p>
-  {{#if noShifts}}
+  {{#if userData.officeHours}}
+
+    {{#each userData.officeHours}}
+      <h2>{{this.dayName}} - {{this.dayDate}}</h2>
+      {{#if this.approved}}
+          <p>The shift request has been approved, you are expected to cover it. If anything stops you from fulling your shift, contact the administrator.</p>
+      {{/if}}
+      {{#if this.pending}}
+          <p>The shift request is pending approval, you will be noticed if the request is denied or approved.</p>
+      {{/if}}
+    {{/each}}
+  {{else}}
     <p>You do not have any office shifts.</p>
   {{/if}}
-  {{#each officeShifts}}
-    <h2>{{this.dayName}} - {{this.dayDate}}</h2>
-    {{#if this.approved}}
-        <p>The shift request has been approved, you are expected to cover it. If anything stops you from fulling your shift, contact the administrator.</p>
-    {{/if}}
-    {{#if this.pending}}
-        <p>The shift request is pending approval, you will be noticed if the request is denied or approved.</p>
-    {{/if}}
-  {{/each}}
-  {{/if}}
+
+
+{{/if}}
 </div>

@@ -150,20 +150,16 @@ CONTENT STYLES
 /*
 OFFICE HOURS
 */
-.weeks{
+.days{
+	overflow: hidden;
 
 }
-.week{
+.day{
 	background-color:$list-line;
 	text-align: center;
 	padding: 10px;
-	margin:10px auto;
-}
-.days{
-	overflow: hidden;
-}
-.day{
-	width: 50%;
+	margin:5px;
+	width: 48%;
 	float: left;
 	h3{
 		text-align: center ;

@@ -97,8 +97,11 @@ module.exports ={
       db.close();
     });
   },
-  //add student request
-  addStdReq: function(query,reqInfo,callback) {
+  /*
+  DEALING WITH ARRAYS
+  */
+  //add element to an array
+  addToArray: function(query,reqInfo,callback) {
     // Connection URL
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
@@ -118,8 +121,8 @@ module.exports ={
       db.close();
     });
   },
-  //remove student request
-  destroyStdReq: function(query,reqToDestroy,callback) {
+  //remove element from array
+  pullFromArray: function(query,docToPull,callback) {
     // Connection URL
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
@@ -129,15 +132,15 @@ module.exports ={
       // Get the documents collection
       var collection = db.collection('users');
       collection.update(query,{
-        $pull: reqToDestroy}, function(err, result) {
+        $pull: docToPull}, function(err, result) {
         callback(result);
         //close connection
         db.close();
       });
     });
   },
-  //update tutor's sessions
-  updateStdSessions: function(query,sessionInfo,callback) {
+  //update an element in an array
+  updateArrayElement: function(query,requestStatus,callback) {
     // Connection URL
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
@@ -147,8 +150,7 @@ module.exports ={
       // Get the documents collection
       var collection = db.collection('users');
       collection.update(query,{
-        $push: sessionInfo,
-        $currentDate: { dateAdded: true }
+        $set: requestStatus,
           }, function(err, result) {
         callback(result);
       });
@@ -206,26 +208,6 @@ module.exports ={
         //close connection
         db.close();
       });
-    });
-  },
-  //update a specific tutor request
-  updatetutorRequestDetails: function(query,requestStatus,callback) {
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
-    // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
-      // Get the documents collection
-      var collection = db.collection('users');
-      collection.update(query,{
-        $set: requestStatus,
-          }, function(err, result) {
-        callback(result);
-      });
-      //get user id and update the information coming form the form
-      //close connection
-      db.close();
     });
   }
 

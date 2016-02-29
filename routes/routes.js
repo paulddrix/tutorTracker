@@ -175,7 +175,7 @@ module.exports = function(app) {
           tutorRequests.createRequest(newTutorRequest,function(err,result){
             console.log('error ',err);
           });
-          userAccount.addStdReq({userId:comingTutor},{studentsToTutor:newTutorRequest},function(err,result){
+          userAccount.addToArray({userId:comingTutor},{studentsToTutor:newTutorRequest},function(err,result){
             console.log('error',err);
           });
           res.redirect('/dashboard');
@@ -248,7 +248,7 @@ module.exports = function(app) {
         else if(decoded['iss'] === "system"){
           var incomingRequestId = parseInt(req.params.requestid);
           var incomingAssignTutor = parseInt(req.params.assignTutor);
-          userAccount.updatetutorRequestDetails({userId:incomingAssignTutor,"studentsToTutor.requestId":incomingRequestId},
+          userAccount.updateArrayElement({userId:incomingAssignTutor,"studentsToTutor.requestId":incomingRequestId},
           {"studentsToTutor.$.pendingStatus":false},function(result){
 
             //**************************************************
@@ -280,7 +280,7 @@ module.exports = function(app) {
         else if(decoded['iss'] === "system"){
           var incomingRequestId = parseInt(req.params.requestid);
           var incomingAssignTutor = parseInt(req.params.assignTutor);
-          userAccount.destroyStdReq({userId:incomingAssignTutor},{ studentsToTutor: { requestId: incomingRequestId } } ,function(err,result){
+          userAccount.pullFromArray({userId:incomingAssignTutor},{ studentsToTutor: { requestId: incomingRequestId } } ,function(err,result){
             console.log('error',err);
             tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:true},function(result){
               res.redirect('/dashboard');
@@ -318,7 +318,7 @@ module.exports = function(app) {
               //targetReq['rejected']= false;
               console.log('EDITTED REQ ',targetReq);
 
-              userAccount.addStdReq({userId:incomingTutorId},{studentsToTutor:targetReq},function(err,result){
+              userAccount.addToArray({userId:incomingTutorId},{studentsToTutor:targetReq},function(err,result){
                 console.log('error',err);
                 res.redirect('/dashboard');
               });
@@ -345,7 +345,7 @@ module.exports = function(app) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system" && decoded['admin'] == true){
-          
+
           userAccount.getUser({userId:decoded.userId},function(result){
               var data={};
             data['userData'] = result[0];
@@ -355,111 +355,116 @@ module.exports = function(app) {
             // Get the current month based on today's date
             officeHours.getCurrentMonth(currentDate,function(currentMonth){
                    //get all the shifts for this month
-
-                   
                    officeHours.organizedShifts(currentMonth[0].startDate,currentMonth[0].endDate,function(officeShifts){
                        //parse shifts into a month object
 
-                       var weeks = [];
-                       
+                       var days = [];
+
                        for (let i = 0; i < officeShifts.length; i++) {
-                            //if this is an odd loop, make the variable to hold a week
-                            if((i+1)%2 !=  0){
-                                var week = {"weekDays":[]};
-                                var weekDay={};
-                                weekDay['dayName']= officeShifts[i]['_id'].dayName;
-                                weekDay['dayDate']= officeShifts[i]['_id'].dayDate;
-                                weekDay['10AM-1PM']=[];
-                                 weekDay['1PM-4PM']=[];
-                                 for (let x = 0; x < officeShifts[i].shifts.length; x++) {
-                              
-                                        if(officeShifts[i].shifts[x].shift == '10AM-1PM'){
-                                                weekDay['10AM-1PM'].push(officeShifts[i].shifts[x]);
-                                        }
-                                        if(officeShifts[i].shifts[x].shift == '1PM-4PM'){
-                                                weekDay['1PM-4PM'].push(officeShifts[i].shifts[x]);
-                                        }
-                                 }
-                                 //push the weekDay into the array of weekDays
-                                  week['weekDays'].push(weekDay);
-                                  //clean variable
-                                  weekDay={};
+                          var weekDay={};
+                          weekDay['dayName']= officeShifts[i]['_id'].dayName;
+                          weekDay['dayDate']= officeShifts[i]['_id'].dayDate;
+                          weekDay['10AM-1PM']=[];
+                           weekDay['1PM-4PM']=[];
+                           for (let x = 0; x < officeShifts[i].shifts.length; x++) {
+
+                                  if(officeShifts[i].shifts[x].shift == '10AM-1PM'){
+                                          weekDay['10AM-1PM'].push(officeShifts[i].shifts[x]);
+                                  }
+                                  if(officeShifts[i].shifts[x].shift == '1PM-4PM'){
+                                          weekDay['1PM-4PM'].push(officeShifts[i].shifts[x]);
+                                  }
                            }
-                            //if this is an even loop, add the week to the array and clear the variables.
-                            else if ((i+1)%2 ==0){
-                                
-                                var weekDay={};
-                                weekDay['dayName']= officeShifts[i]['_id'].dayName;
-                                weekDay['dayDate']= officeShifts[i]['_id'].dayDate;
-                                weekDay['10AM-1PM']=[];
-                                 weekDay['1PM-4PM']=[];
-                                 for (let x = 0; x < officeShifts[i].shifts.length; x++) {
-                              
-                                        if(officeShifts[i].shifts[x].shift == '10AM-1PM'){
-                                                weekDay['10AM-1PM'].push(officeShifts[i].shifts[x]);
-                                        }
-                                        if(officeShifts[i].shifts[x].shift == '1PM-4PM'){
-                                                weekDay['1PM-4PM'].push(officeShifts[i].shifts[x]);
-                                        }
-                                 }
-                                 //push the weekDay into the array of weekDays
-                                 week['weekDays'].push(weekDay);
-                                 //clear weekDay
-                                weekDay={};
-                                //push week to weeks array
-                                 weeks.push(week);
-                                
-                                //clearing week
-                                week = {}
-                            }
-                           
-                           
-                       
-                           console.log('this is i ',i+1);
-                           var testing = (i+1)%2;
-                           console.log(testing);
-                           
-                          // week['weekDays'].push(weekDay);
-                           //weeks.push(week);
-                           
+                           //push the weekDay into the array of days
+                            days.push(weekDay);
                        }
-                        
-                       console.log(weeks);
-                     
-                          data['weeks'] = weeks;
-                          console.log('FUCKINGCOCK ',data['weeks']);
-                          
-                          res.render('officeHours',data);
-                      
+
+                      data['days'] = days;
+                      console.log('FUCKINGSHIT ',data['days'][0]);
+
+                      res.render('officeHours',data);
+
                    });
-                   
+
             });
-            
-            
+
+
           });
         }
-        
+
         else if(decoded['iss'] === "system" && decoded['admin'] == false){
-           
+
           userAccount.getUser({userId:decoded.userId},function(result){
-              var data={};
+            var data={};
             data['userData'] = result[0];
             data['loggedIn'] = true;
-            officeHours.getShifts({userId:decoded.userId},function(shifts) {
-              console.log('OFFICE DATA',shifts);
-              if (shifts.length <= 0){
-                  data['noShifts'] = true;
-              }
-              else{
-                  data['officeShifts'] = shifts;
-              }
-              res.render('officeHours',data);
+            res.render('officeHours',data);
+
+          });
+        }
+      });
+    }
+  });
+  /*
+  OFFICE HOURS > ACCEPT SHIFT HANDLER
+  */
+  app.get('/acceptshift/:userId/:shiftId',urlencodedParser,function(req,res) {
+      console.log(req.params);
+
+    if(req.cookies.auth === undefined){
+      res.redirect('/login');
+    }
+    else{
+      // we will check if the user requesting the page is a tutor or an admin
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
+        console.log('decoded jwt in DENY SHIFT HANDLER ',decoded);
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          var tutorId = parseInt(req.params.userId);
+          var officeShiftId = parseInt(req.params.shiftId);
+          userAccount.updateArrayElement({userId:tutorId,"officeHours.shiftId":officeShiftId},
+          {"officeHours.$.approved":true,"officeHours.$.pending":false},function(result){
+            officeHours.updateOfficeHours({shiftId:officeShiftId},{"approved":true,"pending":false},function(){
+              res.redirect('/officehours');
             });
           });
         }
       });
     }
   });
+  /*
+  OFFICE HOURS > DENY SHIFT HANDLER
+  */
+  app.get('/denyshift/:userId/:shiftId',urlencodedParser,function(req,res) {
+      console.log(req.params);
+
+    if(req.cookies.auth === undefined){
+      res.redirect('/login');
+    }
+    else{
+      // we will check if the user requesting the page is a tutor or an admin
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
+        console.log('decoded jwt in DENY SHIFT HANDLER ',decoded);
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          var tutorId = parseInt(req.params.userId);
+          var officeShiftId = parseInt(req.params.shiftId);
+          userAccount.pullFromArray({userId:tutorId},{ "officeHours": { shiftId: officeShiftId } },function(result){
+            officeHours.destroyShift({shiftId:officeShiftId},function(result){
+              res.redirect('/officehours');
+            });
+          });
+        }
+      });
+    }
+  });
+
   /*
   OFFICE HOURS > REQUEST SHIFT
   */
@@ -503,20 +508,26 @@ module.exports = function(app) {
 
           var shiftDate = moment(req.body.shiftDate).format("MM/DD/YYYY");
           var shiftDay = moment(req.body.shiftDate).format("dddd");
-          var newShift = { 
-                    "dayName" : shiftDay, 
-                    "dayDate" :shiftDate , 
-                    "shift" : req.body.shift, 
-                    "tutorName" : req.body.tutorName, 
-                    "shiftHours" : 3, 
-                    "userId" : parseInt(req.body.userId), 
-                    "pending" : true, 
+          var shiftId = Math.floor((Math.random() * 99999999) + 10000000);
+          var newShift = {
+                    "dayName" : shiftDay,
+                    "shiftId":shiftId,
+                    "dayDate" :shiftDate ,
+                    "shift" : req.body.shift,
+                    "tutorName" : req.body.tutorName,
+                    "shiftHours" : 3,
+                    "userId" : parseInt(req.body.userId),
+                    "pending" : true,
                     "approved" : false
            };
           officeHours.createShift(newShift,function(results){
+            //send the request to the tutor's office hours array
+            userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift},function(result){
+              console.log('result from addToArray ReqSHiftHandler',result);
               res.redirect('/officehours');
+            });
           });
-          
+
         }
       });
     }
@@ -720,7 +731,14 @@ module.exports = function(app) {
             newUser['admin']= true;
           }
           else{
-            newUser['admin']= false;
+            newUser["admin"]= false;
+            newUser["monthlyTotalHours"]= 0,
+            newUser["monthlyTotalShiftHours"]= 0,
+            newUser["monthlyTotalSessionHours"]=0,
+            newUser["studentsToTutor"]=[];
+            newUser["timeSheet"]=[];
+            newUser["eligibleCourses"]=[];
+            newUser["officeHours"]=[];
           }
           if (req.body.degree) {
             newUser['degree']= req.body.degree;
@@ -940,7 +958,7 @@ module.exports = function(app) {
             "sessionEndTime" : endTime.format('h:mm A'),
             "sessionTotal":totalHours
           };
-          userAccount.updateStdSessions({ userId:comingUserId},{timeSheet:sessionData},function(result){
+          userAccount.addToArray({ userId:comingUserId},{timeSheet:sessionData},function(result){
             //add the session to the timeSheet array.
             userAccount.sumStdSessions(comingUserId,function(sumRes) {
               //sum up all the session hour totals
@@ -994,7 +1012,7 @@ module.exports = function(app) {
   HELP & SUPORT > FAQ
   */
   app.get('/helpSupport/faq',function(req,res) {
-      
+
     if(req.cookies.auth != undefined){
       // we will check if the user requesting the page is a tutor or an admin
       // verify a token asymmetric

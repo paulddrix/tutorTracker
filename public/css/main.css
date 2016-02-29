@@ -575,17 +575,15 @@ CONTENT STYLES
 /*
 OFFICE HOURS
 */
-.week {
-  background-color: #E0E0E0;
-  text-align: center;
-  padding: 10px;
-  margin: 10px auto; }
-
 .days {
   overflow: hidden; }
 
 .day {
-  width: 50%;
+  background-color: #E0E0E0;
+  text-align: center;
+  padding: 10px;
+  margin: 5px;
+  width: 48%;
   float: left; }
   .day h3 {
     text-align: center; }

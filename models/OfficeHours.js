@@ -41,7 +41,7 @@ module.exports ={
       });
     });
   },
-  
+
   destroyShift: function(shift,callback) {
     var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
@@ -51,7 +51,7 @@ module.exports ={
       // Get the documents collection
       var collection = db.collection('officeShifts');
       // Insert some documents
-      collection.remove(user, function(err, result) {
+      collection.remove(shift, function(err, result) {
         //console.log('result from user deletion ',result);
         //console.log(err);
         callback(result, err);
@@ -70,8 +70,7 @@ module.exports ={
       // Get the documents collection
       var collection = db.collection('officeShifts');
       collection.update(query,{
-        $set: {updateInfo},
-        $currentDate: { dateAdded: true }
+        $set: updateInfo
           }, function(err, result) {
         callback(result);
       });
@@ -97,16 +96,17 @@ module.exports ={
       collection.aggregate([
         {$match:{ dayDate: { $gt: startDate, $lt: EndDate }}},
         {$group : {_id: {dayDate:"$dayDate",dayName:"$dayName"},
-                            shifts: { $push:  
-                                            { "dayName" : "$dayName", 
-                                               "dayDate" : "$dayDate", 
-                                               "shift" : "$shift", 
-                                               "tutorName" : "$tutorName", 
-                                               "shiftHours" : "$shiftHours", 
-                                               "userId" : "$userId", 
-                                               "pending" : "$pending", 
-                                               "approved" : "$approved" 
-                                               } 
+                            shifts: { $push:
+                                            { "dayName" : "$dayName",
+                                               "dayDate" : "$dayDate",
+                                               "shift" : "$shift",
+                                               "tutorName" : "$tutorName",
+                                               "shiftHours" : "$shiftHours",
+                                               "userId" : "$userId",
+                                               "pending" : "$pending",
+                                               "approved" : "$approved",
+                                               "shiftId":"$shiftId"
+                                               }
                            }
                           }
          },
