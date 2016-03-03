@@ -380,8 +380,6 @@ module.exports = function(app) {
                        }
 
                       data['days'] = days;
-                      console.log('FUCKINGSHIT ',data['days'][0]);
-
                       res.render('officeHours',data);
 
                    });
@@ -427,6 +425,7 @@ module.exports = function(app) {
           var officeShiftId = parseInt(req.params.shiftId);
           userAccount.updateArrayElement({userId:tutorId,"officeHours.shiftId":officeShiftId},
           {"officeHours.$.approved":true,"officeHours.$.pending":false},function(result){
+            // FIXME: need to add the total of all shifts and place that in the totalShiftHours field for a tutor
             officeHours.updateOfficeHours({shiftId:officeShiftId},{"approved":true,"pending":false},function(){
               res.redirect('/officehours');
             });
@@ -439,6 +438,36 @@ module.exports = function(app) {
   OFFICE HOURS > DENY SHIFT HANDLER
   */
   app.get('/denyshift/:userId/:shiftId',urlencodedParser,function(req,res) {
+      console.log(req.params);
+
+    if(req.cookies.auth === undefined){
+      res.redirect('/login');
+    }
+    else{
+      // we will check if the user requesting the page is a tutor or an admin
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, puCert, function(err, decoded){
+        console.log('decoded jwt in DENY SHIFT HANDLER ',decoded);
+        if(decoded == undefined){
+          res.redirect('/login');
+        }
+        else if(decoded['iss'] === "system"){
+          var tutorId = parseInt(req.params.userId);
+          var officeShiftId = parseInt(req.params.shiftId);
+          // FIXME: add the total office hours again after the shift has been removed from the array
+          userAccount.pullFromArray({userId:tutorId},{ "officeHours": { shiftId: officeShiftId } },function(result){
+            officeHours.destroyShift({shiftId:officeShiftId},function(result){
+              res.redirect('/officehours');
+            });
+          });
+        }
+      });
+    }
+  });
+  /*
+  OFFICE HOURS > REMOVE SHIFT HANDLER
+  */
+  app.get('/removeshift/:userId/:shiftId',urlencodedParser,function(req,res) {
       console.log(req.params);
 
     if(req.cookies.auth === undefined){

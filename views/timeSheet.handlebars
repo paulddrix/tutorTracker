@@ -1,6 +1,9 @@
 <div>
 	<h1>Time Sheet</h1>
 	{{#if userData.admin}}
+	<p>
+		Click on a tutor to see all the time sheet entries for this academic month.
+	</p>
 	<div class="listCont">
 	{{#each users}}
 	<div class="userLi">
@@ -16,6 +19,9 @@
 
   {{else}}
   <!-- Tutor Side -->
+	<p>
+		Every time you meet up with a student, you will log the hours here.
+	</p>
 	<a href="/timesheet/addsession" class="button aquarius">Add Session</a>
 	<span><b>Total Session Hours &nbsp;</b>{{userData.monthlyTotalSessionHours}}</span>
 	<ul class="listCont">

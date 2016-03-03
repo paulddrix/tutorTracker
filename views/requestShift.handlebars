@@ -1,9 +1,13 @@
 <div>
     <h1>Request Shift</h1>
+    <p>
+      Fill out the date and the shift time that you wish to work.
+    </p>
     <form action="/requesthandler" method="post">
       <p>
         <label for="shiftDate">Date</label>
         <input type="date" name="shiftDate" id="shiftDate">
+        <!-- Validate with JAVASCRIPT -->
       </p>
       <p>
         <label for="shift">Shift</label>
@@ -14,7 +18,6 @@
           <option value="Both">Both</option>
         </datalist>
       </p>
-
       <input type="hidden" name="userId" value="{{userData.userId}}">
       <input type="hidden" name="tutorName" value="{{userData.firstName}} {{userData.lastName}}">
       <button type="submit" class="aquarius">Submit</button>
