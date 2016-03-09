@@ -479,6 +479,14 @@ nav {
   background-color: #314756; }
   nav a[href='/users'] {
     width: 9%; }
+  nav div {
+    display: none;
+    float: right;
+    padding-right: 15px;
+    color: #EBEBEB; }
+    nav div:hover {
+      cursor: pointer;
+      color: #FF6500; }
   nav a {
     margin-left: 3%;
     float: right;
@@ -511,27 +519,40 @@ nav {
     }*/ }
 
 div[id="mobileNav"] {
-  background-color: black;
+  display: none;
+  background-color: #314756;
   z-index: 999;
+  overflow: hidden;
   position: fixed;
-  top: 58px;
+  top: 43px;
   left: 0;
   text-align: center;
   width: 100%;
   height: auto; }
   div[id="mobileNav"] a {
-    text-decoration: none;
+    text-align: center;
+    margin: 0;
     line-height: 58px;
     height: 58px;
+    text-decoration: none;
     display: block; }
+    div[id="mobileNav"] a:link, div[id="mobileNav"] a:visited {
+      color: #EBEBEB; }
     div[id="mobileNav"] a:hover {
-      color: #1FDB1F; }
+      color: #FF6500; }
+    div[id="mobileNav"] a:hover svg path, div[id="mobileNav"] a:hover svg rect, div[id="mobileNav"] a:hover svg polygon {
+      fill: #FF6500; }
+    div[id="mobileNav"] a svg {
+      margin-bottom: -13px; }
 
-.activeNav svg path {
+.activeNav svg path, .activeNav svg rect {
   fill: #FF6500; }
 .activeNav span {
   color: #FF6500; }
 
+/*
+NAV MENU
+*/
 /*
 BELOWNAV
 */
@@ -648,8 +669,13 @@ USERS LIST
 .listCont {
   clear: both;
   overflow: hidden; }
+  .listCont hr {
+    background-color: #b8c4c4;
+    height: 3px;
+    border: none; }
 
 .userLi {
+  text-decoration: none;
   clear: both;
   display: block;
   width: 98%;
@@ -670,11 +696,29 @@ footer {
   color: #1B212F;
   padding: 10px; }
   footer a {
-    text-decoration: none;
     color: #1B212F; }
     footer a:hover {
       color: #FF6500;
       text-decoration: underline; }
+
+/*
+MODAL STYLES
+*/
+#modalOverlay {
+  z-index: 9999;
+  visibility: hidden;
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%; }
+
+#modal {
+  background-color: #EBEBEB;
+  padding: 10px;
+  width: 400px;
+  margin: 20% auto; }
 
 /*
 MIXINS
@@ -695,6 +739,12 @@ MIXINS
 .newLabel {
   color: #FF6500; }
 
+.acceptedLabel {
+  color: #208A87; }
+
+.liWrapper {
+  width: 100%; }
+
 @media only screen and (min-width: 320px) and (max-width: 490px) {
   /*
   Stylesheet: 320px to 490px Stylesheet
@@ -705,9 +755,10 @@ MIXINS
   /* hiding nav links*/
   nav a:nth-of-type(n+2) {
     display: none; }
-
-  nav span {
+  nav div {
     display: block; }
+  nav a:first-child {
+    width: 40%; }
 
   /* BelowNav */
   #belowNav {
@@ -716,15 +767,16 @@ MIXINS
   /*
   Stylesheet: 491px to 599px
   */
-  /*
-  NAVIGATION
-  */
+  /*********************
+  NAVIGATION STYLES
+  *********************/
   /* hiding nav links*/
   nav a:nth-of-type(n+2) {
     display: none; }
-
-  nav span {
+  nav div {
     display: block; }
+  nav a:first-child {
+    width: 30%; }
 
   /* BelowNav */
   #belowNav {
@@ -733,14 +785,16 @@ MIXINS
   /*
   Stylesheet: 600px to 766px Stylesheet
   */
-  /*
+  /*********************
   NAVIGATION STYLES
-  */
+  *********************/
+  /* hiding nav links*/
   nav a:nth-of-type(n+2) {
     display: none; }
-
-  nav span {
+  nav div {
     display: block; }
+  nav a:first-child {
+    width: 24%; }
 
   /* BelowNav */
   #belowNav {
@@ -760,7 +814,7 @@ MIXINS
   /*
   Stylesheet: min 1025px
   */
-  nav span {
-    display: none; } }
+  nav {
+    /* FIX ANCHOR WIDTH*/ } }
 
 /*# sourceMappingURL=main.css.map */

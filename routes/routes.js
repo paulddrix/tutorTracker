@@ -1,7 +1,6 @@
 module.exports = function(app) {
   "use strict";
-  const urlencodedParser =  require('body-parser').urlencoded({ extended: false }),
-  cookieParser = require('cookie-parser'),
+  const
   //mandrill = require('mandrill-api/mandrill'),
   moment = require('moment'),
   //mandrill_client = new mandrill.Mandrill('R6xFyX_txF1on5jGLGWreQ'),
@@ -12,7 +11,6 @@ module.exports = function(app) {
   courses = require('../models/Courses'),
   tutorRequests = require('../models/TutorRequests'),
   officeHours = require('../models/OfficeHours');
-  app.use(cookieParser());
   //keys
   //public key
   const puCert = fs.readFileSync('./keys/public.pem');
@@ -22,7 +20,7 @@ module.exports = function(app) {
   /*
   LANDING PAGE
   */
-  app.get('/',urlencodedParser, function(req, res){
+  app.get('/', function(req, res){
     //the root route is going to redirect to  the dashboard.
     //check if the user has the auth cookie.
     if(req.cookies.auth === undefined){
@@ -50,7 +48,7 @@ module.exports = function(app) {
     res.render('login');
   });
   //Verify credentials
-  app.post('/verify',urlencodedParser,function(req,res){
+  app.post('/verify',function(req,res){
     console.log('req.body',req.body);
     if(!req.body){
       res.sendStatus(400);
@@ -113,7 +111,7 @@ module.exports = function(app) {
   /*
   DASHBOARD > SEARCH TUTOR ELIGIBILITY
   */
-  app.get('/tutoreligibility/:coursename', urlencodedParser,function(req,res){
+  app.get('/tutoreligibility/:coursename',function(req,res){
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -141,7 +139,7 @@ module.exports = function(app) {
   /*
   DASHBOARD > ADD TUTOR REQUEST HANDLER
   */
-  app.post('/addtutorrequesthandler', urlencodedParser, function(req,res) {
+  app.post('/addtutorrequesthandler', function(req,res) {
     console.log('req body',req.body);
     if(req.cookies.auth === undefined){
       res.redirect('/login');
@@ -186,7 +184,7 @@ module.exports = function(app) {
   /*
   DASHBOARD > VIEW TUTOR REQUEST
   */
-  app.get('/tutorrequest/:requestid',urlencodedParser,function(req,res) {
+  app.get('/dashboard/tutorrequest/:requestid',function(req,res) {
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -232,7 +230,7 @@ module.exports = function(app) {
   /*
   DASHBOARD > ACCEPT TUTOR REQUEST
   */
-  app.get('/tutorrequest/accept/:requestid/:assignTutor',urlencodedParser,function(req,res) {
+  app.get('/tutorrequest/accept/:requestid/:assignTutor',function(req,res) {
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -264,7 +262,7 @@ module.exports = function(app) {
   /*
   DASHBOARD > DENY TUTOR REQUEST
   */
-  app.get('/tutorrequest/deny/:requestid/:assignTutor',urlencodedParser,function(req,res) {
+  app.post('/tutorrequest/deny',function(req,res) {
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -278,11 +276,12 @@ module.exports = function(app) {
         }
         //if the user is an admin
         else if(decoded['iss'] === "system"){
-          var incomingRequestId = parseInt(req.params.requestid);
-          var incomingAssignTutor = parseInt(req.params.assignTutor);
+          var incomingRequestId = parseInt(req.body.requestId);
+          var incomingAssignTutor = parseInt(req.body.assignTutor);
+          var denialReason = req.body.denyReason;
           userAccount.pullFromArray({userId:incomingAssignTutor},{ studentsToTutor: { requestId: incomingRequestId } } ,function(err,result){
             console.log('error',err);
-            tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:true},function(result){
+            tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:true,denyReason:denialReason},function(result){
               res.redirect('/dashboard');
             });
           });
@@ -293,7 +292,7 @@ module.exports = function(app) {
   /*
   DASHBOARD > RE-ASSIGN TUTOR REQUEST HANDLER
   */
-  app.get('/reassigntutor/:tutorId/:requestid', urlencodedParser, function(req,res) {
+  app.get('/reassigntutor/:tutorId/:requestid', function(req,res) {
     console.log('req params',req.params);
     if(req.cookies.auth === undefined){
       res.redirect('/login');
@@ -364,6 +363,7 @@ module.exports = function(app) {
                           var weekDay={};
                           weekDay['dayName']= officeShifts[i]['_id'].dayName;
                           weekDay['dayDate']= officeShifts[i]['_id'].dayDate;
+                          weekDay['humanReadbleDate']= officeShifts[i]['_id'].humanReadbleDate;
                           weekDay['10AM-1PM']=[];
                            weekDay['1PM-4PM']=[];
                            for (let x = 0; x < officeShifts[i].shifts.length; x++) {
@@ -380,6 +380,7 @@ module.exports = function(app) {
                        }
 
                       data['days'] = days;
+                      console.log("FUCK",data['days']);
                       res.render('officeHours',data);
 
                    });
@@ -406,7 +407,7 @@ module.exports = function(app) {
   /*
   OFFICE HOURS > ACCEPT SHIFT HANDLER
   */
-  app.get('/acceptshift/:userId/:shiftId',urlencodedParser,function(req,res) {
+  app.get('/acceptshift/:userId/:shiftId',function(req,res) {
       console.log(req.params);
 
     if(req.cookies.auth === undefined){
@@ -437,7 +438,7 @@ module.exports = function(app) {
   /*
   OFFICE HOURS > DENY SHIFT HANDLER
   */
-  app.get('/denyshift/:userId/:shiftId',urlencodedParser,function(req,res) {
+  app.get('/denyshift/:userId/:shiftId',function(req,res) {
       console.log(req.params);
 
     if(req.cookies.auth === undefined){
@@ -467,7 +468,7 @@ module.exports = function(app) {
   /*
   OFFICE HOURS > REMOVE SHIFT HANDLER
   */
-  app.get('/removeshift/:userId/:shiftId',urlencodedParser,function(req,res) {
+  app.get('/removeshift/:userId/:shiftId',function(req,res) {
       console.log(req.params);
 
     if(req.cookies.auth === undefined){
@@ -521,7 +522,7 @@ module.exports = function(app) {
   /*
   OFFICE HOURS > REQUEST SHIFT HANDLER
   */
-  app.post('/requesthandler',urlencodedParser,function(req,res) {
+  app.post('/requesthandler',function(req,res) {
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -536,12 +537,14 @@ module.exports = function(app) {
         else if(decoded['iss'] === "system"){
 
           var shiftDate = moment(req.body.shiftDate).format("MM/DD/YYYY");
+          var shiftDateHumanFormat = moment(req.body.shiftDate).format("dddd, MMMM Do YYYY");
           var shiftDay = moment(req.body.shiftDate).format("dddd");
           var shiftId = Math.floor((Math.random() * 99999999) + 10000000);
           var newShift = {
                     "dayName" : shiftDay,
                     "shiftId":shiftId,
                     "dayDate" :shiftDate ,
+                    "humanReadbleDate":shiftDateHumanFormat,
                     "shift" : req.body.shift,
                     "tutorName" : req.body.tutorName,
                     "shiftHours" : 3,
@@ -613,7 +616,7 @@ module.exports = function(app) {
   /*
   HANDLE EDIT PROFILE
   */
-  app.post('/editprofilehandler',urlencodedParser,function(req,res) {
+  app.post('/editprofilehandler',function(req,res) {
     var comingUserId = parseInt(req.body.userId);
     if(req.cookies.auth === undefined){
       res.redirect('/login');
@@ -723,7 +726,7 @@ module.exports = function(app) {
   /*
   USERS > ADD USER HANDLER
   */
-  app.post('/adduserhandler',urlencodedParser,function(req,res){
+  app.post('/adduserhandler',function(req,res){
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -740,12 +743,13 @@ module.exports = function(app) {
           var userId = Math.floor((Math.random() * 99999999) + 10000000);
           var comingID = parseInt(req.body.idNumber);
           var comingTxt;
-          if(req.body.textAlert === 'true'){
+          if(req.body.textAlert == 'true'){
             comingTxt= true;
           }
           else{
             comingTxt= false;
           }
+          console.log('FUCK REQ',req.body);
           var newUser = {
             "email" : req.body.email,
             "password" : req.body.password,
@@ -756,7 +760,7 @@ module.exports = function(app) {
             "idNumber":comingID,
             "userId":userId
           };
-          if (req.body.admin == true) {
+          if (req.body.admin == 'true') {
             newUser['admin']= true;
           }
           else{
@@ -769,9 +773,10 @@ module.exports = function(app) {
             newUser["eligibleCourses"]=[];
             newUser["officeHours"]=[];
           }
-          if (req.body.degree) {
+          if (req.body.degree != 'false') {
             newUser['degree']= req.body.degree;
           }
+          console.log('FUCK NEWUSER',newUser);
           userAccount.createUser(newUser,function(result, err){
             res.redirect('/users');
           });
@@ -782,7 +787,7 @@ module.exports = function(app) {
   /*
   USERS > DELETE USER HANDLER
   */
-  app.get('/users/deleteuserhandler/:userId',urlencodedParser,function(req,res){
+  app.get('/users/deleteuserhandler/:userId',function(req,res){
     console.log(req.params);
     var comingUserId = parseInt(req.params.userId);
     if(req.cookies.auth === undefined){
@@ -832,7 +837,7 @@ module.exports = function(app) {
   /*
   USERS > EDIT USER HANDLER
   */
-  app.post('/edituserhandler',urlencodedParser,function(req,res){
+  app.post('/edituserhandler',function(req,res){
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -911,7 +916,7 @@ module.exports = function(app) {
   /*
   TIME SHEET > TUTOS TIME SHEET DETAILS
   */
-  app.get('/timesheet/tutortimesheetdetails/:userId',urlencodedParser,function(req,res) {
+  app.get('/timesheet/tutortimesheetdetails/:userId',function(req,res) {
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -963,7 +968,7 @@ module.exports = function(app) {
   /*
   TIME SHEET > ADD SESSION HANDLER
   */
-  app.post('/timesheet/addsessionhandler',urlencodedParser,function(req,res){
+  app.post('/timesheet/addsessionhandler',function(req,res){
     console.log('req body ',req.body);
     if(req.cookies.auth === undefined){
       res.redirect('/login');
@@ -1081,7 +1086,7 @@ module.exports = function(app) {
   /*
   HANDLE FORGOT PASSWORD
   */
-  app.post('/forgotpasswordhanlder',urlencodedParser,function(req,res){
+  app.post('/forgotpasswordhanlder',function(req,res){
     res.redirect('/login');
   });
 

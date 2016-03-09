@@ -1,3 +1,8 @@
+{{#if message}}
+<div class="">
+  {{message}}
+</div>
+{{/if}}
 <div>
   {{#if userData.admin}}
     <div>
@@ -110,17 +115,21 @@
         </p>
         {{#if rejectedDocs}}
         <div class="listCont">
+          <div class="">
+            <span><b>Name</b></span>
+            <span class="float-right"><b>Date Added</b></span>
+            <hr>
+          </div>
 
           {{!-- NEEDS TO BE FIXED TO ASSIGN A TUTOR TO THE REJECTED REQUEST --}}
         {{#each rejectedDocs}}
-          <a href="/tutorrequest/{{this.requestId}}" class="userLi float-left">
-            <div class="float-left">
-              <b>Name&nbsp;</b>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
-              {{#if this.degree}}
-              <b>Course to Tutor&nbsp;</b> {{this.courseToTutor}} &nbsp;
-              {{/if}}
-              <b>Date Added&nbsp;</b> {{this.dateAdded}} &nbsp;
-            </div>
+          <a href="/dashboard/tutorrequest/{{this.requestId}}" class="userLi float-left">
+
+              <span>&nbsp;{{this.firstName}}&nbsp;{{this.lastName}}</span>
+              <div class="float-right">
+                <span>{{this.dateAdded}}</span><br>
+                <span class="newLabel">REJECTED</span>
+              </div>
           </a>
 
         {{/each}}
@@ -147,14 +156,18 @@
     {{#if userData.studentsToTutor}}
     <div class="listCont">
     {{#each userData.studentsToTutor}}
-      <a href="/tutorrequest/{{this.requestId}}" class="userLi float-left">
-        <div class="float-left">
+      <a href="/dashboard/tutorrequest/{{this.requestId}}" class="userLi float-left">
+        <div class="float-left liWrapper">
           {{#if this.pendingStatus}}
           <b class="newLabel">NEW!</b>
+          {{else}}
+          <b class="acceptedLabel float-right">ACCEPTED!</b>
           {{/if}}
-          <b>Name&nbsp;</b>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
-          <b>Course to Tutor&nbsp;</b> {{this.courseToTutor}} &nbsp;
-          <b>Date Added&nbsp;</b> {{this.dateAdded}} &nbsp;
+          <span>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;</span><br>
+          <span>{{this.courseToTutor}} &nbsp;</span>
+          <div class="float-right">
+            <span>{{this.dateAdded}} &nbsp;</span>
+          </div>
         </div>
       </a>
 

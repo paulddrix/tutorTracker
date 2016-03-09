@@ -6,15 +6,17 @@ Stylesheet: 320px to 490px Stylesheet
 NAVIGATION STYLES
 *********************/
 /* hiding nav links*/
-nav a:nth-of-type(n+2){
-	display:none;
-}
 nav{
-	span{
+	a:nth-of-type(n+2){
+	display:none;
+	}
+	div{
 		display: block;
 	}
+	a:first-child{
+		width: 40%;
+	}
 }
-
 /* BelowNav */
 #belowNav{
 	margin:18% auto;

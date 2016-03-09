@@ -39,6 +39,16 @@ nav{
 	a[href='/users']{
 		width: 9%;
 	}
+	div{
+		display: none;
+		float: right;
+		padding-right: 15px;
+		color:$white;
+		&:hover{
+			cursor: pointer;
+			color:$orange;
+		}
+	}
   a{
 		svg{
 			margin: 13px 6px 0 19px;
@@ -78,27 +88,41 @@ nav{
 		}*/
   }
 }
- div[id="mobileNav"]{
-  background-color: black;
-  z-index: 999;
-  position: fixed;
-  top: 58px;
-  left:0;
-  text-align: center;
-  width: 100%;
-  height: auto;
-  a {
-    text-decoration: none;
-    line-height: 58px;
-    height: 58px;
-    display: block;
-    &:hover{
-      color: #1FDB1F;
-    }
-  }
+div[id="mobileNav"]{
+ display: none;
+ background-color: $coolBlue;
+ z-index: 999;
+ overflow: hidden;
+ position: fixed;
+ top: 43px;
+ left:0;
+ text-align: center;
+ width: 100%;
+ height: auto;
+ a{
+	 text-align: center;
+	 margin: 0;
+	 line-height: 58px;
+	 height: 58px;
+	 text-decoration: none;
+	 display: block;
+	 &:link, &:visited {
+		 color:$white;
+	 }
+	 &:hover{
+		 color: $orange;
+	 }
+	 &:hover svg path, &:hover svg rect, &:hover svg polygon{
+		 fill: $orange;
+	 }
+	 svg{
+		 margin-bottom:  -13px;
+	 }
+ }
+
 }
 .activeNav{
-	svg path{
+	svg path, svg rect{
 		fill:$orange;
 	}
 	span{
@@ -106,6 +130,10 @@ nav{
 	}
 
 }
+/*
+NAV MENU
+*/
+
 /*
 BELOWNAV
 */
@@ -228,8 +256,14 @@ USERS LIST
 .listCont{
 	clear: both;
 	overflow: hidden;
+	hr{
+		background-color: #b8c4c4;
+		height: 3px;
+		border: none;
+	}
 }
 .userLi{
+	text-decoration: none;
 	clear: both;
 	display: block;
 	width: 98%;
@@ -252,13 +286,31 @@ footer{
 	color: $black;
 	padding: 10px;
 	a{
-		text-decoration: none;
 		color:$black;
 		&:hover{
 			color:$orange;
 			text-decoration: underline;
 		}
 	}
+}
+/*
+MODAL STYLES
+*/
+#modalOverlay{
+	z-index: 9999;
+	visibility: hidden;
+	background-color: rgba(0, 0, 0, .5);
+	position: fixed;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+}
+#modal{
+	background-color: $white;
+	padding: 10px;
+	width: 400px;
+	margin: 20% auto;
 }
 /*
 MIXINS
@@ -278,4 +330,10 @@ MIXINS
 }
 .newLabel{
 	color:$orange;
+}
+.acceptedLabel{
+	color:$aquarius;
+}
+.liWrapper{
+	width:100%;
 }

@@ -1,18 +1,27 @@
 (function(){
 	console.log("tutorApp loaded *****");
+	//Mobile Nav Click event
+	if (document.getElementById('mobileMenu')) {
+		document.getElementById('mobileMenu').addEventListener('click',function() {
+			var movNav = document.getElementById('mobileNav');
+			movNav.style.display == '' ?movNav.style.display = 'block':movNav.style.display = '';;
+		});
+	}
 
-	//document.getElementById("wrapper").style.backgroundColor = "red";
 	// ACTIVE NAV
 	var nav = document.getElementsByTagName("NAV");
   var anchor = nav[0]['children'];
       current = window.location.pathname.split('/')[1];
       for (var i = 0; i < anchor.length; i++) {
-      if(anchor[i].href.split('/')[3] == current) {
-          anchor[i].className = "activeNav";
-      }
-			else{
-				anchor[i].className = "";
-			}
+				if (anchor[i].href) {
+					if(anchor[i].href.split('/')[3] == current) {
+		          anchor[i].className = "activeNav";
+		      }
+					else{
+						anchor[i].className = "";
+					}
+				}
+
   }
 	//Dashboard page
 	if (document.getElementById('searchCourses')) {
@@ -30,7 +39,7 @@
 						var response = JSON.parse(xhttp.responseText);
 						var resultsHtml ='<div class="listCont">';
 						for (var i = 0; i < response.length; i++) {
-						resultsHtml+= "<div class=\"userLi\"><b>Name</b>&nbsp;"+response[i]['firstName']+" "+ response[i]['lastName'] +" "+ " <b>Total Hours </b>" +response[i]['monthlyTotalHours'] +"<button class=\"dynamicAssign\" data-tutor-name=\""+response[i]['firstName']+" "+response[i]['lastName']+ "\" data-tutor-id=\""+response[i]['userId']+ " \">Assign</button></div>";
+						resultsHtml+= "<div class=\"userLi\"><b>Name</b>&nbsp;"+response[i]['firstName']+" "+ response[i]['lastName'] +" "+ " <b>Total Hours </b>" +response[i]['monthlyTotalHours'] +"&nbsp;<button class=\"dynamicAssign\" data-tutor-name=\""+response[i]['firstName']+" "+response[i]['lastName']+ "\" data-tutor-id=\""+response[i]['userId']+ " \">Assign</button></div>";
 						}
 						resultsHtml+= "</div>";
 
@@ -82,7 +91,7 @@
 						//place the results from the ajax call into the container
 			      document.getElementById("courseSearchRes2").innerHTML =resultsHtml;
 						//what happens when the user clicks the assign button
-						
+
 			    }
 			  };
 			  xhttp2.open("GET", "/tutoreligibility/"+searchQuery, true);
@@ -90,6 +99,15 @@
 			}
 		});
 	}
-
+	//Deny Request Modal
+	if (document.getElementById('denyModal')) {
+		document.getElementById('denyModal').addEventListener('click',function() {
+				document.getElementById('modalOverlay').style.visibility="visible";
+		});
+		//Close modal with cancel button
+		document.getElementById('closeDenyModal').addEventListener('click',function() {
+				document.getElementById('modalOverlay').style.visibility="hidden";
+		});
+	}
 
 })();

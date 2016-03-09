@@ -2,14 +2,20 @@
 Stylesheet: 600px to 766px Stylesheet
 */
 
-/*
+/*********************
 NAVIGATION STYLES
-*/
-nav a:nth-of-type(n+2){
+*********************/
+/* hiding nav links*/
+nav{
+	a:nth-of-type(n+2){
 	display:none;
-}
-nav span{
-  display: block;
+	}
+	div{
+		display: block;
+	}
+	a:first-child{
+		width: 24%;
+	}
 }
 /* BelowNav */
 #belowNav{

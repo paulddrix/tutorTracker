@@ -95,7 +95,7 @@ module.exports ={
       var collection = db.collection('officeShifts');
       collection.aggregate([
         {$match:{ dayDate: { $gt: startDate, $lt: EndDate }}},
-        {$group : {_id: {dayDate:"$dayDate",dayName:"$dayName"},
+        {$group : {_id: {dayDate:"$dayDate",dayName:"$dayName",humanReadbleDate:"$humanReadbleDate"},
                             shifts: { $push:
                                             { "dayName" : "$dayName",
                                                "dayDate" : "$dayDate",
@@ -105,7 +105,8 @@ module.exports ={
                                                "userId" : "$userId",
                                                "pending" : "$pending",
                                                "approved" : "$approved",
-                                               "shiftId":"$shiftId"
+                                               "shiftId":"$shiftId",
+                                               "humanReadbleDate":"$humanReadbleDate"
                                                }
                            }
                           }
