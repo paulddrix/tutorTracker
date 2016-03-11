@@ -36,4 +36,8 @@ node_modules
 ./.sass-cache
 
 # Keys
-./keys
+*.pem
+*.pub
+
+# Env
+.env

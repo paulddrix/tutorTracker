@@ -5,7 +5,9 @@ const express = require('express'),
 	exphbs  = require('express-handlebars'),
 	flash = require('connect-flash'),
 	cookieParser = require('cookie-parser'),
+	fs = require('fs'),
 	bodyParser = require('body-parser');
+	//jwt = require('jsonwebtoken');
 // Dot Env File Loader
 if(!process.env.PORT){
 	let dotenv = require('dotenv').load();
@@ -15,9 +17,11 @@ if(!process.env.PORT){
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
+//App config
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(flash());
+//app.use(jwt);
 
 // =-=-=-=-=-=-=-=-=-= Config vars =-=-=-=-=-=-=-=-=-=-=-=
 let port = process.env.PORT || 8080;

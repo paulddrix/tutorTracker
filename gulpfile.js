@@ -5,8 +5,7 @@ var
     exec   = require('child_process').exec,
     minifyCss = require('gulp-minify-css'),
     nodemon         = require('gulp-nodemon'),
-    MongoClient = require('mongodb').MongoClient;
-
+    UserAccounts = require('./models/account');
 // startup required services to run the app server
 gulp.task('mongod', function() { 
     // spawn in a child process mongodb
@@ -14,24 +13,18 @@ gulp.task('mongod', function() { 
     	console.log(stdout);
     });
 });
+// Create keys and store them in the right folder
+gulp.task('genRSAKeys', function() { 
+  exec('openssl genrsa -out ./keys/private.pem 1024 && openssl rsa -in ./keys/private.pem -pubout > ./keys/public.pub', function(err,stdout,stderr){
+    console.log(stdout);
+  });
+});
 //Add a test user for an Admin
 gulp.task('create-admin-test-user', function(done) {
   // FIXME: need to create admin test user
   let user = {}
 	try {
-		var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
-    MongoClient.connect(mongoUrl, function(err, db) {
-      console.log("Connected correctly to mongodb");
-      // Get the documents collection
-      var collection = db.collection('users');
-      // Insert some documents
-      collection.insertOne(user, function(err, result) {
-        //console.log("error? ",err);
-        callback(result, err);
-        //close connection
-        db.close();
-      });
-    });
+    //UserAccounts.create()
 	}
   catch (e) {
 		console.log(e);
@@ -40,7 +33,6 @@ gulp.task('create-admin-test-user', function(done) {
 
 	});
 
-});
 // Run app.js with nodemon
 gulp.task('dev', function () {
   nodemon({ script: 'app.js'
@@ -63,3 +55,6 @@ gulp.task('minify-css', function() {
 });
 // start dev environment
   gulp.task('startup', ['mongod', 'dev']);
+
+// start dev environment
+  gulp.task('setup', ['genRSAKeys', 'create-admin-test-user']);

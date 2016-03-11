@@ -1,6 +1,5 @@
 "use strict";
 module.exports = function(app) {
-
   const
   moment = require('moment'),
   jwt = require('jsonwebtoken'),
@@ -12,9 +11,11 @@ module.exports = function(app) {
   officeHours = require('../models/officeHours');
   //keys
   //public key
-  const puCert = fs.readFileSync('./keys/public.pem');
+  const puCert = fs.readFileSync('./keys/public.pub');
   //Private Key
-  const prCert = fs.readFileSync('./keys/private.key');
+  const prCert = fs.readFileSync('./keys/private.pem');
+
+
 
   /*
   LANDING PAGE
@@ -84,7 +85,7 @@ module.exports = function(app) {
           res.redirect('/login');
         }
         //if the user is an admin
-        else if(decoded['iss'] === "system" && decoded['admin'] == true){
+        else if(decoded['iss'] === "system" && decoded['admin'] === true){
           var data = {userData:{admin:true},loggedIn:true};
           userAccount.getUsers({admin:false},function(results) {
             data['tutorList']=results;
@@ -123,7 +124,7 @@ module.exports = function(app) {
           res.redirect('/login');
         }
         //if the user is an admin
-        else if(decoded['iss'] === "system" && decoded['admin'] == true){
+        else if(decoded['iss'] === "system" && decoded['admin'] === true){
           userAccount.getUsers({"eligibleCourses.courseName": req.params.coursename},function(doc) {
             res.send(doc);
           });
@@ -152,11 +153,10 @@ module.exports = function(app) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          var comingTutor = parseInt(req.body.assignTutor);
-          console.log("tutor n ",comingTutor);
-          var requestId = Math.floor((Math.random() * 99999999) + 10000000);
-          var dateAdded = moment().format("dddd, MMMM Do YYYY, h:mm a");
-          var newTutorRequest = {
+          let assignedTutor = parseInt(req.body.assignTutor);
+          let requestId = Math.floor((Math.random() * 99999999) + 10000000);
+          let dateAdded = moment().format("dddd, MMMM Do YYYY, h:mm a");
+          let newTutorRequest = {
             "dateAdded":dateAdded,
             "firstName": req.body.firstName,
             "lastName": req.body.lastName,
@@ -165,14 +165,14 @@ module.exports = function(app) {
             "degree": req.body.degree,
             "courseToTutor": req.body.courseToTutor,
             "program": req.body.program,
-            "assignTutor": comingTutor,
+            "assignTutor": assignedTutor,
             "requestId":requestId,
             "pendingStatus":true
           };
           tutorRequests.createRequest(newTutorRequest,function(err,result){
             console.log('error ',err);
           });
-          userAccount.addToArray({userId:comingTutor},{studentsToTutor:newTutorRequest},function(err,result){
+          userAccount.addToArray({userId:assignedTutor},{studentsToTutor:newTutorRequest},function(err,result){
             console.log('error',err);
           });
           res.redirect('/dashboard');
@@ -196,7 +196,7 @@ module.exports = function(app) {
           res.redirect('/login');
         }
         //if the user is an admin
-        else if(decoded['iss'] === "system" && decoded['admin'] ==true){
+        else if(decoded['iss'] === "system" && decoded['admin'] === true){
           userAccount.getUser({userId:decoded['userId']},function(result){
             var data = {userData:result[0],loggedIn:true};
             var incomingRequestId = parseInt(req.params.requestid);
@@ -213,7 +213,7 @@ module.exports = function(app) {
             });
           });
         }
-        else if (decoded['iss'] === "system" && decoded['admin'] ==false) {
+        else if (decoded['iss'] === "system" && decoded['admin'] === false) {
           userAccount.getUser({userId:decoded['userId']},function(result){
             var data = {userData:result[0],loggedIn:true};
             var incomingRequestId = parseInt(req.params.requestid);
@@ -342,7 +342,7 @@ module.exports = function(app) {
         if(decoded == undefined){
           res.redirect('/login');
         }
-        else if(decoded['iss'] === "system" && decoded['admin'] == true){
+        else if(decoded['iss'] === "system" && decoded['admin'] === true){
 
           userAccount.getUser({userId:decoded.userId},function(result){
               var data={};
@@ -390,7 +390,7 @@ module.exports = function(app) {
           });
         }
 
-        else if(decoded['iss'] === "system" && decoded['admin'] == false){
+        else if(decoded['iss'] === "system" && decoded['admin'] === false){
 
           userAccount.getUser({userId:decoded.userId},function(result){
             var data={};
@@ -616,7 +616,7 @@ module.exports = function(app) {
   HANDLE EDIT PROFILE
   */
   app.post('/editprofilehandler',function(req,res) {
-    var comingUserId = parseInt(req.body.userId);
+    var editUserId = parseInt(req.body.userId);
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -636,7 +636,7 @@ module.exports = function(app) {
             "password":req.body.password,
             "phone":req.body.phone
           };
-          userAccount.updateUser({ userId:comingUserId },editedProfile,function(result){
+          userAccount.updateUser({ userId:editUserId },editedProfile,function(result){
             console.log('result from update in editprofilehandler',result);
             res.redirect('profile');
           });
@@ -740,13 +740,13 @@ module.exports = function(app) {
         else if(decoded['iss'] === "system"){
           //check if the new user is an admin
           var userId = Math.floor((Math.random() * 99999999) + 10000000);
-          var comingID = parseInt(req.body.idNumber);
-          var comingTxt;
+          var addID = parseInt(req.body.idNumber);
+          var addTxt;
           if(req.body.textAlert == 'true'){
-            comingTxt= true;
+            addTxt= true;
           }
           else{
-            comingTxt= false;
+            addTxt= false;
           }
           console.log('FUCK REQ',req.body);
           var newUser = {
@@ -755,8 +755,8 @@ module.exports = function(app) {
             "firstName" : req.body.firstName,
             "lastName":req.body.lastName,
             "phone" : req.body.phone,
-            "textAlert":comingTxt,
-            "idNumber":comingID,
+            "textAlert":addTxt,
+            "idNumber":addID,
             "userId":userId
           };
           if (req.body.admin == 'true') {
@@ -775,7 +775,7 @@ module.exports = function(app) {
           if (req.body.degree != 'false') {
             newUser['degree']= req.body.degree;
           }
-          console.log('FUCK NEWUSER',newUser);
+          console.log(' NEWUSER',newUser);
           userAccount.createUser(newUser,function(result, err){
             res.redirect('/users');
           });
@@ -788,7 +788,7 @@ module.exports = function(app) {
   */
   app.get('/users/deleteuserhandler/:userId',function(req,res){
     console.log(req.params);
-    var comingUserId = parseInt(req.params.userId);
+    var deleteUserId = parseInt(req.params.userId);
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -801,7 +801,7 @@ module.exports = function(app) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.destroyUser({userId:comingUserId},function(result,err) {
+          userAccount.destroyUser({userId:deleteUserId},function(result,err) {
             res.redirect("/users");
           });
         }
@@ -812,7 +812,7 @@ module.exports = function(app) {
   USERS > EDIT PAGE
   */
   app.get('/users/edituser/:userId',function(req,res){
-    var comingUserId= parseInt(req.params.userId);
+    var editUserId= parseInt(req.params.userId);
     if(req.cookies.auth === undefined){
       res.redirect('/login');
     }
@@ -825,7 +825,7 @@ module.exports = function(app) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:comingUserId},function(result){
+          userAccount.getUser({userId:editUserId},function(result){
             var data = {userData:result[0],loggedIn:true};
             res.render('editUser',data);
           });
@@ -849,21 +849,21 @@ module.exports = function(app) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          var comingIdNumber = parseInt(req.body.idNumber);
-          var comingUserId = parseInt(req.body.userId);
-          var comingTxt;
-          var comingAdmin;
+          var editIdNumber = parseInt(req.body.idNumber);
+          var editUserId = parseInt(req.body.userId);
+          var editTxt;
+          var editAdmin;
           if(req.body.textAlert === 'true'){
-            comingTxt= true;
+            editTxt= true;
           }
           else{
-            comingTxt= false;
+            editTxt= false;
           }
           if(req.body.admin === 'true'){
-            comingAdmin= true;
+            editAdmin= true;
           }
           else{
-            comingAdmin= false;
+            editAdmin= false;
           }
           var editedUser = {
             "email" : req.body.email,
@@ -871,14 +871,14 @@ module.exports = function(app) {
             "firstName" : req.body.firstName,
             "lastName":req.body.lastName,
             "phone" : req.body.phone,
-            "admin" : comingAdmin,
-            "textAlert":comingTxt,
-            "idNumber":comingIdNumber
+            "admin" : editAdmin,
+            "textAlert":editTxt,
+            "idNumber":editIdNumber
           };
           if (req.body.degree !=false) {
             editedUser['degree']= req.body.degree;
           }
-          userAccount.updateUser({ userId:comingUserId},editedUser,function(result){
+          userAccount.updateUser({ userId:editUserId},editedUser,function(result){
             res.redirect('/users');
           });
         }
@@ -980,7 +980,7 @@ module.exports = function(app) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          var comingUserId = parseInt(req.body.userId);
+          var sessionUserId = parseInt(req.body.userId);
           var startTime = moment(req.body.sessionDate + " " + req.body.sessionStartTime);
           var endTime = moment(req.body.sessionDate + " " + req.body.sessionEndTime);
           var totalHours = endTime.diff(startTime,'minutes')/60;
@@ -991,17 +991,17 @@ module.exports = function(app) {
             "sessionEndTime" : endTime.format('h:mm A'),
             "sessionTotal":totalHours
           };
-          userAccount.addToArray({ userId:comingUserId},{timeSheet:sessionData},function(result){
+          userAccount.addToArray({ userId:sessionUserId},{timeSheet:sessionData},function(result){
             //add the session to the timeSheet array.
-            userAccount.sumStdSessions(comingUserId,function(sumRes) {
+            userAccount.sumStdSessions(sessionUserId,function(sumRes) {
               //sum up all the session hour totals
               console.log("SUM ",sumRes);
               console.log(sumRes[0].total);
-              userAccount.updateUser({userId:comingUserId},{monthlyTotalSessionHours:sumRes[0].total},function(result) {
+              userAccount.updateUser({userId:sessionUserId},{monthlyTotalSessionHours:sumRes[0].total},function(result) {
                 //insert the total in the tutor's monthlyTotalSessionHours.
                 //FIX ME: how to make the monthlyTotalHours always add the values
                 //for monthlyTotalSessionHours and monthlyTotalShiftHours
-                //userAccount.updateUser({userId:comingUserId},,function(result) {
+                //userAccount.updateUser({userId:sessionUserId},,function(result) {
                 //add the monthlyTotalSessionHours to the tutor's monthlyTotalHours
                 //console.log(result);
                 res.redirect('/timesheet');

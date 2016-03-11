@@ -1,5 +1,9 @@
 var expect = require('chai').expect,
     userAccount = require('../models/account.js');
+    // Dot Env File Loader
+    if(!process.env.PORT){
+    	var dotenv = require('dotenv').load();
+    }
 
 describe('Account Tests', function() {
 
