@@ -6,6 +6,11 @@ const express = require('express'),
 	flash = require('connect-flash'),
 	cookieParser = require('cookie-parser'),
 	bodyParser = require('body-parser');
+// Dot Env File Loader
+if(!process.env.PORT){
+	let dotenv = require('dotenv').load();
+}
+
 // View engine
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
@@ -19,7 +24,9 @@ let port = process.env.PORT || 8080;
 
 // =-=-=-=-=-=-=-=-=-= Routes =-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 require('./routes/routes')(app);
+// Start up the Server
+var server = app.listen(port, function() {
+  if (process.env.DEBUG) console.log('Server Active On', port);
+});
 
-app.listen(port);
-
-console.log("Server running on port: ", port);
+module.exports = server;

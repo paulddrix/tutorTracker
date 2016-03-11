@@ -1,5 +1,5 @@
 var expect = require('chai').expect,
-    userAccount = require('../models/Account.js');
+    userAccount = require('../models/account.js');
 
 describe('Account Tests', function() {
 

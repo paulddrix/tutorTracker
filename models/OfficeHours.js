@@ -5,18 +5,12 @@ module.exports ={
    Office Shifts
   */
   getShifts: function(query,callback) {
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the DB Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      //console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('officeShifts');
       // Find some documents
       collection.find(query).toArray(function(err, docs) {
-        console.log('error In getShifts Func',err);
-        //console.dir(docs);
-        //send results
         callback(docs);
         //close connection
         db.close();
@@ -26,16 +20,11 @@ module.exports ={
   },
   //add student request
   createShift: function(shiftReq,callback) {
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('officeShifts');
       collection.insert(shiftReq, function(err, result) {
-            console.log('error In createShift Func',err);
         callback(result);
         db.close();
       });
@@ -43,17 +32,12 @@ module.exports ={
   },
 
   destroyShift: function(shift,callback) {
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      //console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('officeShifts');
       // Insert some documents
       collection.remove(shift, function(err, result) {
-        //console.log('result from user deletion ',result);
-        //console.log(err);
         callback(result, err);
         //close connection
         db.close();
@@ -61,12 +45,8 @@ module.exports ={
     });
   },
   updateOfficeHours: function(query,updateInfo,callback) {
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('officeShifts');
       collection.update(query,{
@@ -85,12 +65,8 @@ module.exports ={
     * @param {string} endDate of the month
   */
  organizedShifts: function(startDate,EndDate,callback) {
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('officeShifts');
       collection.aggregate([
@@ -113,9 +89,6 @@ module.exports ={
          },
          {$sort:{"_id.dayDate":1}}
       ],function(err,result) {
-        if (err) {
-          console.log(err);
-        }
         callback(result);
         //close connection
         db.close();
@@ -126,18 +99,12 @@ module.exports ={
    Office Months
   */
   getCurrentMonth: function(currentDate,callback) {
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the DB Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      //console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('officeMonths');
       // Find some documents
       collection.find({ "startDate": { $lte: currentDate }, $and: [ { "endDate": { $gte: currentDate } } ] }).toArray(function(err, docs) {
-        console.log('error In getCurrentMonth Func',err);
-        //console.dir(docs);
-        //send results
         callback(docs);
         //close connection
         db.close();

@@ -3,18 +3,12 @@ assert = require('assert');
 module.exports ={
 
   getUsers: function(query,callback) {
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the DB Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      //console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('users');
-      // Find some documents
+      // Find all users
       collection.find(query).toArray(function(err, docs) {
-        //console.log("logging out all users");
-        //console.dir(docs);
-        //parsing mongoDoc
         callback(docs);
         //close connection
         db.close();
@@ -23,18 +17,12 @@ module.exports ={
     });
   },
   getUser: function(userInfo,callback) {
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the DB Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      //console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('users');
-      // Find some documents
+      // Find a user
       collection.find(userInfo).toArray(function(err, docs) {
-        //console.log("logging out one user");
-        //console.dir(docs);
-        //parsing mongoDoc
         callback(docs);
         //close connection
         db.close();
@@ -43,16 +31,12 @@ module.exports ={
     });
   },
   createUser: function(user,callback) {
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      //console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('users');
-      // Insert some documents
+      // Insert one user
       collection.insertOne(user, function(err, result) {
-        //console.log("error? ",err);
         callback(result, err);
         //close connection
         db.close();
@@ -60,17 +44,12 @@ module.exports ={
     });
   },
   destroyUser: function(user,callback) {
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      //console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('users');
-      // Insert some documents
+      // remove a user
       collection.remove(user, function(err, result) {
-        //console.log('result from user deletion ',result);
-        //console.log(err);
         callback(result, err);
         //close connection
         db.close();
@@ -78,12 +57,8 @@ module.exports ={
     });
   },
   updateUser: function(query,updateInfo,callback) {
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('users');
       collection.update(query,{
@@ -92,7 +67,6 @@ module.exports ={
           }, function(err, result) {
         callback(result);
       });
-      //get user id and update the information coming form the form
       //close connection
       db.close();
     });
@@ -102,12 +76,8 @@ module.exports ={
   */
   //add element to an array
   addToArray: function(query,reqInfo,callback) {
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('users');
       collection.update(query,{
@@ -116,19 +86,14 @@ module.exports ={
           }, function(err, result) {
         callback(result);
       });
-      //get user id and update the information coming form the form
       //close connection
       db.close();
     });
   },
   //remove element from array
   pullFromArray: function(query,docToPull,callback) {
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('users');
       collection.update(query,{
@@ -141,12 +106,8 @@ module.exports ={
   },
   //update an element in an array
   updateArrayElement: function(query,requestStatus,callback) {
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('users');
       collection.update(query,{
@@ -154,7 +115,6 @@ module.exports ={
           }, function(err, result) {
         callback(result);
       });
-      //get user id and update the information coming form the form
       //close connection
       db.close();
     });
@@ -162,12 +122,8 @@ module.exports ={
   //sums tutor's sessions totals
   sumStdSessions: function(userID,callback) {
     console.log(userID);
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('users');
       collection.aggregate([
@@ -175,9 +131,6 @@ module.exports ={
         {$unwind : "$timeSheet" },
         {$group : { _id:'$userId', total: {$sum:"$timeSheet.sessionTotal"} }}
       ],function(err,result) {
-        if (err) {
-          console.log(err);
-        }
         callback(result);
         //close connection
         db.close();
@@ -186,13 +139,8 @@ module.exports ={
   },
   //get a specific tutor request
   tutorRequestDetails: function(userID,requestId,callback) {
-    console.log(userID);
-    // Connection URL
-    var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
     // Use connect method to connect to the Server
-    MongoClient.connect(mongoUrl, function(err, db) {
-      assert.equal(null, err);
-      console.log("Connected correctly to mongodb");
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
       var collection = db.collection('users');
       collection.aggregate([
@@ -201,9 +149,6 @@ module.exports ={
         {$unwind : "$studentsToTutor" },
         {$match : {"studentsToTutor.requestId":requestId}}
       ],function(err,result) {
-        if (err) {
-          console.log(err);
-        }
         callback(result);
         //close connection
         db.close();

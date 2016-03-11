@@ -1,9 +1,11 @@
+"use strict";
 var
     gulp            = require('gulp'), 
     child_process   = require('child_process'),
     exec   = require('child_process').exec,
     minifyCss = require('gulp-minify-css'),
-    nodemon         = require('gulp-nodemon');
+    nodemon         = require('gulp-nodemon'),
+    MongoClient = require('mongodb').MongoClient;
 
 // startup required services to run the app server
 gulp.task('mongod', function() { 
@@ -11,6 +13,33 @@ gulp.task('mongod', function() { 
     child_process.exec('mongod', function(err,stdout,stderr){
     	console.log(stdout);
     });
+});
+//Add a test user for an Admin
+gulp.task('create-admin-test-user', function(done) {
+  // FIXME: need to create admin test user
+  let user = {}
+	try {
+		var mongoUrl = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/tutorTracker';
+    MongoClient.connect(mongoUrl, function(err, db) {
+      console.log("Connected correctly to mongodb");
+      // Get the documents collection
+      var collection = db.collection('users');
+      // Insert some documents
+      collection.insertOne(user, function(err, result) {
+        //console.log("error? ",err);
+        callback(result, err);
+        //close connection
+        db.close();
+      });
+    });
+	}
+  catch (e) {
+		console.log(e);
+		return;
+	}
+
+	});
+
 });
 // Run app.js with nodemon
 gulp.task('dev', function () {

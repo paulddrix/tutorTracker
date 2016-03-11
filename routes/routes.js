@@ -1,16 +1,15 @@
+"use strict";
 module.exports = function(app) {
-  "use strict";
+
   const
-  //mandrill = require('mandrill-api/mandrill'),
   moment = require('moment'),
-  //mandrill_client = new mandrill.Mandrill('R6xFyX_txF1on5jGLGWreQ'),
   jwt = require('jsonwebtoken'),
   fs = require('fs'),
   //models
-  userAccount = require('../models/Account'),
-  courses = require('../models/Courses'),
-  tutorRequests = require('../models/TutorRequests'),
-  officeHours = require('../models/OfficeHours');
+  userAccount = require('../models/account'),
+  courses = require('../models/courses'),
+  tutorRequests = require('../models/tutorRequests'),
+  officeHours = require('../models/officeHours');
   //keys
   //public key
   const puCert = fs.readFileSync('./keys/public.pem');
