@@ -1,5 +1,4 @@
-var MongoClient = require('mongodb').MongoClient,
-    assert = require('assert');
+var MongoClient = require('mongodb').MongoClient;
 module.exports ={
 /*
    Office Shifts

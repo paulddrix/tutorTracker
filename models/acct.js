@@ -1,5 +1,5 @@
-var MongoClient = require('mongodb').MongoClient,
-    assert = require('assert');
+var MongoClient = require('mongodb').MongoClient;
+
 module.exports ={
 
   getUsers: function(query,callback) {

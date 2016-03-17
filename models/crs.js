@@ -1,12 +1,11 @@
-var MongoClient = require('mongodb').MongoClient,
-    assert = require('assert');
+var MongoClient = require('mongodb').MongoClient;
 module.exports ={
 
-  getTutorRequests: function(query,callback) {
+  getCourses: function(query,callback) {
     // Use connect method to connect to the DB Server
     MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
-      var collection = db.collection('tutorRequests');
+      var collection = db.collection('courses');
       // Find some documents
       collection.find(query).toArray(function(err, docs) {
         callback(docs);
@@ -16,13 +15,13 @@ module.exports ={
 
     });
   },
-  getRequest: function(reqInfo,callback) {
+  getCourse: function(userInfo,callback) {
     // Use connect method to connect to the DB Server
     MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
-      var collection = db.collection('tutorRequests');
+      var collection = db.collection('courses');
       // Find some documents
-      collection.find(reqInfo).toArray(function(err, docs) {
+      collection.find(userInfo).toArray(function(err, docs) {
         callback(docs);
         //close connection
         db.close();
@@ -30,24 +29,25 @@ module.exports ={
 
     });
   },
-  createRequest: function(request,callback) {
+  createCourse: function(user,callback) {
     // Use connect method to connect to the Server
     MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
+      assert.equal(null, err);
       // Get the documents collection
-      var collection = db.collection('tutorRequests');
+      var collection = db.collection('courses');
       // Insert some documents
-      collection.insertOne(request, function(err, result) {
+      collection.insertOne(user, function(err, result) {
         callback(result, err);
         //close connection
         db.close();
       });
     });
   },
-  destroyUser: function(user,callback) {
+  destroyCourse: function(user,callback) {
     // Use connect method to connect to the Server
     MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
-      var collection = db.collection('tutorRequests');
+      var collection = db.collection('courses');
       // Insert some documents
       collection.remove(user, function(err, result) {
         callback(result, err);
@@ -56,14 +56,16 @@ module.exports ={
       });
     });
   },
-  // insert new tutor request
-  updateTutorRequest: function(query,updateInfo,callback) {
+  updateCourse: function(query,updateInfo,callback) {
+    // Connection URL
     // Use connect method to connect to the Server
     MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection
-      var collection = db.collection('tutorRequests');
-      collection.update(query,
-        {$set: updateInfo }, function(err, result) {
+      var collection = db.collection('courses');
+      collection.update(query,{
+        $set: updateInfo,
+        $currentDate: { lastModified: true }
+          }, function(err, result) {
         callback(result);
       });
       //close connection
