@@ -40,30 +40,30 @@ const publicKey = fs.readFileSync('./keys/public.pub');
 const privateKey = fs.readFileSync('./keys/private.pem');
 
 //authorization middleware
-app.use(function (req, res, next) {
-	req.typeOfAdmin = true;
-  console.log('Cookie token ', req.cookies.auth);
-	// if(req.cookies.auth === undefined){
-	// 	res.redirect('/login');
-	// }
-	//jwt.verify(req.cookies.auth, publicKey, function(err, decoded){
-
-		// Utils.debug('decoded JWT at '+req.path,decoded);
-		// if(decoded == undefined){
-		// 	res.redirect('/login')
-		// }
-		// else if(decoded['iss'] === "system" && decoded['admin'] === true){
-		// 	console.log("FUCKINGSHITFACE");
-		// 	req.typeOfAdmin = true;
-		// 	Utils.debug('ADMIN CONDITINAL ',req.typeOfAdmin);
-		// }
-		// else if(decoded['iss'] === "system" && decoded['admin'] === false){
-		// 	req.typeOfAdmin = false;
-		// 	Utils.debug('TUTOR CONDITINAL ',req.typeOfAdmin);
-		// }
-	//});
-  next();
-});
+// app.use(function (req, res, next) {
+// 	req.typeOfAdmin = true;
+//   console.log('Cookie token ', req.cookies.auth);
+// 	// if(req.cookies.auth === undefined){
+// 	// 	res.redirect('/login');
+// 	// }
+// 	//jwt.verify(req.cookies.auth, publicKey, function(err, decoded){
+//
+// 		// Utils.debug('decoded JWT at '+req.path,decoded);
+// 		// if(decoded == undefined){
+// 		// 	res.redirect('/login')
+// 		// }
+// 		// else if(decoded['iss'] === "system" && decoded['admin'] === true){
+// 		// 	console.log("FUCKINGSHITFACE");
+// 		// 	req.typeOfAdmin = true;
+// 		// 	Utils.debug('ADMIN CONDITINAL ',req.typeOfAdmin);
+// 		// }
+// 		// else if(decoded['iss'] === "system" && decoded['admin'] === false){
+// 		// 	req.typeOfAdmin = false;
+// 		// 	Utils.debug('TUTOR CONDITINAL ',req.typeOfAdmin);
+// 		// }
+// 	//});
+//   next();
+// });
 
 // =-=-=-=-=-=-=-=-=-= Config vars =-=-=-=-=-=-=-=-=-=-=-=
 let port = process.env.PORT || 8080;

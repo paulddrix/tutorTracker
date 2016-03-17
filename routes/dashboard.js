@@ -35,6 +35,7 @@ module.exports = function(app,publicKey,privateKey) {
               data['courseList']=courseRes;
               tutorRequests.getTutorRequests({rejected:true},function(rejectedDocs){
                 data['rejectedDocs'] = rejectedDocs;
+                Utils.debug('DASHBOARD Route ADMIN conditial DATA!',data);
                 res.render('dashboard',data);
               });
             });
@@ -45,6 +46,7 @@ module.exports = function(app,publicKey,privateKey) {
           Utils.debug('DASHBOARD Route TUTOR conditial','TUTOR!!!!');
           userAccount.getUser({userId:decoded.userId},function(result){
             var data = {userData:result[0],loggedIn:true};
+            Utils.debug('DASHBOARD Route TUTOR conditial DATA!',data);
             res.render('dashboard',data);
           });
         }
