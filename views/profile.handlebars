@@ -3,19 +3,19 @@
 	<p>
 		Please keep your information updated.
 	</p>
-	<p><b>Name &nbsp;</b>{{ userData.firstName }}&nbsp;{{ userData.lastName }}</p>
+	<p>{{ userData.firstName }}&nbsp;{{ userData.lastName }}</p>
 	{{#if userData.degree}}
-	<p><b>Degree &nbsp;</b>{{ userData.degree }}</p>
+	<p>{{ userData.degree }}</p>
 	{{/if}}
-	<p><b>Email &nbsp;</b>{{ userData.email }}</p>
-	<p><b>Phone &nbsp;</b>{{ userData.phone }}</p>
+	<p>{{ userData.email }}</p>
+	<p>{{ userData.phone }}</p>
 	{{#if userData.admin}}
-	<p><b>Administrator</b></p>
+	<p>Administrator</p>
 	{{/if}}
 	{{#if userData.textAlert}}
-	<span><b>Text Alerts:</b> On</span><br>
+	<span>Text Alerts are </span><span class="aquariusLabel bold">On</span><br>
 	{{else}}
-	<span><b>Text Alerts:</b> Off</span><br>
+	<span>Text Alerts are </span><span class="orangeLabel bold">Off</span><br>
 	{{/if}}
 	<a href="/profile/editprofile" class="button aquarius">Edit Profile</a></br>
 	<a href="logout" class="button fsorange">Log Out</a>

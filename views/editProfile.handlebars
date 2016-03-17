@@ -23,9 +23,11 @@
       </p>
       <p>
         {{#if userData.textAlert}}
-        <input type="checkbox" name="textAlert" checked="checked" value="true">&nbsp;Text Alerts<br>
+        <input type="checkbox" name="textAlert" id="txtAlert" checked="checked" value="true">
+        <label for="txtAlert">Text Alerts</label>
         {{else}}
-        <input type="checkbox" name="textAlert" value="true">&nbsp;Text Alerts<br>
+        <input type="checkbox" name="textAlert" id="txtAlert" value="true">
+        <label for="txtAlert">Text Alerts</label>
         {{/if}}
       </p>
       <input type="hidden" name="userId" value="{{userData.userId}}">

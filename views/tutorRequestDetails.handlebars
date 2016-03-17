@@ -1,14 +1,14 @@
 
 {{#if userData.admin}}
 <h1>Student's Details</h1>
-<p><b>Name &nbsp;</b>{{ tutorRequest.firstName }}&nbsp;{{ tutorRequest.lastName }}</p>
-<p><b>Email &nbsp;</b>{{ tutorRequest.email }}</p>
-<p><b>Phone &nbsp;</b>{{ tutorRequest.phone }}</p>
-<p><b>Date Added&nbsp;</b>{{ tutorRequest.dateAdded }}</p>
-<p><b>Degree &nbsp;</b>{{ tutorRequest.degree }}</p>
-<p><b>Course to Tutor &nbsp;</b>{{ tutorRequest.courseToTutor }}</p>
-<p><b>Program &nbsp;</b>{{ tutorRequest.program }}</p>
-<p><b>Deny Reason &nbsp;</b>{{ tutorRequest.denyReason }}</p>
+<p>{{ tutorRequest.firstName }}&nbsp;{{ tutorRequest.lastName }}</p>
+<p>{{ tutorRequest.email }}</p>
+<p>{{ tutorRequest.phone }}</p>
+<p>{{ tutorRequest.dateAdded }}</p>
+<p>{{ tutorRequest.degree }}</p>
+<p>{{ tutorRequest.courseToTutor }}</p>
+<p>{{ tutorRequest.program }}</p>
+<p>{{ tutorRequest.denyReason }}</p>
 <input type="hidden" id="rejectedReqId" value="{{tutorRequest.requestId}}">
 <h2>Search Eligible Tutors</h2>
 <p>
@@ -40,13 +40,13 @@
 <p>
 	If have not already done so, accept or deny the request. If you accept it, your are responsible to reach out to the student. If you deny it, you must specifiy a valid reason why.
 </p>
-<p><b>Name &nbsp;</b>{{ tutorRequest.firstName }}&nbsp;{{ tutorRequest.lastName }}</p>
-<p><b>Email &nbsp;</b>{{ tutorRequest.email }}</p>
-<p><b>Phone &nbsp;</b>{{ tutorRequest.phone }}</p>
-<p><b>Date Added&nbsp;</b>{{ tutorRequest.dateAdded }}</p>
-<p><b>Degree &nbsp;</b>{{ tutorRequest.degree }}</p>
-<p><b>Course to Tutor &nbsp;</b>{{ tutorRequest.courseToTutor }}</p>
-<p><b>Program &nbsp;</b>{{ tutorRequest.program }}</p>
+<p>{{ tutorRequest.firstName }}&nbsp;{{ tutorRequest.lastName }}</p>
+<p>{{ tutorRequest.email }}</p>
+<p>{{ tutorRequest.phone }}</p>
+<p>{{ tutorRequest.dateAdded }}</p>
+<p>{{ tutorRequest.degree }}</p>
+<p>{{ tutorRequest.courseToTutor }}</p>
+<p>{{ tutorRequest.program }}</p>
 	{{#if tutorRequest.pendingStatus}}
 		<a href="/tutorrequest/accept/{{tutorRequest.requestId}}/{{tutorRequest.assignTutor}}" class="button aquarius">Accept</a>
 		<button id="denyModal" class="fsorange" data-request-id="{{tutorRequest.requestId}}" data-assign-tutor="{{tutorRequest.assignTutor}}">Deny</button>

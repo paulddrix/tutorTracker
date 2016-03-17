@@ -35,11 +35,12 @@
 			  xhttp = new XMLHttpRequest();
 			  xhttp.onreadystatechange = function() {
 			    if (xhttp.readyState == 4 && xhttp.status == 200) {
+
 						console.log(xhttp);
 						var response = JSON.parse(xhttp.responseText);
 						var resultsHtml ='<div class="listCont">';
 						for (var i = 0; i < response.length; i++) {
-						resultsHtml+= "<div class=\"userLi\"><b>Name</b>&nbsp;"+response[i]['firstName']+" "+ response[i]['lastName'] +" "+ " <b>Total Hours </b>" +response[i]['monthlyTotalHours'] +"&nbsp;<button class=\"dynamicAssign\" data-tutor-name=\""+response[i]['firstName']+" "+response[i]['lastName']+ "\" data-tutor-id=\""+response[i]['userId']+ " \">Assign</button></div>";
+						resultsHtml+= "<div class=\"userLi\">"+response[i]['firstName']+" "+ response[i]['lastName'] +" <span class=\"bold aquariusLabel\">" +response[i]['monthlyTotalHours'] +"</span>&nbsp;Total Hours<button class=\"dynamicAssign float-right\" data-tutor-name=\""+response[i]['firstName']+" "+response[i]['lastName']+ "\" data-tutor-id=\""+response[i]['userId']+ " \">Assign</button></div>";
 						}
 						resultsHtml+= "</div>";
 
@@ -51,8 +52,11 @@
 							dynamicButtons[i].addEventListener('click',function() {
 								var tutorName = this.getAttribute("data-tutor-name");
 								var tutorId = this.getAttribute("data-tutor-id");
-								console.log(document.getElementsByClassName("assignTutor"));
-								document.getElementsByClassName("assignTutor").assignTutor.value =tutorId;
+								document.getElementById("assignTutorName").value =tutorName;
+								document.getElementById("course").value =searchQuery;
+								document.getElementById("assignTutor").value =tutorId;
+								// Display request form
+								document.getElementById("addRequestForm").style.display ='block';
 							});
 						}
 						// document.getElementsByClassName('dynamicAssign').addEventListener('click',function() {
@@ -85,7 +89,7 @@
 						var response = JSON.parse(xhttp2.responseText);
 						var resultsHtml ='<div class="listCont">';
 						for (var i = 0; i < response.length; i++) {
-							resultsHtml+= "<div class=\"userLi\"><b>Name</b>&nbsp;"+response[i]['firstName']+" "+ response[i]['lastName'] +" "+ " <b>Total Hours </b>" +response[i]['monthlyTotalHours'] +"<a class=\"aquarius button\" href=\"/reassigntutor/"+ response[i]['userId']+ "/" + rejectedReqId +"\">Assign</a></div>";
+							resultsHtml+= "<div class=\"userLi\">"+response[i]['firstName']+" "+ response[i]['lastName'] + " " +response[i]['monthlyTotalHours'] +" Total Hours<a class=\"aquarius button float-right\" href=\"/reassigntutor/"+ response[i]['userId']+ "/" + rejectedReqId +"\">Assign</a></div>";
 						}
 						resultsHtml+= "</div>";
 						//place the results from the ajax call into the container

@@ -11,13 +11,13 @@
 		<div class="userLi">
 			<a href="/users/userprofiles/{{userId}}" class="float-left">
 				<div class="float-left text-wrap">
-					<b>Name&nbsp;</b>{{firstName}}&nbsp;{{lastName}}&nbsp;
+					{{firstName}}&nbsp;{{lastName}}&nbsp;
 					{{#if this.degree}}
-					<b>Degree&nbsp;</b> {{degree}} &nbsp;
+					{{degree}} &nbsp;
 					{{/if}}
 
 					{{#if this.admin}}
-					<b>Administrator&nbsp;</b>
+					<span class="aquariusLabel bold">Administrator</span>
 					{{/if}}
 				</div>
 				<a href="/users/deleteuserhandler/{{userId}}" class="button fsorange float-right">Delete</a>&nbsp;
@@ -35,13 +35,13 @@
 	{{#each users}}
 		<a href="users/userprofiles/{{userId}}" class="userLi float-left">
 		<div class="float-left">
-			<b>Name&nbsp;</b>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
+			<span>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;</span>
 			{{#if this.degree}}
-			<b>Degree&nbsp;</b> {{degree}} &nbsp;
+			<span>{{degree}} &nbsp;</span>
 			{{/if}}
 
 			{{#if this.admin}}
-			<b>Administrator&nbsp;</b>
+			<span class="aquariusLabel bold">Administrator</span>
 			{{/if}}
 		</div>
 	</a>

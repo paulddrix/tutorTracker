@@ -1,13 +1,19 @@
 <h1>{{ tutor.firstName }}&nbsp;{{ tutor.lastName }}'s Tutor Sessions</h1>
-
+{{#if tutor.timeSheet}}
 <div class="listCont">
 {{#each tutor.timeSheet}}
 <div class="userLi">
-  <a href="/timesheet/tutortimesheetdetails/{{userId}}" class="float-left">
     <div class="float-left text-wrap">
-      <b>Date&nbsp;</b>{{ this.sessionDate }} &nbsp;<b>Start Time&nbsp;</b> {{this.sessionStartTime}}&nbsp;<b>End Time&nbsp;</b> {{this.sessionEndTime}}&nbsp;<b>Total Hours&nbsp;</b> {{this.sessionTotal}}
+      <span>{{ this.sessionDate }} &nbsp;</span>
+       <span>{{this.sessionStartTime}}&nbsp;</span>-
+       <span>{{this.sessionEndTime}}&nbsp;</span>
+       <span class="aquariusLabel bold">{{this.sessionTotal}}</span><span>&nbsp;Total Hours</span>
     </div>
-  </a>
 </div>
 {{/each}}
 </div>
+{{else}}
+<p>
+  This tutor does not have any time sheet entries.
+</p>
+{{/if}}

@@ -11,7 +11,7 @@ Application to Manage tutors in a university environment
 - create a .env file with the following in it:
 `DEBUG='true'
 MONGOLAB_URI='mongodb://localhost:27017/tutorTracker'`
-- run `gulp setup`
+- run `gulp setup` to create test users and test data
 
 and then node app.js. That's it :).
 

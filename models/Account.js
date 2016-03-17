@@ -121,7 +121,6 @@ module.exports ={
   },
   //sums tutor's sessions totals
   sumStdSessions: function(userID,callback) {
-    console.log(userID);
     // Use connect method to connect to the Server
     MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
       // Get the documents collection

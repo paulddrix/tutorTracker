@@ -6,12 +6,12 @@
 <div>
   {{#if userData.admin}}
     <div>
+      <h1>Search Eligible Tutors</h1>
       <p>
         Search tutor eligibility and total hours. Based upon that, add a request to a tutor.
       </p>
-      <h2>Search Eligible Tutors</h2>
       <p>
-        Simply search by course name, and click the assign button to add the tutor to the request form. If you did this correctly, the will be a number for the assign tutor field.
+        Simply search by course name, and click the assign button to add the tutor to the request form.
       </p>
       <div class="float-clear">
         <input type="text" class="float-left" name="courseName" list="courseNames" id="courseName" placeholder="Course Name">
@@ -35,8 +35,8 @@
       </div>
     </div>
     <div class="float-clear">
-      <h1>Add Tutor Request</h1>
-      <form action="/addtutorrequesthandler" method="post">
+      <form action="/addtutorrequesthandler" method="post" id="addRequestForm">
+        <h2>Add Tutor Request</h2>
         <p>
           <label for="fName">First Name</label>
           <input type="text" name="firstName" id="fName" required="required">
@@ -74,17 +74,6 @@
           </datalist>
         </p>
         <p>
-          <label for="course">Course to Tutor</label>
-          <input type="text" name="courseToTutor" list="courseToTutors" required="required" id="degree">
-            <datalist id="courseToTutors">
-              {{#each courseList}}
-              <option value="{{this.courseName}}">{{this.courseName}}</option>
-              {{/each}}
-            </datalist>
-
-
-        </p>
-        <p>
           <label for="program">Program Type</label>
           <input type="text" name="program" list="programs" id="program" required="required">
             <datalist id="programs">
@@ -93,13 +82,14 @@
             </datalist>
         </p>
         <p>
+          <label for="course">Course to Tutor</label>
+          <input type="text" name="courseToTutor" required="required" id="course">
+        </p>
+
+        <p>
           <label for="assignTutor">Assign Tutor</label>
-          <input type="text" name="assignTutor" required="required" list="assignTutors" id="assignTutor" class="assignTutor">
-            <datalist id="assignTutors">
-              {{#each tutorList}}
-              <option value="{{this.userId}}">{{this.firstName}}&nbsp;{{this.lastName}}</option>
-              {{/each}}
-            </datalist>
+          <input type="text" name="assignTutorName" required="required" id="assignTutorName">
+          <input type="hidden" name="assignTutor" id="assignTutor">
         </p>
         <button type="submit" class="blue_button">
            <svg viewBox="0 0 46.5 46.5" height="20" fill="#EBEBEB">
@@ -115,11 +105,6 @@
         </p>
         {{#if rejectedDocs}}
         <div class="listCont">
-          <div class="">
-            <span><b>Name</b></span>
-            <span class="float-right"><b>Date Added</b></span>
-            <hr>
-          </div>
 
           {{!-- NEEDS TO BE FIXED TO ASSIGN A TUTOR TO THE REJECTED REQUEST --}}
         {{#each rejectedDocs}}
@@ -128,7 +113,7 @@
               <span>&nbsp;{{this.firstName}}&nbsp;{{this.lastName}}</span>
               <div class="float-right">
                 <span>{{this.dateAdded}}</span><br>
-                <span class="newLabel">REJECTED</span>
+                <span class="orangeLabel">REJECTED</span>
               </div>
           </a>
 
@@ -159,15 +144,25 @@
       <a href="/dashboard/tutorrequest/{{this.requestId}}" class="userLi float-left">
         <div class="float-left liWrapper">
           {{#if this.pendingStatus}}
-          <b class="newLabel">NEW!</b>
-          {{else}}
-          <b class="acceptedLabel float-right">ACCEPTED!</b>
-          {{/if}}
-          <span>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;</span><br>
-          <span>{{this.courseToTutor}} &nbsp;</span>
+          <div>
+            <span>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;</span><br>
+            <span>{{this.courseToTutor}} &nbsp;</span>
+          </div>
           <div class="float-right">
+            <span class="orangeLabel">NEW!</span>
             <span>{{this.dateAdded}} &nbsp;</span>
           </div>
+          {{else}}
+          <div>
+            <span>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;</span><br>
+            <span>{{this.courseToTutor}} &nbsp;</span>
+          </div>
+          <div class="float-right">
+            <span class="aquariusLabel">ACCEPTED!</span><br>
+            <span>{{this.dateAdded}} &nbsp;</span>
+          </div>
+          {{/if}}
+
         </div>
       </a>
 

@@ -1,12 +1,14 @@
 <div>
 	<h1>User's Details</h1>
-	<p><b>Name &nbsp;</b>{{ userProfile.firstName }}&nbsp;{{ userProfile.lastName }}</p>
+	<p>
+		<span>{{ userProfile.firstName }}&nbsp;{{ userProfile.lastName }}</span>
+	</p>
 	{{#if userProfile.degree}}
-	<p><b>Degree &nbsp;</b>{{ userProfile.degree }}</p>
+	<p>{{ userProfile.degree }}</p>
 	{{/if}}
-	<p><b>Email &nbsp;</b>{{ userProfile.email }}</p>
-	<p><b>Phone &nbsp;</b>{{ userProfile.phone }}</p>
+	<p>{{ userProfile.email }}</p>
+	<p>{{ userProfile.phone }}</p>
 	{{#if userProfile.admin}}
-	<p><b>Administrator</b></p>
+	<p>Administrator</p>
 	{{/if}}
 </div>

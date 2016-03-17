@@ -27,7 +27,8 @@
       </p>
       <p>
         <label for="degree">Degree</label>
-        <select name="degree" required="required" id="degree">
+        <input name="degree" id="degree" list="degrees" required="required">
+        <datalist id="degrees">
           <option value="false">Select a Degree</option>
           <option value="Digital Arts &amp; Design">Digital Arts &amp; Design</option>
           <option value="Game Development">Game Development</option>
@@ -42,13 +43,15 @@
           <option value="Simuation &amp; Visualization">Simuation &amp; Visualization</option>
           <option value="Mobile Development">Mobile Development</option>
           <option value="Software Development">Software Development</option>
-        </select>
+        </datalist>
       </p>
       <p>
-        <input type="checkbox" name="admin" value="true">&nbsp;Administrator<br>
+        <input type="checkbox" name="admin" id="admin" value="true">
+        <label for="admin">Administrator</label>
       </p>
       <p>
-        <input type="checkbox" name="textAlert" value="true">&nbsp;Text Alerts<br>
+        <input type="checkbox" name="textAlert" value="true" id="txtAlert">
+        <label for="txtAlert">Text Alerts</label>
       </p>
       <button type="submit" class="blue_button">Add User</button>
     </form>

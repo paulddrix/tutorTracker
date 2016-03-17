@@ -12,3 +12,18 @@ nav {
     width:18.2%;
   }
 }
+/*
+FORMS
+*/
+form{
+  margin: 0 auto;
+	width: 60%;
+	input{
+		width: 100%;
+		padding:10px;
+		border: solid $black 2px;
+	}
+	button{
+		width: 100%;
+	}
+}

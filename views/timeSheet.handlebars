@@ -9,8 +9,8 @@
 	<div class="userLi">
 		<a href="/timesheet/tutortimesheetdetails/{{userId}}" class="float-left">
 			<div class="float-left text-wrap">
-				<b>Name&nbsp;</b>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
-				<b>Total Session Hours&nbsp;</b> {{this.monthlyTotalSessionHours}}
+				{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
+				 <span class="aquariusLabel bold">{{this.monthlyTotalSessionHours}}</span><span>&nbsp;Total Session Hours</span>
 			</div>
 		</a>
 	</div>
@@ -23,10 +23,16 @@
 		Every time you meet up with a student, you will log the hours here.
 	</p>
 	<a href="/timesheet/addsession" class="button aquarius">Add Session</a>
-	<span><b>Total Session Hours &nbsp;</b>{{userData.monthlyTotalSessionHours}}</span>
+	<span class="aquariusLabel bold">{{userData.monthlyTotalSessionHours}}</span><span>&nbsp;Total Session Hours</span>
 	<ul class="listCont">
 		{{#each userData.timeSheet}}
-		<li class="userLi"><b>Date&nbsp;</b>{{ this.sessionDate }} &nbsp;<b>Start Time&nbsp;</b> {{this.sessionStartTime}}&nbsp;<b>End Time&nbsp;</b> {{this.sessionEndTime}}&nbsp;<b>Total Hours&nbsp;</b> {{this.sessionTotal}}</li>
+		<li class="userLi">
+			{{ this.sessionDate }} &nbsp;
+			<span>{{this.sessionStartTime}}&nbsp;</span>-
+			<span>{{this.sessionEndTime}}&nbsp;</span>
+			<span class="bold">{{this.sessionTotal}}</span>
+			<span>Total Hours&nbsp;</span>
+		</li>
 		{{/each}}
 	</ul>
   {{/if}}

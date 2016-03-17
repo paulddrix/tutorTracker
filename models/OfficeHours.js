@@ -111,5 +111,17 @@ module.exports ={
       });
 
     });
-  }
+  },
+  //add a month
+  createMonth: function(month,callback) {
+    // Use connect method to connect to the Server
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
+      // Get the documents collection
+      var collection = db.collection('officeMonths');
+      collection.insert(month, function(err, result) {
+        callback(result);
+        db.close();
+      });
+    });
+  },
 }//end export
