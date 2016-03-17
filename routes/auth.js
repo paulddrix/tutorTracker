@@ -42,8 +42,8 @@ module.exports = function(app,publicKey,privateKey) {
     else{
       //read from DB to see what type of account they have
       userAccount.getUser(req.body,function(result){
-        Utils.debug('results from query',result);
-        
+        Utils.debug('results from query in VERIFY',result);
+
         if(result[0]=== undefined){
           res.redirect('/login');
         }
