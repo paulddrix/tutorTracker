@@ -13,7 +13,6 @@ module.exports = function(app,publicKey,privateKey) {
   DASHBOARD
   */
   app.get('/dashboard',function(req,res) {
-    Utils.debug('req typeOfAdmin is ->  ',req.typeOfAdmin);
     //Utils.debug('AUTH MIDDLEWARE TEST ',req.typeOfAdmin);
     if(req.cookies.auth === undefined){
       res.redirect('/login');
@@ -28,6 +27,7 @@ module.exports = function(app,publicKey,privateKey) {
         }
         //if the user is an admin
         else if(decoded['iss'] === "system" && decoded['admin'] === true){
+          Utils.debug('DASHBOARD Route ADMIN conditial','ADMIN!!!!');
           var data = {userData:{admin:true},loggedIn:true};
           userAccount.getUsers({admin:false},function(results) {
             data['tutorList']=results;
@@ -41,7 +41,8 @@ module.exports = function(app,publicKey,privateKey) {
           });
         }
         //if the user is a tutor
-        else{
+        else if(decoded['iss'] === "system" && decoded['admin'] === false){
+          Utils.debug('DASHBOARD Route TUTOR conditial','TUTOR!!!!');
           userAccount.getUser({userId:decoded.userId},function(result){
             var data = {userData:result[0],loggedIn:true};
             res.render('dashboard',data);
