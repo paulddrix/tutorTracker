@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient,
-assert = require('assert');
+    assert = require('assert');
 module.exports ={
 
   getCourses: function(query,callback) {
