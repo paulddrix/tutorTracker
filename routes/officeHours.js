@@ -225,31 +225,86 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
+          if (req.body.shift === "Both") {
+            // Make request for 10AM-1PM
+            var shiftDate = moment(req.body.shiftDate).format("MM/DD/YYYY");
+            var shiftDateHumanFormat = moment(req.body.shiftDate).format("dddd, MMMM Do YYYY");
+            var shiftDay = moment(req.body.shiftDate).format("dddd");
+            var shiftId = Math.floor((Math.random() * 99999999) + 10000000);
+            var newShift = {
+                      "dayName" : shiftDay,
+                      "shiftId":shiftId,
+                      "dayDate" :shiftDate ,
+                      "humanReadbleDate":shiftDateHumanFormat,
+                      "shift" : "10AM-1PM",
+                      "tutorName" : req.body.tutorName,
+                      "shiftHours" : 3,
+                      "userId" : parseInt(req.body.userId),
+                      "pending" : true,
+                      "approved" : false
+             };
+            officeHours.createShift(newShift,function(results){
+              //send the request to the tutor's office hours array
+              userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift},function(result){
 
-          var shiftDate = moment(req.body.shiftDate).format("MM/DD/YYYY");
-          var shiftDateHumanFormat = moment(req.body.shiftDate).format("dddd, MMMM Do YYYY");
-          var shiftDay = moment(req.body.shiftDate).format("dddd");
-          var shiftId = Math.floor((Math.random() * 99999999) + 10000000);
-          var newShift = {
-                    "dayName" : shiftDay,
-                    "shiftId":shiftId,
-                    "dayDate" :shiftDate ,
-                    "humanReadbleDate":shiftDateHumanFormat,
-                    "shift" : req.body.shift,
-                    "tutorName" : req.body.tutorName,
-                    "shiftHours" : 3,
-                    "userId" : parseInt(req.body.userId),
-                    "pending" : true,
-                    "approved" : false
-           };
-          officeHours.createShift(newShift,function(results){
-            //send the request to the tutor's office hours array
-            userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift},function(result){
+                Utils.debug('result from addToArray ReqSHiftHandler',result);
 
-              Utils.debug('result from addToArray ReqSHiftHandler',result);
-              res.redirect('/officehours');
+              });
             });
-          });
+            // Make request for 1PM-4PM
+            var shiftDate2 = moment(req.body.shiftDate).format("MM/DD/YYYY");
+            var shiftDateHumanFormat2 = moment(req.body.shiftDate).format("dddd, MMMM Do YYYY");
+            var shiftDay2 = moment(req.body.shiftDate).format("dddd");
+            var shiftId2 = Math.floor((Math.random() * 99999999) + 10000000);
+            var newShift2 = {
+                      "dayName" : shiftDay2,
+                      "shiftId":shiftId2,
+                      "dayDate" :shiftDate2 ,
+                      "humanReadbleDate":shiftDateHumanFormat2,
+                      "shift" : "1PM-4PM",
+                      "tutorName" : req.body.tutorName,
+                      "shiftHours" : 3,
+                      "userId" : parseInt(req.body.userId),
+                      "pending" : true,
+                      "approved" : false
+             };
+            officeHours.createShift(newShift2,function(results){
+              //send the request to the tutor's office hours array
+              userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift2},function(result){
+
+                Utils.debug('result from addToArray ReqSHiftHandler',result);
+                
+              });
+            });
+            res.redirect('/officehours');
+          }
+          else if(req.body.shift === "10AM-1PM" || req.body.shift === "1PM-4PM" ){
+            var shiftDate3 = moment(req.body.shiftDate).format("MM/DD/YYYY");
+            var shiftDateHumanFormat3 = moment(req.body.shiftDate).format("dddd, MMMM Do YYYY");
+            var shiftDay3 = moment(req.body.shiftDate).format("dddd");
+            var shiftId3 = Math.floor((Math.random() * 99999999) + 10000000);
+            var newShift3 = {
+                      "dayName" : shiftDay3,
+                      "shiftId":shiftId3,
+                      "dayDate" :shiftDate3 ,
+                      "humanReadbleDate":shiftDateHumanFormat3,
+                      "shift" : req.body.shift,
+                      "tutorName" : req.body.tutorName,
+                      "shiftHours" : 3,
+                      "userId" : parseInt(req.body.userId),
+                      "pending" : true,
+                      "approved" : false
+             };
+            officeHours.createShift(newShift3,function(results){
+              //send the request to the tutor's office hours array
+              userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift3},function(result){
+
+                Utils.debug('result from addToArray ReqSHiftHandler',result);
+                res.redirect('/officehours');
+              });
+            });
+          }
+
 
         }
       });
