@@ -3,7 +3,6 @@
 const express = require('express'),
 	app = express(),
 	exphbs  = require('express-handlebars'),
-	flash = require('connect-flash'),
 	cookieParser = require('cookie-parser'),
 	fs = require('fs'),
 	bodyParser = require('body-parser'),
@@ -14,14 +13,13 @@ if(!process.env.PORT){
 	let dotenv = require('dotenv').load();
 }
 
-// View engine
+// Configuration for express
 app.engine('handlebars', exphbs({defaultLayout: 'main'}));
 app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
 //App config
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(flash());
 
 // // custom middleware for support page
 // app.use('/helpSupport',function (req, res, next) {

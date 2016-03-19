@@ -36,7 +36,7 @@ module.exports ={
       var collection = db.collection('tutorRequests');
       // Insert some documents
       collection.insertOne(request, function(err, result) {
-        callback(result, err);
+        callback(err,result);
         //close connection
         db.close();
       });
@@ -63,10 +63,11 @@ module.exports ={
       var collection = db.collection('tutorRequests');
       collection.update(query,
         {$set: updateInfo }, function(err, result) {
-        callback(result);
+        callback(err,result);
+        db.close();
       });
       //close connection
-      db.close();
+
     });
   }
 }//end export

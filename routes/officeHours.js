@@ -110,13 +110,36 @@ module.exports = function(app,publicKey,privateKey) {
           var tutorId = parseInt(req.params.userId);
           var officeShiftId = parseInt(req.params.shiftId);
           userAccount.updateArrayElement({userId:tutorId,"officeHours.shiftId":officeShiftId},
-          {"officeHours.$.approved":true,"officeHours.$.pending":false},function(result){
-            // FIXME: need to add the total of all shifts and place that in the totalShiftHours field for a tutor
-            officeHours.updateOfficeHours({shiftId:officeShiftId},{"approved":true,"pending":false},function(){
-              res.redirect('/officehours');
-            });
-          });
+          {"officeHours.$.approved":true,"officeHours.$.pending":false},function(err,result){
+
+            // Sum tutor's office hours
+            userAccount.sumStdOfficeHours(tutorId,function(err,officeSum) {
+
+              // Update the tutor's monthlyTotalShiftHours
+              userAccount.updateUser({userId:tutorId},{monthlyTotalShiftHours:officeSum[0].total},function(result) {
+                // Sum tutor's monthlyTotalShiftHours and monthlyTotalSessionHours
+                //userAccount.sumAllStdHours(tutorId,function(err,totalHours) {
+                  // Utils.debug('TOTAL HOURS at ACCEPT SHIFT HANDLER',totalHours);
+                  // Utils.debug('ERROR at ACCEPT SHIFT HANDLER',err);
+                    // update totalHours for tutor
+                  // userAccount.updateUser({userId:tutorId},{monthlyTotalHours:totalHours[0].total},function(result) {
+                  //
+                    officeHours.updateOfficeHours({shiftId:officeShiftId},{"approved":true,"pending":false},function(){
+                      res.redirect('/officehours');
+                    });
+                  //
+                  // });// close updateUser
+
+
+                //});// close sumAllStdHours
+
+              });// close updateUser
+
+            }); // close sumStdOfficeHours
+
+          });// close updateArrayElement
         }
+
       });
     }
   });
@@ -143,7 +166,7 @@ module.exports = function(app,publicKey,privateKey) {
           var tutorId = parseInt(req.params.userId);
           var officeShiftId = parseInt(req.params.shiftId);
           // FIXME: add the total office hours again after the shift has been removed from the array
-          userAccount.pullFromArray({userId:tutorId},{ "officeHours": { shiftId: officeShiftId } },function(result){
+          userAccount.pullFromArray({userId:tutorId},{ "officeHours": { shiftId: officeShiftId } },function(err,result){
             officeHours.destroyShift({shiftId:officeShiftId},function(result){
               res.redirect('/officehours');
             });
@@ -173,7 +196,7 @@ module.exports = function(app,publicKey,privateKey) {
         else if(decoded['iss'] === "system"){
           var tutorId = parseInt(req.params.userId);
           var officeShiftId = parseInt(req.params.shiftId);
-          userAccount.pullFromArray({userId:tutorId},{ "officeHours": { shiftId: officeShiftId } },function(result){
+          userAccount.pullFromArray({userId:tutorId},{ "officeHours": { shiftId: officeShiftId } },function(err,result){
             officeHours.destroyShift({shiftId:officeShiftId},function(result){
               res.redirect('/officehours');
             });
@@ -245,7 +268,7 @@ module.exports = function(app,publicKey,privateKey) {
              };
             officeHours.createShift(newShift,function(results){
               //send the request to the tutor's office hours array
-              userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift},function(result){
+              userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift},function(err,result){
 
                 Utils.debug('result from addToArray ReqSHiftHandler',result);
 
@@ -270,10 +293,10 @@ module.exports = function(app,publicKey,privateKey) {
              };
             officeHours.createShift(newShift2,function(results){
               //send the request to the tutor's office hours array
-              userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift2},function(result){
+              userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift2},function(err,result){
 
                 Utils.debug('result from addToArray ReqSHiftHandler',result);
-                
+
               });
             });
             res.redirect('/officehours');
@@ -297,7 +320,7 @@ module.exports = function(app,publicKey,privateKey) {
              };
             officeHours.createShift(newShift3,function(results){
               //send the request to the tutor's office hours array
-              userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift3},function(result){
+              userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift3},function(err,result){
 
                 Utils.debug('result from addToArray ReqSHiftHandler',result);
                 res.redirect('/officehours');

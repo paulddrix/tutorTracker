@@ -5,7 +5,7 @@ module.exports = function(app,publicKey,privateKey) {
   moment = require('moment'),
   jwt = require('jsonwebtoken'),
   Utils = require('../lib/utils'),
-  //Load models
+  // Load models
   userAccount = require('../models/account'),
   courses = require('../models/courses'),
   tutorRequests = require('../models/tutorRequests');
@@ -36,7 +36,16 @@ module.exports = function(app,publicKey,privateKey) {
               tutorRequests.getTutorRequests({rejected:true},function(rejectedDocs){
                 data['rejectedDocs'] = rejectedDocs;
                 Utils.debug('DASHBOARD Route ADMIN conditial DATA!',data);
+                if (app.locals.errorMessage) {
+                  data['errorMessage']= app.locals.errorMessage;
+                }
+                else if (app.locals.successMessage) {
+                  data['successMessage']= app.locals.successMessage;
+                }
                 res.render('dashboard',data);
+                //clear local vars
+                app.locals.errorMessage = null;
+                app.locals.successMessage = null;
               });
             });
           });
@@ -47,7 +56,16 @@ module.exports = function(app,publicKey,privateKey) {
           userAccount.getUser({userId:decoded.userId},function(result){
             var data = {userData:result[0],loggedIn:true};
             Utils.debug('DASHBOARD Route TUTOR conditial DATA!',data);
+            if (app.locals.tutorErrorMessage) {
+              data['errorMessage']= app.locals.tutorErrorMessage;
+            }
+            else if (app.locals.tutorSuccessMessage) {
+              data['successMessage']= app.locals.tutorSuccessMessage;
+            }
             res.render('dashboard',data);
+            //clear local vars
+            app.locals.tutorErrorMessage = null;
+            app.locals.tutorSuccessMessage = null;
           });
         }
       });
@@ -119,13 +137,26 @@ module.exports = function(app,publicKey,privateKey) {
             "pendingStatus":true
           };
           tutorRequests.createRequest(newTutorRequest,function(err,result){
-
             Utils.debug('error in creating tutor request ',err);
+            // visual indication to the user so show an error
+            if(err != null || err != undefined){
+              app.locals.errorMessage = ' There was an error creating the tutor request';
+            }
+
           });
           userAccount.addToArray({userId:assignedTutor},{studentsToTutor:newTutorRequest},function(err,result){
-            Utils.debug('error in adding tutor request tot assigned tutor',err);
+            Utils.debug('error in adding tutor request to assigned tutor',err);
+            // visual indication to the user so show an error
+            if(err != null || err != undefined){
+              app.locals.errorMessage ='There was an error assigning the request to the tutor.';
+            }
+            if(result.result.ok === 1){
+              app.locals.successMessage ='Tutor request was successfully added.';
+            }
+            res.redirect('/dashboard');
           });
-          res.redirect('/dashboard');
+
+
         }
       });
     }
@@ -170,7 +201,16 @@ module.exports = function(app,publicKey,privateKey) {
             var incomingRequestId = parseInt(req.params.requestid);
             userAccount.tutorRequestDetails(decoded['userId'],incomingRequestId,function(tutorRequest){
               data['tutorRequest']=tutorRequest[0]['studentsToTutor'];
+              if (app.locals.tutorErrorMessage) {
+                data['errorMessage']= app.locals.tutorErrorMessage;
+              }
+              else if (app.locals.tutorSuccessMessage) {
+                data['successMessage']= app.locals.tutorSuccessMessage;
+              }
               res.render('tutorRequestDetails',data);
+              //clear local vars
+              app.locals.tutorErrorMessage = null;
+              app.locals.tutorSuccessMessage = null;
             });
           });
         }
@@ -198,13 +238,19 @@ module.exports = function(app,publicKey,privateKey) {
           var incomingRequestId = parseInt(req.params.requestid);
           var incomingAssignTutor = parseInt(req.params.assignTutor);
           userAccount.updateArrayElement({userId:incomingAssignTutor,"studentsToTutor.requestId":incomingRequestId},
-          {"studentsToTutor.$.pendingStatus":false},function(result){
+          {"studentsToTutor.$.pendingStatus":false},function(err,result){
 
-            //**************************************************
-            //let the admin know the tutor accepted the request.
-            //**************************************************
+            // visual indication to the user so show an error
+            Utils.debug('Error at accepting tutor request ',err);
+            if(err != null || err != undefined){
+              app.locals.tutorErrorMessage ='There was an error accepting the request.';
+            }
+            Utils.debug('Result at accepting tutor request ',result);
+            if(result.result.ok === 1){
+              app.locals.tutorSuccessMessage ='Tutor request was accepted successfully.';
+            }
             res.redirect('back');
-          });
+            });
 
         }
       });
@@ -232,12 +278,28 @@ module.exports = function(app,publicKey,privateKey) {
           var incomingAssignTutor = parseInt(req.body.assignTutor);
           var denialReason = req.body.denyReason;
           userAccount.pullFromArray({userId:incomingAssignTutor},{ studentsToTutor: { requestId: incomingRequestId } } ,function(err,result){
-
+            if(err != null || err != undefined){
+              app.locals.tutorErrorMessage ='There was an error denying the request.';
+            }
             Utils.debug('error when pulling from tutor requests array',err);
-            tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:true,denyReason:denialReason},function(result){
+            tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:true,denyReason:denialReason},function(err,result){
+              // visual indication to the user so show an error
+              if(err != null || err != undefined){
+                app.locals.tutorErrorMessage ='There was an error creating request denial.';
+              }
+              Utils.debug('Result at denying tutor request ',result);
+              if(result.result.ok === 1){
+                app.locals.tutorSuccessMessage ='Tutor request was denied successfully.';
+              }
+
+              //**************************************************
+              //let the admin know the tutor accepted the request.
+              //**************************************************
               res.redirect('/dashboard');
+
             });
           });
+
         }
       });
     }
@@ -263,7 +325,7 @@ module.exports = function(app,publicKey,privateKey) {
         else if(decoded['iss'] === "system"){
           var incomingRequestId = parseInt(req.params.requestid);
           var incomingTutorId = parseInt(req.params.tutorId);
-          tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:false,assignTutor:incomingTutorId},function(result){
+          tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:false,assignTutor:incomingTutorId},function(err,result){
             //must query for the tutor request to add ************
             tutorRequests.getRequest({requestId:incomingRequestId},function(result){
               //hold the req and make the necessary changes to it
@@ -272,6 +334,15 @@ module.exports = function(app,publicKey,privateKey) {
               Utils.debug('EDITTED REQ',targetReq);
 
               userAccount.addToArray({userId:incomingTutorId},{studentsToTutor:targetReq},function(err,result){
+
+                // visual indication to the user so show an error
+                if(err != null || err != undefined){
+                  app.locals.errorMessage ='There was an error reassigning the request.';
+                }
+                Utils.debug('Result at re-assigning tutor request ',result);
+                if(result.result.ok === 1){
+                  app.locals.successMessage ='Tutor request was reassigned successfully.';
+                }
 
                 Utils.debug('error ADDING EDITTED REQ to TUTOR ARRAY',err);
                 res.redirect('/dashboard');

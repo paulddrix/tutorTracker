@@ -23,7 +23,16 @@
 				}
 
   }
-	//Dashboard page
+	// Flash messages
+	if (document.getElementsByClassName('message')) {
+		var messages = document.getElementsByClassName('message');
+		for (var i = 0; i < messages.length; i++) {
+			messages[i].addEventListener('click',function() {
+				this.style.display = "none";
+			});
+		}
+	}
+	// Dashboard page
 	if (document.getElementById('searchCourses')) {
 		//search course when user clicks button
 		document.getElementById('searchCourses').addEventListener('click',function() {

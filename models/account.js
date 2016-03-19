@@ -84,10 +84,11 @@ module.exports ={
         $push: reqInfo,
         $currentDate: { dateAdded: true }
           }, function(err, result) {
-        callback(result);
+        callback(err,result);
+        db.close();
       });
       //close connection
-      db.close();
+
     });
   },
   //remove element from array
@@ -98,7 +99,7 @@ module.exports ={
       var collection = db.collection('users');
       collection.update(query,{
         $pull: docToPull}, function(err, result) {
-        callback(result);
+        callback(err,result);
         //close connection
         db.close();
       });
@@ -113,10 +114,11 @@ module.exports ={
       collection.update(query,{
         $set: requestStatus,
           }, function(err, result) {
-        callback(result);
+        callback(err,result);
+        db.close();
       });
       //close connection
-      db.close();
+
     });
   },
   //sums tutor's sessions totals
@@ -131,6 +133,40 @@ module.exports ={
         {$group : { _id:'$userId', total: {$sum:"$timeSheet.sessionTotal"} }}
       ],function(err,result) {
         callback(result);
+        //close connection
+        db.close();
+      });
+    });
+  },
+  //sums tutor's office hours totals
+  sumStdOfficeHours: function(userID,callback) {
+    // Use connect method to connect to the Server
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
+      // Get the documents collection
+      var collection = db.collection('users');
+      collection.aggregate([
+        {$match:{userId:userID}},
+        {$unwind : "$officeHours" },
+        {$group : { _id:{userId:'$userId',approved:'$officeHours.approved'},total: {$sum:"$officeHours.shiftHours"} }},
+        {$match : {'_id.approved':true}}
+      ],function(err,result) {
+        callback(err,result);
+        //close connection
+        db.close();
+      });
+    });
+  },
+  //sums tutor's hours
+  sumAllStdHours: function(userID,callback) {
+    // Use connect method to connect to the Server
+    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
+      // Get the documents collection
+      var collection = db.collection('users');
+      collection.aggregate([
+        {$match:{userId:userID}},
+        {$project : { _id:0, totalHours: { $sum: ["$monthlyTotalShiftHours","$monthlyTotalSessionHours"]} } }
+      ],function(err,result) {
+        callback(err,result);
         //close connection
         db.close();
       });

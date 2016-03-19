@@ -796,6 +796,23 @@ MODAL STYLES
   margin: 20% auto; }
 
 /*
+FLASH MESSAGES
+*/
+.message {
+  padding: 10px;
+  text-align: center;
+  color: #EBEBEB;
+  width: 100%; }
+  .message:hover {
+    cursor: pointer; }
+
+.success {
+  background-color: #208A87; }
+
+.error {
+  background-color: #FF6500; }
+
+/*
 MIXINS
 */
 .text-wrap {

@@ -118,7 +118,7 @@ module.exports = function(app,publicKey,privateKey) {
             "sessionEndTime" : endTime.format('h:mm A'),
             "sessionTotal":totalHours
           };
-          userAccount.addToArray({ userId:sessionUserId},{timeSheet:sessionData},function(result){
+          userAccount.addToArray({ userId:sessionUserId},{timeSheet:sessionData},function(err,result){
             //add the session to the timeSheet array.
             userAccount.sumStdSessions(sessionUserId,function(sumRes) {
               //sum up all the session hour totals

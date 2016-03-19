@@ -145,13 +145,25 @@
      </div>
 
      <div id="belowNav">
+       <!-- Display error messages -->
+       {{#if errorMessage}}
+       <div class="message error">
+         {{errorMessage}}(click to close)
+       </div>
+       {{/if}}
+       <!-- Success error messages -->
+       {{#if successMessage}}
+       <div class="message success">
+         {{successMessage}}(click to close)
+       </div>
+       {{/if}}
     {{{ body }}}
     </div>
 
 
   </div>
     <footer>
-      &copy; Copyright 2016 Full Sail University - <a href="/helpSupport">Help &amp; Support</a> - V 0.2.6 BETA</footer>
+      &copy; Copyright 2016 Full Sail University - <a href="/helpSupport">Help &amp; Support</a> - V 0.2.7 BETA</footer>
     <script src="/js/tutorApp.js"></script>
 </body>
 </html>
