@@ -13,10 +13,10 @@ describe('Account Tests', function() {
             password: "testing101",
             name:"Tester Quiz",
             phone:6060606060
-            }, function (doc) {
+          }, function (err,doc) {
                 var newUser = doc;
                 expect(doc).not.to.be.null;
-                userAccount.getUser({email:"tester@testsuit.test"}, function(targetDoc){
+                userAccount.getUser({email:"tester@testsuit.test"}, function(err,targetDoc){
                     expect(targetDoc).not.to.be.null;
                     done();
                 });
@@ -26,7 +26,7 @@ describe('Account Tests', function() {
     });
 
     it('FIND ALL users', function(done){
-        userAccount.getUsers({},function(targetDoc){
+        userAccount.getUsers({},function(err,targetDoc){
             expect(targetDoc.length).not.to.be.empty;
             done();
         });
@@ -38,11 +38,11 @@ describe('Account Tests', function() {
             password: "bb",
             name:"Brandy Bergh",
             phone:8918223211
-            }, function (doc) {
+          }, function (err,doc) {
                 var removeUser = doc;
                 expect(doc).not.to.be.null;
                 userAccount.destroyUser({email:"bbergh@fullsail.edu"}, function() {
-                    userAccount.getUser({email:"bbergh@fullsail.edu"}, function(targetDoc){
+                    userAccount.getUser({email:"bbergh@fullsail.edu"}, function(err,targetDoc){
                         expect(targetDoc).to.be.empty;
                         done();
                     });
@@ -53,7 +53,7 @@ describe('Account Tests', function() {
     //remove all test from db
     it('REMOVE all test users',function (done){
         userAccount.destroyUser({email: "tester@testsuit.test"}, function() {
-            userAccount.getUser({email: "tester@testsuit.test"}, function(targetTest){
+            userAccount.getUser({email: "tester@testsuit.test"}, function(err,targetTest){
                 expect(targetTest).to.be.empty;
                 done();
             });
