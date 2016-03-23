@@ -8,7 +8,7 @@ module.exports ={
       var collection = db.collection('courses');
       // Find some documents
       collection.find(query).toArray(function(err, docs) {
-        callback(docs);
+        callback(err,docs);
         //close connection
         db.close();
       });
@@ -22,7 +22,7 @@ module.exports ={
       var collection = db.collection('courses');
       // Find some documents
       collection.find(userInfo).toArray(function(err, docs) {
-        callback(docs);
+        callback(err,docs);
         //close connection
         db.close();
       });
@@ -37,7 +37,7 @@ module.exports ={
       var collection = db.collection('courses');
       // Insert some documents
       collection.insertOne(user, function(err, result) {
-        callback(result, err);
+        callback(err,result);
         //close connection
         db.close();
       });
@@ -50,7 +50,7 @@ module.exports ={
       var collection = db.collection('courses');
       // Insert some documents
       collection.remove(user, function(err, result) {
-        callback(result, err);
+        callback(err,result);
         //close connection
         db.close();
       });
@@ -66,10 +66,11 @@ module.exports ={
         $set: updateInfo,
         $currentDate: { lastModified: true }
           }, function(err, result) {
-        callback(result);
+        callback(err,result);
+        //close connection
+        db.close();
       });
-      //close connection
-      db.close();
+
     });
   }
 }//end export

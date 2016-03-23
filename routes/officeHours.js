@@ -28,16 +28,16 @@ module.exports = function(app,publicKey,privateKey) {
         }
         else if(decoded['iss'] === "system" && decoded['admin'] === true){
 
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
               var data={};
             data['userData'] = result[0];
             data['loggedIn'] = true;
             //current date
             var currentDate = moment().format("MM/DD/YYYY");
             // Get the current month based on today's date
-            officeHours.getCurrentMonth(currentDate,function(currentMonth){
+            officeHours.getCurrentMonth(currentDate,function(err,currentMonth){
                    //get all the shifts for this month
-                   officeHours.organizedShifts(currentMonth[0].startDate,currentMonth[0].endDate,function(officeShifts){
+                   officeHours.organizedShifts(currentMonth[0].startDate,currentMonth[0].endDate,function(err,officeShifts){
                        //parse shifts into a month object
 
                        var days = [];
@@ -64,9 +64,17 @@ module.exports = function(app,publicKey,privateKey) {
 
                       data['days'] = days;
                       Utils.debug('FINAL DAYS OBJECT',data['days']);
-
+                      //send messages to the template
+                      if (app.locals.adminOfficeHrsErrorMessage) {
+                        data['adminOfficeHrsErrorMessage']= app.locals.adminOfficeHrsErrorMessage;
+                      }
+                      else if (app.locals.adminOfficeHrsSuccessMessage) {
+                        data['adminOfficeHrsSuccessMessage']= app.locals.adminOfficeHrsSuccessMessage;
+                      }
                       res.render('officeHours',data);
-
+                      //clear local vars
+                      app.locals.adminOfficeHrsErrorMessage = null;
+                      app.locals.adminOfficeHrsSuccessMessage = null;
                    });
 
             });
@@ -77,11 +85,21 @@ module.exports = function(app,publicKey,privateKey) {
 
         else if(decoded['iss'] === "system" && decoded['admin'] === false){
 
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
             var data={};
             data['userData'] = result[0];
             data['loggedIn'] = true;
+            if (app.locals.tutorOfficeHrsErrorMessage) {
+              data['tutorOfficeHrsErrorMessage']= app.locals.tutorOfficeHrsErrorMessage;
+            }
+            else if (app.locals.tutorOfficeHrsSuccessMessage) {
+              data['tutorOfficeHrsSuccessMessage']= app.locals.tutorOfficeHrsSuccessMessage;
+            }
             res.render('officeHours',data);
+            //clear local vars
+            app.locals.tutorOfficeHrsErrorMessage = null;
+            app.locals.tutorOfficeHrsSuccessMessage = null;
+
 
           });
         }
@@ -116,22 +134,33 @@ module.exports = function(app,publicKey,privateKey) {
             userAccount.sumStdOfficeHours(tutorId,function(err,officeSum) {
 
               // Update the tutor's monthlyTotalShiftHours
-              userAccount.updateUser({userId:tutorId},{monthlyTotalShiftHours:officeSum[0].total},function(result) {
+              userAccount.updateUser({userId:tutorId},{monthlyTotalShiftHours:officeSum[0].total},function(err,result) {
                 // Sum tutor's monthlyTotalShiftHours and monthlyTotalSessionHours
-                //userAccount.sumAllStdHours(tutorId,function(err,totalHours) {
-                  // Utils.debug('TOTAL HOURS at ACCEPT SHIFT HANDLER',totalHours);
-                  // Utils.debug('ERROR at ACCEPT SHIFT HANDLER',err);
+                userAccount.sumAllStdHours(tutorId,function(err,totalHours) {
+                   Utils.debug('TOTAL HOURS at ACCEPT SHIFT HANDLER',totalHours[0].totalHours);
+                   Utils.debug('ERROR at ACCEPT SHIFT HANDLER',err);
+                   var totalTutorHrs = totalHours[0].totalHours;
                     // update totalHours for tutor
-                  // userAccount.updateUser({userId:tutorId},{monthlyTotalHours:totalHours[0].total},function(result) {
-                  //
-                    officeHours.updateOfficeHours({shiftId:officeShiftId},{"approved":true,"pending":false},function(){
-                      res.redirect('/officehours');
-                    });
-                  //
-                  // });// close updateUser
+                   userAccount.updateUser({userId:tutorId},{monthlyTotalHours:totalTutorHrs},function(err,result) {
+
+                    officeHours.updateOfficeHours({shiftId:officeShiftId},{"approved":true,"pending":false},function(err,result){
+                      Utils.debug('Result at ACCEPT SHIFT HANDLER',result);
+                      Utils.debug('ERROR at ACCEPT SHIFT HANDLER',err);
+                      // visual indication to the user so show an error
+                      if(err != null || err != undefined){
+                        app.locals.adminOfficeHrsErrorMessage ='Oops, there was an error accepting the shift .';
+                      }
+                      if(result.result.ok === 1){
+                        app.locals.adminOfficeHrsSuccessMessage ='Tutor shift was successfully accepted.';
+                      }
+                       res.redirect('/officehours');
+
+                    }); // Close updateOfficeHours
+
+                   });// close updateUser
 
 
-                //});// close sumAllStdHours
+                });// close sumAllStdHours
 
               });// close updateUser
 
@@ -165,10 +194,38 @@ module.exports = function(app,publicKey,privateKey) {
         else if(decoded['iss'] === "system"){
           var tutorId = parseInt(req.params.userId);
           var officeShiftId = parseInt(req.params.shiftId);
-          // FIXME: add the total office hours again after the shift has been removed from the array
           userAccount.pullFromArray({userId:tutorId},{ "officeHours": { shiftId: officeShiftId } },function(err,result){
-            officeHours.destroyShift({shiftId:officeShiftId},function(result){
-              res.redirect('/officehours');
+            // reomve shift from tutor account
+            officeHours.destroyShift({shiftId:officeShiftId},function(err,result){
+
+              // Sum tutor's office hours
+              userAccount.sumStdOfficeHours(tutorId,function(err,officeSum) {
+                var officeHoursSum;
+                if (officeSum[0] === undefined) {
+                  officeHoursSum = 0;
+                }
+                else{
+                  officeHoursSum =officeSum[0].total;
+                }
+                // update sum of office hours
+                userAccount.updateUser({userId:tutorId},{monthlyTotalShiftHours:officeHoursSum},function(err,result) {
+
+                  userAccount.sumAllStdHours(tutorId,function(err,totalHours) {
+                    var totalTutorHrs = totalHours[0].totalHours;
+                    // Update the total hours for the tutor
+                    userAccount.updateUser({userId:tutorId},{monthlyTotalHours:totalTutorHrs},function(err,result) {
+                      // visual indication to the user so show an error
+                      if(err != null || err != undefined){
+                        app.locals.adminOfficeHrsErrorMessage ='Oops, there was an error denying the shift .';
+                      }
+                      if(result.result.ok === 1){
+                        app.locals.adminOfficeHrsSuccessMessage ='Tutor shift was successfully denied.';
+                      }
+                      res.redirect('/officehours');
+                    });// close updateUser
+                  });// closesumAllStdHours
+              });// close updateUser
+            });
             });
           });
         }
@@ -197,10 +254,39 @@ module.exports = function(app,publicKey,privateKey) {
           var tutorId = parseInt(req.params.userId);
           var officeShiftId = parseInt(req.params.shiftId);
           userAccount.pullFromArray({userId:tutorId},{ "officeHours": { shiftId: officeShiftId } },function(err,result){
-            officeHours.destroyShift({shiftId:officeShiftId},function(result){
-              res.redirect('/officehours');
+            // Remove shift from tutor's accnt
+            officeHours.destroyShift({shiftId:officeShiftId},function(err,result){
+              // Sum tutor's office hours
+              userAccount.sumStdOfficeHours(tutorId,function(err,officeSum) {
+                var officeHoursSum;
+                if (officeSum[0] === undefined) {
+                  officeHoursSum = 0;
+                }
+                else{
+                  officeHoursSum =officeSum[0].total;
+                }
+                // Update tutor's office hours
+                userAccount.updateUser({userId:tutorId},{monthlyTotalShiftHours:officeHoursSum},function(err,result) {
+
+                  userAccount.sumAllStdHours(tutorId,function(err,totalHours) {
+                    var totalTutorHrs = totalHours[0].totalHours;
+                    userAccount.updateUser({userId:tutorId},{monthlyTotalHours:totalTutorHrs},function(err,result) {
+
+                      // visual indication to the user so show an error
+                      if(err != null || err != undefined){
+                        app.locals.adminOfficeHrsErrorMessage ='Oops, there was an error removing the shift .';
+                      }
+                      if(result.result.ok === 1){
+                        app.locals.adminOfficeHrsSuccessMessage ='Tutor shift was successfully removed.';
+                      }
+                      res.redirect('/officehours');
+                    });
+                  });
+                });
+              });
             });
           });
+
         }
       });
     }
@@ -223,9 +309,14 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
             var data = {userData:result[0],loggedIn:true};
-            res.render('requestShift',data);
+            //current date
+            var currentDate = moment().format("MM/DD/YYYY");
+            officeHours.getCurrentMonth(currentDate,function(err,currentMonth){
+                data['workableDates']= currentMonth[0].workingDates;
+                res.render('requestShift',data);
+            });
           });
         }
       });
@@ -266,7 +357,7 @@ module.exports = function(app,publicKey,privateKey) {
                       "pending" : true,
                       "approved" : false
              };
-            officeHours.createShift(newShift,function(results){
+            officeHours.createShift(newShift,function(err,results){
               //send the request to the tutor's office hours array
               userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift},function(err,result){
 
@@ -291,15 +382,22 @@ module.exports = function(app,publicKey,privateKey) {
                       "pending" : true,
                       "approved" : false
              };
-            officeHours.createShift(newShift2,function(results){
+            officeHours.createShift(newShift2,function(err,results){
               //send the request to the tutor's office hours array
               userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift2},function(err,result){
 
                 Utils.debug('result from addToArray ReqSHiftHandler',result);
-
+                // visual indication to the user so show an error
+                if(err != null || err != undefined){
+                  app.locals.tutorOfficeHrsErrorMessage ='Oops, there was an error requesting the shifts.';
+                }
+                if(result.result.ok === 1){
+                  app.locals.tutorOfficeHrsSuccessMessage ='Tutor shifts were successfully requested.';
+                }
+                res.redirect('/officehours');
               });
             });
-            res.redirect('/officehours');
+
           }
           else if(req.body.shift === "10AM-1PM" || req.body.shift === "1PM-4PM" ){
             var shiftDate3 = moment(req.body.shiftDate).format("MM/DD/YYYY");
@@ -318,11 +416,17 @@ module.exports = function(app,publicKey,privateKey) {
                       "pending" : true,
                       "approved" : false
              };
-            officeHours.createShift(newShift3,function(results){
+            officeHours.createShift(newShift3,function(err,results){
               //send the request to the tutor's office hours array
               userAccount.addToArray({userId:parseInt(req.body.userId)},{"officeHours":newShift3},function(err,result){
 
                 Utils.debug('result from addToArray ReqSHiftHandler',result);
+                if(err != null || err != undefined){
+                  app.locals.tutorOfficeHrsErrorMessage ='Oops, there was an error requesting the shift.';
+                }
+                if(result.result.ok === 1){
+                  app.locals.tutorOfficeHrsSuccessMessage ='Tutor shift was successfully requested.';
+                }
                 res.redirect('/officehours');
               });
             });

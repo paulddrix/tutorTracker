@@ -19,6 +19,20 @@
 
   {{else}}
   <!-- Tutor Side -->
+
+	<!-- Error Messages -->
+  {{#if tutorTimeSheetErrorMessage}}
+  <div class="message error">
+    {{tutorTimeSheetErrorMessage}}(click to close)
+  </div>
+  {{/if}}
+  <!-- Success messages -->
+  {{#if tutorTimeSheetHrsSuccessMessage}}
+  <div class="message success">
+    {{tutorTimeSheetHrsSuccessMessage}}(click to close)
+  </div>
+  {{/if}}
+
 	<p>
 		Every time you meet up with a student, you will log the hours here.
 	</p>

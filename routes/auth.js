@@ -31,7 +31,18 @@ module.exports = function(app,publicKey,privateKey) {
   LOGIN
   */
   app.get('/login',function(req,res){
-    res.render('login');
+    var data={};
+    if (app.locals.loginErrorMessage) {
+      data['errorMessage']= app.locals.loginErrorMessage;
+    }
+    else if (app.locals.loginSuccessMessage) {
+      data['successMessage']= app.locals.loginSuccessMessage;
+    }
+
+    res.render('login',data);
+    //clear local vars
+    app.locals.loginErrorMessage = null;
+    app.locals.loginSuccessMessage = null;
   });
   //Verify credentials
   app.post('/verify',function(req,res){
@@ -41,10 +52,12 @@ module.exports = function(app,publicKey,privateKey) {
     }
     else{
       //read from DB to see what type of account they have
-      userAccount.getUser(req.body,function(result){
+      userAccount.getUser(req.body,function(err,result){
         Utils.debug('results from query in VERIFY',result);
 
         if(result[0]=== undefined){
+          app.locals.loginErrorMessage = "Oops, your email or password didn't match.";
+
           res.redirect('/login');
         }
         else{
@@ -61,6 +74,7 @@ module.exports = function(app,publicKey,privateKey) {
   */
   app.get('/logout',function(req,res){
     res.cookie('auth',"logged-out");
+    app.locals.loginSuccessMessage = "You were successfully logged out.";
     res.redirect('/login');
   });
   /*

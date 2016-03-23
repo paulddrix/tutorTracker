@@ -9,7 +9,7 @@ module.exports ={
       var collection = db.collection('users');
       // Find all users
       collection.find(query).toArray(function(err, docs) {
-        callback(docs);
+        callback(err,docs);
         //close connection
         db.close();
       });
@@ -23,7 +23,7 @@ module.exports ={
       var collection = db.collection('users');
       // Find a user
       collection.find(userInfo).toArray(function(err, docs) {
-        callback(docs);
+        callback(err,docs);
         //close connection
         db.close();
       });
@@ -37,7 +37,7 @@ module.exports ={
       var collection = db.collection('users');
       // Insert one user
       collection.insertOne(user, function(err, result) {
-        callback(result, err);
+        callback(err,result);
         //close connection
         db.close();
       });
@@ -50,7 +50,7 @@ module.exports ={
       var collection = db.collection('users');
       // remove a user
       collection.remove(user, function(err, result) {
-        callback(result, err);
+        callback(err,result);
         //close connection
         db.close();
       });
@@ -65,10 +65,11 @@ module.exports ={
         $set: updateInfo,
         $currentDate: { lastModified: true }
           }, function(err, result) {
-        callback(result);
+        callback(err,result);
+        //close connection
+        db.close();
       });
-      //close connection
-      db.close();
+
     });
   },
   /*
@@ -132,7 +133,7 @@ module.exports ={
         {$unwind : "$timeSheet" },
         {$group : { _id:'$userId', total: {$sum:"$timeSheet.sessionTotal"} }}
       ],function(err,result) {
-        callback(result);
+        callback(err,result);
         //close connection
         db.close();
       });
@@ -164,7 +165,7 @@ module.exports ={
       var collection = db.collection('users');
       collection.aggregate([
         {$match:{userId:userID}},
-        {$project : { _id:0, totalHours: { $sum: ["$monthlyTotalShiftHours","$monthlyTotalSessionHours"]} } }
+        {$project : { _id:0, totalHours: { $add: ["$monthlyTotalShiftHours","$monthlyTotalSessionHours"]} } }
       ],function(err,result) {
         callback(err,result);
         //close connection
@@ -184,7 +185,7 @@ module.exports ={
         {$unwind : "$studentsToTutor" },
         {$match : {"studentsToTutor.requestId":requestId}}
       ],function(err,result) {
-        callback(result);
+        callback(err,result);
         //close connection
         db.close();
       });

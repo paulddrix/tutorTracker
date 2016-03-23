@@ -1,13 +1,17 @@
 <div>
     <h1>Request Shift</h1>
     <p>
-      Fill out the date and the shift time that you wish to work.
+      Select a the date and the shift time that you wish to work.
     </p>
     <form action="/requesthandler" method="post">
       <p>
         <label for="shiftDate">Date</label>
-        <input type="date" name="shiftDate" id="shiftDate">
-        <!-- Validate with JAVASCRIPT -->
+        <input name="shiftDate" id="shiftDate" list="shiftDates">
+        <datalist id="shiftDates">
+          {{#each workableDates}}
+          <option value="{{this}}">{{this}}</option>
+          {{/each}}
+        </datalist>
       </p>
       <p>
         <label for="shift">Shift</label>

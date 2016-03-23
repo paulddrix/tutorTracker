@@ -8,7 +8,7 @@ module.exports ={
       var collection = db.collection('tutorRequests');
       // Find some documents
       collection.find(query).toArray(function(err, docs) {
-        callback(docs);
+        callback(err,docs);
         //close connection
         db.close();
       });
@@ -22,7 +22,7 @@ module.exports ={
       var collection = db.collection('tutorRequests');
       // Find some documents
       collection.find(reqInfo).toArray(function(err, docs) {
-        callback(docs);
+        callback(err,docs);
         //close connection
         db.close();
       });
@@ -42,19 +42,6 @@ module.exports ={
       });
     });
   },
-  destroyUser: function(user,callback) {
-    // Use connect method to connect to the Server
-    MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
-      // Get the documents collection
-      var collection = db.collection('tutorRequests');
-      // Insert some documents
-      collection.remove(user, function(err, result) {
-        callback(result, err);
-        //close connection
-        db.close();
-      });
-    });
-  },
   // insert new tutor request
   updateTutorRequest: function(query,updateInfo,callback) {
     // Use connect method to connect to the Server
@@ -66,7 +53,6 @@ module.exports ={
         callback(err,result);
         db.close();
       });
-      //close connection
 
     });
   }

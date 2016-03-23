@@ -10,7 +10,7 @@ module.exports ={
       var collection = db.collection('officeShifts');
       // Find some documents
       collection.find(query).toArray(function(err, docs) {
-        callback(docs);
+        callback(err,docs);
         //close connection
         db.close();
       });
@@ -24,7 +24,7 @@ module.exports ={
       // Get the documents collection
       var collection = db.collection('officeShifts');
       collection.insert(shiftReq, function(err, result) {
-        callback(result);
+        callback(err,result);
         db.close();
       });
     });
@@ -37,7 +37,7 @@ module.exports ={
       var collection = db.collection('officeShifts');
       // Insert some documents
       collection.remove(shift, function(err, result) {
-        callback(result, err);
+        callback(err,result);
         //close connection
         db.close();
       });
@@ -51,10 +51,11 @@ module.exports ={
       collection.update(query,{
         $set: updateInfo
           }, function(err, result) {
-        callback(result);
+        callback(err,result);
+        //close connection
+        db.close();
       });
-      //close connection
-      db.close();
+
     });
   },
   //group shifts
@@ -88,7 +89,7 @@ module.exports ={
          },
          {$sort:{"_id.dayDate":1}}
       ],function(err,result) {
-        callback(result);
+        callback(err,result);
         //close connection
         db.close();
       });
@@ -104,7 +105,7 @@ module.exports ={
       var collection = db.collection('officeMonths');
       // Find some documents
       collection.find({ "startDate": { $lte: currentDate }, $and: [ { "endDate": { $gte: currentDate } } ] }).toArray(function(err, docs) {
-        callback(docs);
+        callback(err,docs);
         //close connection
         db.close();
       });
@@ -118,7 +119,7 @@ module.exports ={
       // Get the documents collection
       var collection = db.collection('officeMonths');
       collection.insert(month, function(err, result) {
-        callback(result);
+        callback(err,result);
         db.close();
       });
     });

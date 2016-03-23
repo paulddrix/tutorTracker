@@ -5,6 +5,7 @@ var
     exec   = require('child_process').exec,
     minifyCss = require('gulp-minify-css'),
     nodemon         = require('gulp-nodemon'),
+    moment = require('moment'),
     UserAccount = require('./models/account'),
     OfficeHours = require('./models/officeHours'),
     Courses = require('./models/courses');
@@ -38,7 +39,7 @@ gulp.task('create-admin-test-user', function(done) {
     "textAlert" : true,
     "idNumber" : 6231231,
     "userId" : 90123212,
-    }, function(doc) {
+  }, function(err,doc) {
           console.log('User Email: ',doc.ops[0].email);
           console.log('User Passowrd: ',doc.ops[0].password);
     });
@@ -71,7 +72,7 @@ gulp.task('create-tutor-test-user', function(done) {
     }
     ],
     "officeHours" : [],
-}, function(doc) {
+}, function(err,doc) {
           console.log('User Email: ',doc.ops[0].email);
           console.log('User Passowrd: ',doc.ops[0].password);
     });
@@ -84,27 +85,27 @@ gulp.task('create-test-course', function(done) {
     "courseAbbr" : "TST",
     "courseName" : "Testing101",
     "courseCode" : "WDD143"
-},function(doc){
+},function(err,doc){
   console.log('when testing a tutor request, search for the folloing course, ',doc.ops[0].courseName);
   });
 
 
 });
-// FIXME: add a month with starting date of today and end date of today plus a month
 //Create testing month
-// gulp.task('create-tutor-month', function(done) {
-//
-//   OfficeHours.createMonth({
-//   "startDate" : "02/14/2016",
-//   "endDate" : "03/12/2016",
-//   "workingDates" : []
-// },function(doc){
-//   console.log('if you are going to make a shift request, make sure it is between');
-//   });
-//
-//
-//
-// });
+gulp.task('create-tutor-month', function(done) {
+  var startDate = moment().format("MM/DD/YYYY");
+  var endDate = moment().add(31, 'days').format("MM/DD/YYYY");
+  OfficeHours.createMonth({
+  "startDate" : startDate,
+  "endDate" : endDate,
+  "workingDates" : []
+},function(err,doc){
+  console.log('if you are going to make a shift request, make sure it is between '+startDate +' and '+endDate);
+  });
+
+
+
+});
 
 // Run app.js with nodemon
 gulp.task('dev', function () {

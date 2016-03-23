@@ -24,9 +24,9 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
             var data = {userData:result[0],loggedIn:true};
-            userAccount.getUsers({admin:false},function(results) {
+            userAccount.getUsers({admin:false},function(err,results) {
               data['users']=results;
               res.render('timeSheet',data);
             });
@@ -52,12 +52,23 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
             var data = {userData:result[0],loggedIn:true};
             var userID = parseInt(req.params.userId);
-            userAccount.getUser({userId:userID},function(results) {
+            userAccount.getUser({userId:userID},function(err,results) {
               data['tutor']=results[0];
+              //send messages to the template
+              if (app.locals.tutorTimeSheetErrorMessage) {
+                data['tutorTimeSheetErrorMessage']= app.locals.tutorTimeSheetErrorMessage;
+              }
+              else if (app.locals.tutorTimeSheetHrsSuccessMessage) {
+                data['tutorTimeSheetHrsSuccessMessage']= app.locals.tutorTimeSheetHrsSuccessMessage;
+              }
               res.render('timeSheetDetails',data);
+              //clear local vars
+              app.locals.tutorTimeSheetErrorMessage = null;
+              app.locals.tutorTimeSheetHrsSuccessMessage = null;
+
             });
           });
         }
@@ -81,7 +92,7 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
             var data = {userData:result[0],loggedIn:true};
             res.render('addSession',data);
           });
@@ -120,25 +131,31 @@ module.exports = function(app,publicKey,privateKey) {
           };
           userAccount.addToArray({ userId:sessionUserId},{timeSheet:sessionData},function(err,result){
             //add the session to the timeSheet array.
-            userAccount.sumStdSessions(sessionUserId,function(sumRes) {
+            userAccount.sumStdSessions(sessionUserId,function(err,sumRes) {
               //sum up all the session hour totals
 
               Utils.debug('SUM OF STUDENT SESSIONS',sumRes);
 
-              Utils.debug('TOTLA SUM OF STUDENT SESSIONS',sumRes[0].total);
-              userAccount.updateUser({userId:sessionUserId},{monthlyTotalSessionHours:sumRes[0].total},function(result) {
-                //insert the total in the tutor's monthlyTotalSessionHours.
-                //FIX ME: how to make the monthlyTotalHours always add the values
-                //for monthlyTotalSessionHours and monthlyTotalShiftHours
-                //userAccount.updateUser({userId:sessionUserId},,function(result) {
-                //add the monthlyTotalSessionHours to the tutor's monthlyTotalHours
-                //Utils.debug('some result',result);
-                res.redirect('/timesheet');
-                //});
+              Utils.debug('TOTAL SUM OF STUDENT SESSIONS',sumRes[0].total);
+              userAccount.updateUser({userId:sessionUserId},{monthlyTotalSessionHours:sumRes[0].total},function(err,result) {
+                userAccount.sumAllStdHours(sessionUserId,function(err,totalHours) {
+                  var totalTutorHrs = totalHours[0].totalHours;
+                  userAccount.updateUser({userId:sessionUserId},{monthlyTotalHours:totalTutorHrs},function(err,result) {
+
+                    // visual indication to the user so show an error
+                    if(err != null || err != undefined){
+                      app.locals.tutorTimeSheetErrorMessage ='Oops, there was an error adding a session.';
+                    }
+                    if(result.result.ok === 1){
+                      app.locals.tutorTimeSheetHrsSuccessMessage ='Tutor session was successfully added.';
+                    }
+                    res.redirect('/timesheet');
+                  });
+                });
+
               });
             });
           });
-          // do aggregate func to get the sum of all the sessions and add them tp the tutor's total.
         }
       });
     }

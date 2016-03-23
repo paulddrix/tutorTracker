@@ -19,9 +19,9 @@ module.exports = function(app,publicKey,privateKey) {
           res.render('helpSupport');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
             var userInfo = {userData:result[0],loggedIn:true};
-            userAccount.getUsers({},function(results) {
+            userAccount.getUsers({},function(err,results) {
               userInfo['users']=results;
               res.render('helpSupport',userInfo);
             });
@@ -48,9 +48,9 @@ module.exports = function(app,publicKey,privateKey) {
           res.render('faq');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
             var userInfo = {userData:result[0],loggedIn:true};
-            userAccount.getUsers({},function(results) {
+            userAccount.getUsers({},function(err,results) {
               userInfo['users']=results;
               res.render('faq',userInfo);
             });

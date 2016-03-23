@@ -1,6 +1,20 @@
 <div>
 	<h1>Users</h1>
 	{{#if userData.admin}}
+
+	<!-- Error Messages -->
+  {{#if adminUsersErrorMessage}}
+  <div class="message error">
+    {{adminUsersErrorMessage}}(click to close)
+  </div>
+  {{/if}}
+  <!-- Success messages -->
+  {{#if adminUsersSuccessMessage}}
+  <div class="message success">
+    {{adminUsersSuccessMessage}}(click to close)
+  </div>
+	{{/if}}
+
 	<p>
 		Click on a user's name to view details
 	</p>

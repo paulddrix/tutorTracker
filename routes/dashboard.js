@@ -5,6 +5,7 @@ module.exports = function(app,publicKey,privateKey) {
   moment = require('moment'),
   jwt = require('jsonwebtoken'),
   Utils = require('../lib/utils'),
+  exec = require('child_process').exec,
   // Load models
   userAccount = require('../models/account'),
   courses = require('../models/courses'),
@@ -29,23 +30,23 @@ module.exports = function(app,publicKey,privateKey) {
         else if(decoded['iss'] === "system" && decoded['admin'] === true){
           Utils.debug('DASHBOARD Route ADMIN conditial','ADMIN!!!!');
           var data = {userData:{admin:true},loggedIn:true};
-          userAccount.getUsers({admin:false},function(results) {
+          userAccount.getUsers({admin:false},function(err,results) {
             data['tutorList']=results;
-            courses.getCourses({},function(courseRes) {
+            courses.getCourses({},function(err,courseRes) {
               data['courseList']=courseRes;
-              tutorRequests.getTutorRequests({rejected:true},function(rejectedDocs){
+              tutorRequests.getTutorRequests({rejected:true},function(err,rejectedDocs){
                 data['rejectedDocs'] = rejectedDocs;
                 Utils.debug('DASHBOARD Route ADMIN conditial DATA!',data);
-                if (app.locals.errorMessage) {
-                  data['errorMessage']= app.locals.errorMessage;
+                if (app.locals.adminDashErrorMessage) {
+                  data['adminDashErrorMessage']= app.locals.adminDashErrorMessage;
                 }
-                else if (app.locals.successMessage) {
-                  data['successMessage']= app.locals.successMessage;
+                else if (app.locals.adminDashSuccessMessage) {
+                  data['adminDashSuccessMessage']= app.locals.adminDashSuccessMessage;
                 }
                 res.render('dashboard',data);
                 //clear local vars
-                app.locals.errorMessage = null;
-                app.locals.successMessage = null;
+                app.locals.adminDashErrorMessage = null;
+                app.locals.adminDashSuccessMessage = null;
               });
             });
           });
@@ -53,19 +54,19 @@ module.exports = function(app,publicKey,privateKey) {
         //if the user is a tutor
         else if(decoded['iss'] === "system" && decoded['admin'] === false){
           Utils.debug('DASHBOARD Route TUTOR conditial','TUTOR!!!!');
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
             var data = {userData:result[0],loggedIn:true};
             Utils.debug('DASHBOARD Route TUTOR conditial DATA!',data);
-            if (app.locals.tutorErrorMessage) {
-              data['errorMessage']= app.locals.tutorErrorMessage;
+            if (app.locals.tutorDashErrorMessage) {
+              data['tutorDashErrorMessage']= app.locals.tutorDashErrorMessage;
             }
-            else if (app.locals.tutorSuccessMessage) {
-              data['successMessage']= app.locals.tutorSuccessMessage;
+            else if (app.locals.tutorDashSuccessMessage) {
+              data['tutorDashSuccessMessage']= app.locals.tutorDashSuccessMessage;
             }
             res.render('dashboard',data);
             //clear local vars
-            app.locals.tutorErrorMessage = null;
-            app.locals.tutorSuccessMessage = null;
+            app.locals.tutorDashErrorMessage = null;
+            app.locals.tutorDashSuccessMessage = null;
           });
         }
       });
@@ -89,7 +90,7 @@ module.exports = function(app,publicKey,privateKey) {
         }
         //if the user is an admin
         else if(decoded['iss'] === "system" && decoded['admin'] === true){
-          userAccount.getUsers({"eligibleCourses.courseName": req.params.coursename},function(doc) {
+          userAccount.getUsers({"eligibleCourses.courseName": req.params.coursename},function(err,doc) {
             res.send(doc);
           });
         }
@@ -148,11 +149,13 @@ module.exports = function(app,publicKey,privateKey) {
             Utils.debug('error in adding tutor request to assigned tutor',err);
             // visual indication to the user so show an error
             if(err != null || err != undefined){
-              app.locals.errorMessage ='There was an error assigning the request to the tutor.';
+              app.locals.adminDashErrorMessage ='There was an error assigning the request to the tutor.';
             }
             if(result.result.ok === 1){
-              app.locals.successMessage ='Tutor request was successfully added.';
+              app.locals.adminDashSuccessMessage ='Tutor request was successfully added.';
             }
+            // txt tutor
+            exec('curl -Xcurl -X POST http://textbelt.com/text -d number=9043074738 -d \"message=There is a new tutor request for you, please log into Tutor Tracker and address it, Thank you.\"');
             res.redirect('/dashboard');
           });
 
@@ -179,15 +182,15 @@ module.exports = function(app,publicKey,privateKey) {
         }
         //if the user is an admin
         else if(decoded['iss'] === "system" && decoded['admin'] === true){
-          userAccount.getUser({userId:decoded['userId']},function(result){
+          userAccount.getUser({userId:decoded['userId']},function(err,result){
             var data = {userData:result[0],loggedIn:true};
             var incomingRequestId = parseInt(req.params.requestid);
-            tutorRequests.getTutorRequests({requestId:incomingRequestId},function(request){
+            tutorRequests.getTutorRequests({requestId:incomingRequestId},function(err,request){
               data['tutorRequest'] = request[0];
 
-              userAccount.getUsers({admin:false},function(results) {
+              userAccount.getUsers({admin:false},function(err,results) {
                 data['tutorList']=results;
-                courses.getCourses({},function(courseRes) {
+                courses.getCourses({},function(err,courseRes) {
                   data['courseList']=courseRes;
                   res.render('tutorRequestDetails',data);
                 });
@@ -196,21 +199,21 @@ module.exports = function(app,publicKey,privateKey) {
           });
         }
         else if (decoded['iss'] === "system" && decoded['admin'] === false) {
-          userAccount.getUser({userId:decoded['userId']},function(result){
+          userAccount.getUser({userId:decoded['userId']},function(err,result){
             var data = {userData:result[0],loggedIn:true};
             var incomingRequestId = parseInt(req.params.requestid);
-            userAccount.tutorRequestDetails(decoded['userId'],incomingRequestId,function(tutorRequest){
+            userAccount.tutorRequestDetails(decoded['userId'],incomingRequestId,function(err,tutorRequest){
               data['tutorRequest']=tutorRequest[0]['studentsToTutor'];
-              if (app.locals.tutorErrorMessage) {
-                data['errorMessage']= app.locals.tutorErrorMessage;
+              if (app.locals.tutorDashErrorMessage) {
+                data['tutorDashErrorMessage']= app.locals.tutorDashErrorMessage;
               }
-              else if (app.locals.tutorSuccessMessage) {
-                data['successMessage']= app.locals.tutorSuccessMessage;
+              else if (app.locals.tutorDashSuccessMessage) {
+                data['tutorDashSuccessMessage']= app.locals.tutorDashSuccessMessage;
               }
               res.render('tutorRequestDetails',data);
               //clear local vars
-              app.locals.tutorErrorMessage = null;
-              app.locals.tutorSuccessMessage = null;
+              app.locals.tutorDashErrorMessage = null;
+              app.locals.tutorDashSuccessMessage = null;
             });
           });
         }
@@ -243,13 +246,13 @@ module.exports = function(app,publicKey,privateKey) {
             // visual indication to the user so show an error
             Utils.debug('Error at accepting tutor request ',err);
             if(err != null || err != undefined){
-              app.locals.tutorErrorMessage ='There was an error accepting the request.';
+              app.locals.tutorDashErrorMessage ='There was an error accepting the request.';
             }
             Utils.debug('Result at accepting tutor request ',result);
             if(result.result.ok === 1){
-              app.locals.tutorSuccessMessage ='Tutor request was accepted successfully.';
+              app.locals.tutorDashSuccessMessage ='Tutor request was accepted successfully.';
             }
-            res.redirect('back');
+            res.redirect('/dashboard');
             });
 
         }
@@ -285,15 +288,15 @@ module.exports = function(app,publicKey,privateKey) {
             tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:true,denyReason:denialReason},function(err,result){
               // visual indication to the user so show an error
               if(err != null || err != undefined){
-                app.locals.tutorErrorMessage ='There was an error creating request denial.';
+                app.locals.tutorDashErrorMessage ='There was an error creating request denial.';
               }
               Utils.debug('Result at denying tutor request ',result);
               if(result.result.ok === 1){
-                app.locals.tutorSuccessMessage ='Tutor request was denied successfully.';
+                app.locals.tutorDashSuccessMessage ='Tutor request was denied successfully.';
               }
 
               //**************************************************
-              //let the admin know the tutor accepted the request.
+              //let the admin know the tutor denied the request.
               //**************************************************
               res.redirect('/dashboard');
 
@@ -327,7 +330,7 @@ module.exports = function(app,publicKey,privateKey) {
           var incomingTutorId = parseInt(req.params.tutorId);
           tutorRequests.updateTutorRequest({requestId:incomingRequestId},{rejected:false,assignTutor:incomingTutorId},function(err,result){
             //must query for the tutor request to add ************
-            tutorRequests.getRequest({requestId:incomingRequestId},function(result){
+            tutorRequests.getRequest({requestId:incomingRequestId},function(err,result){
               //hold the req and make the necessary changes to it
               var targetReq = result[0];
               targetReq['assignTutor']= incomingTutorId;
@@ -337,11 +340,11 @@ module.exports = function(app,publicKey,privateKey) {
 
                 // visual indication to the user so show an error
                 if(err != null || err != undefined){
-                  app.locals.errorMessage ='There was an error reassigning the request.';
+                  app.locals.adminDashErrorMessage ='There was an error reassigning the request.';
                 }
                 Utils.debug('Result at re-assigning tutor request ',result);
                 if(result.result.ok === 1){
-                  app.locals.successMessage ='Tutor request was reassigned successfully.';
+                  app.locals.adminDashSuccessMessage ='Tutor request was reassigned successfully.';
                 }
 
                 Utils.debug('error ADDING EDITTED REQ to TUTOR ARRAY',err);

@@ -1,5 +1,19 @@
 <div>
   {{#if userData.admin}}
+
+  <!-- Error Messages -->
+  {{#if adminOfficeHrsErrorMessage}}
+  <div class="message error">
+    {{adminOfficeHrsErrorMessage}}(click to close)
+  </div>
+  {{/if}}
+  <!-- Success messages -->
+  {{#if adminOfficeHrsSuccessMessage}}
+  <div class="message success">
+    {{adminOfficeHrsSuccessMessage}}(click to close)
+  </div>
+  {{/if}}
+
   <h1>Manage Office Hours</h1>
   <p>
     Please accept of deny a shift, if you have accepted a shift and the tutor can no longer fulfill it, you can remove it and ask another tutor to submit a request for the same shift. Below is a legend explaining the icons<br>
@@ -135,6 +149,20 @@ L15.7,40.4z"/>
   <!-- End Month -->
   {{!-- Start Tutor Side --}}
   {{else}}
+
+  <!-- Error Messages -->
+  {{#if tutorOfficeHrsErrorMessage}}
+  <div class="message error">
+    {{tutorOfficeHrsErrorMessage}}(click to close)
+  </div>
+  {{/if}}
+  <!-- Success messages -->
+  {{#if tutorOfficeHrsSuccessMessage}}
+  <div class="message success">
+    {{tutorOfficeHrsSuccessMessage}}(click to close)
+  </div>
+  {{/if}}
+
   <a href="/officehours/requestshift" class="button aquarius">Request Shift</a>
   <h1>View  Office Hours</h1>
   <p>If you have any office shifts they will be displayed below.</p>

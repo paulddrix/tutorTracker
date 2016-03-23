@@ -22,9 +22,19 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
             var data = {userData:result[0],loggedIn:true};
+            if (app.locals.profileErrorMessage) {
+              data['profileErrorMessage']= app.locals.profileErrorMessage;
+            }
+            else if (app.locals.profileSuccessMessage) {
+              data['profileSuccessMessage']= app.locals.profileSuccessMessage;
+            }
             res.render('profile',data);
+            //clear local vars
+            app.locals.profileErrorMessage = null;
+            app.locals.profileSuccessMessage = null;
+
           });
         }
       });
@@ -47,7 +57,7 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
 
             Utils.debug('edit profile page',result[0]);
             var data = {userData:result[0],loggedIn:true};
@@ -91,9 +101,16 @@ module.exports = function(app,publicKey,privateKey) {
             "phone":req.body.phone,
             "textAlert":textAlert
           };
-          userAccount.updateUser({ userId:editUserId },editedProfile,function(result){
+          userAccount.updateUser({ userId:editUserId },editedProfile,function(err,result){
 
             Utils.debug('result from update in editprofilehandler',result);
+            // visual indication to the user so show an error
+            if(err != null || err != undefined){
+              app.locals.profileErrorMessage ='Oops, there was an error editing your profile. ';
+            }
+            if(result.result.ok === 1){
+              app.locals.profileSuccessMessage ='Profile information was successfully updated.';
+            }
             res.redirect('profile');
           });
         }

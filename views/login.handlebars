@@ -1,3 +1,18 @@
+{{!-- Start Messages --}}
+
+{{#if loginErrorMessage}}
+<div class="message error">
+	{{loginErrorMessage}}(click to close)
+</div>
+{{/if}}
+<!-- Success error messages -->
+{{#if loginSuccessMessage}}
+<div class="message success">
+	{{loginSuccessMessage}}(click to close)
+</div>
+{{/if}}
+
+{{!-- End Admin Messages --}}
 <p>If you are here is most likely that your session ended or you just need to sign in for the first time, please sign in.</p>
 <form action="/verify" method="post">
 	<p>

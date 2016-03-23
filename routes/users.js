@@ -23,11 +23,20 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
             var data = {userData:result[0],loggedIn:true};
-            userAccount.getUsers({},function(results) {
+            userAccount.getUsers({},function(err,results) {
               data['users']=results;
+              if (app.locals.adminUsersErrorMessage) {
+                data['adminUsersErrorMessage']= app.locals.adminUsersErrorMessage;
+              }
+              else if (app.locals.adminUsersSuccessMessage) {
+                data['adminUsersSuccessMessage']= app.locals.adminUsersSuccessMessage;
+              }
               res.render('users',data);
+              //clear local vars
+              app.locals.adminUsersErrorMessage = null;
+              app.locals.adminUsersSuccessMessage = null;
             });
           });
         }
@@ -53,17 +62,18 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:incomingNumber},function(result) {
+          userAccount.getUser({userId:incomingNumber},function(err,result) {
             var data={loggedIn:true};
             data['userProfile']=result[0];
             res.render('userDetails',data);
+
           });
         }
       });
     }
   });
   /*
-  USERS > ADD PAGE
+  USERS > ADD USER PAGE
   */
   app.get('/users/adduser',function(req,res){
     if(req.cookies.auth === undefined){
@@ -79,7 +89,7 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system" && decoded['admin'] == true){
-          userAccount.getUser({userId:decoded.userId},function(result){
+          userAccount.getUser({userId:decoded.userId},function(err,result){
             var data = {userData:result[0],loggedIn:true};
             res.render('addUser',data);
           });
@@ -144,7 +154,14 @@ module.exports = function(app,publicKey,privateKey) {
           }
 
           Utils.debug('NEWUSER at USERS > ADD USER HANDLER',newUser);
-          userAccount.createUser(newUser,function(result, err){
+          userAccount.createUser(newUser,function(err,result){
+
+            if(err != null || err != undefined){
+              app.locals.adminUsersErrorMessage ='There was an error adding a new user.';
+            }
+            if(result.result.ok === 1){
+              app.locals.adminUsersSuccessMessage ='New user was successfully added.';
+            }
             res.redirect('/users');
           });
         }
@@ -171,7 +188,13 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.destroyUser({userId:deleteUserId},function(result,err) {
+          userAccount.destroyUser({userId:deleteUserId},function(err,result) {
+            if(err != null || err != undefined){
+              app.locals.adminUsersErrorMessage ='There was an error deleting the user.';
+            }
+            if(result.result.ok === 1){
+              app.locals.adminUsersSuccessMessage ='User was successfully deleted.';
+            }
             res.redirect("/users");
           });
         }
@@ -196,7 +219,7 @@ module.exports = function(app,publicKey,privateKey) {
           res.redirect('/login');
         }
         else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:editUserId},function(result){
+          userAccount.getUser({userId:editUserId},function(err,result){
             var data = {userData:result[0],loggedIn:true};
             res.render('editUser',data);
           });
@@ -250,8 +273,14 @@ module.exports = function(app,publicKey,privateKey) {
           if (req.body.degree !=false) {
             editedUser['degree']= req.body.degree;
           }
-          userAccount.updateUser({ userId:editUserId},editedUser,function(result){
-            res.redirect('/users');
+          userAccount.updateUser({ userId:editUserId},editedUser,function(err,result){
+            if(err != null || err != undefined){
+              app.locals.adminUsersErrorMessage ='There was an error editing the user.';
+            }
+            if(result.result.ok === 1){
+              app.locals.adminUsersSuccessMessage ='User information was successfully edited.';
+            }
+            res.redirect("/users");
           });
         }
       });

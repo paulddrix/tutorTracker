@@ -1,5 +1,18 @@
-
 {{#if userData.admin}}
+
+<!-- Error Messages -->
+{{#if adminDashErrorMessage}}
+<div class="message error">
+	{{adminDashErrorMessage}}(click to close)
+</div>
+{{/if}}
+<!-- Success messages -->
+{{#if adminDashSuccessMessage}}
+<div class="message success">
+	{{adminDashSuccessMessage}}(click to close)
+</div>
+{{/if}}
+
 <h1>Student's Details</h1>
 <p>{{ tutorRequest.firstName }}&nbsp;{{ tutorRequest.lastName }}</p>
 <p>{{ tutorRequest.email }}</p>
@@ -36,6 +49,20 @@
 </div>
 {{!-- START TUTOR SIDEs --}}
 {{else}}
+
+<!-- Error Messages -->
+{{#if tutorDashErrorMessage}}
+<div class="message error">
+	{{tutorDashErrorMessage}}(click to close)
+</div>
+{{/if}}
+<!-- Success messages -->
+{{#if tutorDashSuccessMessage}}
+<div class="message success">
+	{{tutorDashSuccessMessage}}(click to close)
+</div>
+{{/if}}
+
 <h1>Student's Details</h1>
 <p>
 	If have not already done so, accept or deny the request. If you accept it, your are responsible to reach out to the student. If you deny it, you must specifiy a valid reason why.

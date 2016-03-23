@@ -1,13 +1,21 @@
-
 <div>
   {{#if userData.admin}}
+  <!-- Error Messages -->
+  {{#if adminDashErrorMessage}}
+  <div class="message error">
+    {{adminDashErrorMessage}}(click to close)
+  </div>
+  {{/if}}
+  <!-- Success messages -->
+  {{#if adminDashSuccessMessage}}
+  <div class="message success">
+    {{adminDashSuccessMessage}}(click to close)
+  </div>
+  {{/if}}
     <div>
       <h1>Search Eligible Tutors</h1>
       <p>
-        Search tutor eligibility and total hours. Based upon that, add a request to a tutor.
-      </p>
-      <p>
-        Simply search by course name, and click the assign button to add the tutor to the request form.
+        Search by course name to see eligible tutors. After searching, click the assign button to add the tutor to the request form.
       </p>
       <div class="float-clear">
         <input type="text" class="float-left" name="courseName" list="courseNames" id="courseName" placeholder="Course Name">
@@ -102,7 +110,7 @@
         {{#if rejectedDocs}}
         <div class="listCont">
 
-          {{!-- NEEDS TO BE FIXED TO ASSIGN A TUTOR TO THE REJECTED REQUEST --}}
+
         {{#each rejectedDocs}}
           <a href="/dashboard/tutorrequest/{{this.requestId}}" class="userLi float-left">
 
@@ -123,6 +131,20 @@
 
   {{!-- Start Tutor Side --}}
   {{else}}
+
+  <!-- Error Messages -->
+  {{#if tutorDashErrorMessage}}
+  <div class="message error">
+    {{tutorDashErrorMessage}}(click to close)
+  </div>
+  {{/if}}
+  <!-- Success messages -->
+  {{#if tutorDashSuccessMessage}}
+  <div class="message success">
+    {{tutorDashSuccessMessage}}(click to close)
+  </div>
+  {{/if}}
+
   <div class="totalHours">
     <h1>Total Session Hours</h1>
       <span>{{userData.monthlyTotalSessionHours}} &nbsp; Hours</span>
