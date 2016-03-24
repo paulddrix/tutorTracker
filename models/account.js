@@ -30,6 +30,12 @@ module.exports ={
 
     });
   },
+  /** 
+   * Create a user
+   * @constructor
+   * @param {object}  user The user object
+   * @param {function}  callback Callback function with err, result
+  */
   createUser: function(user,callback) {
     // Use connect method to connect to the Server
     MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {

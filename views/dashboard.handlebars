@@ -145,11 +145,15 @@
   </div>
   {{/if}}
 
-  <div class="totalHours">
-    <h1>Total Session Hours</h1>
-      <span>{{userData.monthlyTotalSessionHours}} &nbsp; Hours</span>
-    <h1>Total Office Hours</h1>
-      <span>{{userData.monthlyTotalShiftHours}} &nbsp; Hours</span>
+  <div class="totalHours section">
+    <div class="col span-1-2">
+      <h3>Total Session Hours</h3>
+        <span class="hours">{{userData.monthlyTotalSessionHours}} &nbsp; Hours</span>
+    </div>
+    <div class="col span-1-2">
+      <h3>Total Office Hours</h3>
+        <span class="hours">{{userData.monthlyTotalShiftHours}} &nbsp; Hours</span>
+    </div>
   </div>
   <div class="reqHelp customList">
     <h1>Requested Help</h1>

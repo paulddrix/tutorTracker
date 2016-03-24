@@ -61,13 +61,13 @@ module.exports = function(app,publicKey,privateKey) {
               if (app.locals.tutorTimeSheetErrorMessage) {
                 data['tutorTimeSheetErrorMessage']= app.locals.tutorTimeSheetErrorMessage;
               }
-              else if (app.locals.tutorTimeSheetHrsSuccessMessage) {
-                data['tutorTimeSheetHrsSuccessMessage']= app.locals.tutorTimeSheetHrsSuccessMessage;
+              else if (app.locals.tutorTimeSheetSuccessMessage) {
+                data['tutorTimeSheetSuccessMessage']= app.locals.tutorTimeSheetSuccessMessage;
               }
               res.render('timeSheetDetails',data);
               //clear local vars
               app.locals.tutorTimeSheetErrorMessage = null;
-              app.locals.tutorTimeSheetHrsSuccessMessage = null;
+              app.locals.tutorTimeSheetSuccessMessage = null;
 
             });
           });

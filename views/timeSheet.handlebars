@@ -27,17 +27,23 @@
   </div>
   {{/if}}
   <!-- Success messages -->
-  {{#if tutorTimeSheetHrsSuccessMessage}}
+  {{#if tutorTimeSheetSuccessMessage}}
   <div class="message success">
-    {{tutorTimeSheetHrsSuccessMessage}}(click to close)
+    {{tutorTimeSheetSuccessMessage}}(click to close)
   </div>
   {{/if}}
+	<div class="span-1-2 float-right">
+		<a href="/timesheet/addsession" class="button aquarius float-right">Add Session</a>
+	</div>
+	<div class="col span-1-2">
+		<p>
+			Every time you meet up with a student, you will log the hours here.
+		</p>
+		<span class="aquariusLabel bold">{{userData.monthlyTotalSessionHours}}</span><span>&nbsp;Total Session Hours</span>
+	</div>
 
-	<p>
-		Every time you meet up with a student, you will log the hours here.
-	</p>
-	<a href="/timesheet/addsession" class="button aquarius">Add Session</a>
-	<span class="aquariusLabel bold">{{userData.monthlyTotalSessionHours}}</span><span>&nbsp;Total Session Hours</span>
+
+
 	<ul class="listCont">
 		{{#each userData.timeSheet}}
 		<li class="userLi">

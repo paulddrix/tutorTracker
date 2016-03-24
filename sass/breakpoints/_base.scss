@@ -4,24 +4,35 @@ Stylesheet: Base Mobile Stylesheet
 /*
 GENERAL STYLES
 */
+html,body{
+	height: 100%;
+}
 body {
 	font-family:$base-font-family;
 	font-size: 100%;
 	line-height: 1.5;
   background-color: #EBEBEB;
+	height: 100%;
 }
 
 #wrapper{
 max-width: 1038px;
 margin: 0 auto;
 clear: both;
+min-height: 100%;
+margin-bottom: -142px;
 }
-h1{
+h1,h3{
 	color: #666;
 }
 h1,h2,h3,h4,h5{
 
 	font-weight: initial;
+}
+#wrapper:after{
+	content: "";
+  display: block;
+	height: 142px;
 }
 /*
 NAVIGATION STYLES
@@ -355,6 +366,7 @@ USERS LIST
 FOOTER
 */
 footer{
+	height: 142px;
 	text-align: center;
 	color: $black;
 	padding: 10px;
@@ -431,4 +443,23 @@ MIXINS
 }
 .bold{
 	font-weight: bold;
+}
+.hours{
+font-size: 20px;
+}
+.totalHours{
+overflow: hidden;
+}
+
+
+.col{
+	float: left;
+	display: block;
+}
+
+.float-right{
+	float: right;
+}
+.span-1-2{
+	width: 50%;
 }

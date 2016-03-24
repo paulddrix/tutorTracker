@@ -15,11 +15,16 @@
   </div>
 	{{/if}}
 
-	<p>
-		Click on a user's name to view details
-	</p>
-  <a href="/users/adduser" class="button aquarius">Add User</a>
-	<br/>
+
+
+	<div class="span-1-2 float-right">
+		<a href="/users/adduser" class="button aquarius float-right">Add User</a>
+  </div>
+  <div class="col span-1-2">
+		<p>
+			Click on a user's name to view details
+		</p>
+  </div>
 	<div class="listCont">
 		{{#each users}}
 		<div class="userLi">
