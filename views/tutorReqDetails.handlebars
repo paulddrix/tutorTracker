@@ -75,14 +75,14 @@
 <p>{{ tutorRequest.courseToTutor }}</p>
 <p>{{ tutorRequest.program }}</p>
 	{{#if tutorRequest.pendingStatus}}
-		<a href="/tutorrequest/accept/{{tutorRequest.requestId}}/{{tutorRequest.assignTutor}}" class="button aquarius">Accept</a>
+		<a href="/dashboard/tutor/request/accept/handler/{{tutorRequest.requestId}}/{{tutorRequest.assignTutor}}" class="button aquarius">Accept</a>
 		<button id="denyModal" class="fsorange" data-request-id="{{tutorRequest.requestId}}" data-assign-tutor="{{tutorRequest.assignTutor}}">Deny</button>
 	{{/if}}
 	<!-- START MODAL-->
 	<div id="modalOverlay">
 		<div id="modal">
 			<h1>Deny Request</h1>
-			<form action="/tutorrequest/deny" method="post">
+			<form action="/dashboard/tutor/request/deny/handler" method="post">
 				<input type="hidden" name="requestId" value="{{tutorRequest.requestId}}">
 				<input type="hidden" name="assignTutor" value="{{tutorRequest.assignTutor}}">
 				<textarea name="denyReason" rows="5" cols="30" placeholder="Type the reason here"></textarea>

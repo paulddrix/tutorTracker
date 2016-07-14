@@ -1,69 +1,101 @@
-"use strict";
-module.exports = function(app,publicKey,privateKey) {
-  const jwt = require('jsonwebtoken'),
-  Utils = require('../lib/utils'),
-  userAccount = require('../models/account');
+module.exports = (app, publicKey, privateKey) => {
+  const jwt = require('jsonwebtoken');
+  const handyUtils = require('handyutils');
+  const userAccount = require('../models/account');
+  /*
+  * Basic Auth for all routes
+  */
+  app.all('/*', (req, res, next) => {
+    handyUtils.debug('Basic Auth ran, req: ', req.path);
+    const reqRef = req;
+    // Check cookie function
+    function checkCookie() {
+      if (req.cookies.auth === undefined ||
+          req.cookies.auth === '' ||
+          req.cookies.auth === null ||
+          reqRef.cookies.auth === 'logged-out') {
+        return false;
+      }
+      return true;
+    }
+    /* Whitelisted Routes */
+    // Help & Support route
+    if (reqRef.path === '/helpSupport' || reqRef.path === '/helpSupport/faq') {
+      // Check if the user has the auth cookie.
+      if (!checkCookie()) {
+        next();
+      } else {
+        // verify a token asymmetric
+        jwt.verify(req.cookies.auth, publicKey, (decodedErr, decodedToken) => {
+          if (decodedToken === undefined) {
+            res.redirect('/login');
+          } else if (decodedToken.iss === 'system') {
+            reqRef.body.decodedInfo = decodedToken;
+            next();
+          }
+        });
+      } /* Secured Routes */
+    } else if (checkCookie()) {
+      // verify a token asymmetric
+      jwt.verify(req.cookies.auth, publicKey, (decodedErr, decodedToken) => {
+        handyUtils.debug('Decoding JWTs in authCheck', decodedToken);
+        if (decodedToken === undefined) {
+          res.redirect('/login');
+        } else if (decodedToken.iss === 'system') {
+          reqRef.body.decodedInfo = decodedToken;
+          next();
+        }
+      });
+    } else if (!checkCookie()) {
+      next();
+    }
+  });
   /*
   LANDING PAGE
   */
-  app.get('/', function(req, res){
-    //the root route is going to redirect to  the dashboard.
-    //check if the user has the auth cookie.
-    if(req.cookies.auth === undefined){
+  app.get('/', (req, res) => {
+    // the root route is going to redirect to  the dashboard.
+    // check if the user has decodedInfo in the body of the request.
+    if (req.body.decodedInfo === undefined) {
       res.redirect('/login');
-    }
-    //if they do, decode it.
-    else{
+    } else { // if they do, decode it.
       // verify a token asymmetric
-      jwt.verify(req.cookies.auth, publicKey, function(err, decoded){
-        Utils.debug('decoded jwt in LANDING',decoded);
-        if(decoded == undefined){
+      jwt.verify(req.cookies.auth, publicKey, (err, decoded) => {
+        handyUtils.debug('decoded jwt in LANDING', decoded);
+        if (decoded === undefined) {
           res.redirect('/login');
-        }
-        else if(decoded['iss'] === "system"){
+        } else if (decoded.iss === 'system') {
           res.redirect('/dashboard');
-
-        };
+        }
       });
     }
   });
   /*
   LOGIN
   */
-  app.get('/login',function(req,res){
-    var data={};
-    if (app.locals.loginErrorMessage) {
-      data['errorMessage']= app.locals.loginErrorMessage;
-    }
-    else if (app.locals.loginSuccessMessage) {
-      data['successMessage']= app.locals.loginSuccessMessage;
-    }
-
-    res.render('login',data);
-    //clear local vars
-    app.locals.loginErrorMessage = null;
-    app.locals.loginSuccessMessage = null;
+  app.get('/login', (req, res) => {
+    const data = {};
+    // FIXME:FLASH MESSAGES
+    res.render('login', data);
   });
-  //Verify credentials
-  app.post('/verify',function(req,res){
-    Utils.debug('req body in VERIFY',req.body);
-    if(!req.body){
+  // Verify credentials
+  app.post('/verify', (req, res) => {
+    handyUtils.debug('req body in VERIFY', req.body);
+    if (!req.body) {
       res.sendStatus(400);
-    }
-    else{
-      //read from DB to see what type of account they have
-      userAccount.getUser(req.body,function(err,result){
-        Utils.debug('results from query in VERIFY',result);
-
-        if(result[0]=== undefined){
-          app.locals.loginErrorMessage = "Oops, your email or password didn't match.";
-
+    } else {
+      // read from DB to see what type of account they have
+      userAccount.find(req.body, (err, result) => {
+        handyUtils.debug('results from query in VERIFY', result);
+        if (result[0] === undefined) {
+          // app.locals.loginErrorMessage = 'Oops, your email or password didnt match.';
           res.redirect('/login');
-        }
-        else{
-
-          var token = jwt.sign({ alg: 'RS256',typ:'JWT',admin:result[0].admin, userId:result[0].userId }, privateKey, { algorithm: 'RS256',issuer:'system',expiresIn:86400000});
-          res.cookie('auth', token, {expires: new Date(Date.now() + 9000000),maxAge: 9000000 });//secure: true
+        } else {
+          const token = jwt.sign({ alg: 'RS256', typ: 'JWT', admin: result[0].admin,
+          userId: result[0].userId },
+          privateKey, { algorithm: 'RS256', issuer: 'system', expiresIn: 86400000 });
+          res.cookie('auth', token,
+           { expires: new Date(Date.now() + 9000000), maxAge: 9000000 }); // secure: true
           res.redirect('/');
         }
       });
@@ -72,22 +104,22 @@ module.exports = function(app,publicKey,privateKey) {
   /*
   LOGOUT
   */
-  app.get('/logout',function(req,res){
-    res.cookie('auth',"logged-out");
-    app.locals.loginSuccessMessage = "You were successfully logged out.";
+  app.get('/logout', (req, res) => {
+    res.cookie('auth', 'logged-out');
+    // app.locals.loginSuccessMessage = 'You were successfully logged out.'';
     res.redirect('/login');
   });
   /*
   FORGOT PASSWORD
   */
-  app.get('/user/forgotpassword/page',function(req,res){
+  app.get('/forgotpassword', (req, res) => {
     res.render('forgotPassword');
   });
   /*
   HANDLE FORGOT PASSWORD
   */
-  app.post('/user/forgotpassword/hanlder',function(req,res){
+  app.post('forgotpassword/handler', (req, res) => {
     // FIXME: need to add functionality to be able to reset a PASSWORD
     res.redirect('/login');
   });
-}
+};

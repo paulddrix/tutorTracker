@@ -1,65 +1,42 @@
-"use strict";
-module.exports = function(app,publicKey,privateKey) {
-
-  const jwt = require('jsonwebtoken'),
-  Utils = require('../lib/utils'),
-  userAccount = require('../models/account');
-
+module.exports = (app) => {
+  const handyUtils = require('handyutils');
+  const userAccount = require('../models/account');
   /*
   HELP & SUPORT
   */
-  app.get('/helpSupport',function(req,res) {
-    if(req.cookies.auth != undefined){
-      // we will check if the user requesting the page is a tutor or an admin
-      // verify a token asymmetric
-      jwt.verify(req.cookies.auth, publicKey, function(err, decoded){
-
-        Utils.debug('decoded JWT at helpSupport',decoded);
-        if(decoded == undefined){
-          res.render('helpSupport');
-        }
-        else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:decoded.userId},function(err,result){
-            var userInfo = {userData:result[0],loggedIn:true};
-            userAccount.getUsers({},function(err,results) {
-              userInfo['users']=results;
-              res.render('helpSupport',userInfo);
-            });
-          });
-        }
+  app.get('/helpSupport', (req, res) => {
+    const reqRef = req;
+    const decodedInfo = reqRef.body.decodedInfo;
+    if (decodedInfo) {
+      const decodedResult = req.body.decodedInfo;
+      userAccount.find({ userId: decodedResult.userId }, (findErr, findResult) => {
+        const userInfo = { userData: findResult[0], loggedIn: true };
+        userAccount.find({}, (userErr, userResults) => {
+          userInfo.users = userResults;
+          res.render('helpSupport', userInfo);
+        });
       });
-    }
-    else{
+    } else {
       res.render('helpSupport');
     }
   });
    /*
   HELP & SUPORT > FAQ
   */
-  app.get('/helpSupport/faq',function(req,res) {
-
-    if(req.cookies.auth != undefined){
-      // we will check if the user requesting the page is a tutor or an admin
-      // verify a token asymmetric
-      jwt.verify(req.cookies.auth, publicKey, function(err, decoded){
-
-        Utils.debug('decoded JWT at helpSupport FAQ',decoded);
-        if(decoded == undefined){
-          res.render('faq');
-        }
-        else if(decoded['iss'] === "system"){
-          userAccount.getUser({userId:decoded.userId},function(err,result){
-            var userInfo = {userData:result[0],loggedIn:true};
-            userAccount.getUsers({},function(err,results) {
-              userInfo['users']=results;
-              res.render('faq',userInfo);
-            });
-          });
-        }
+  app.get('/helpSupport/faq', (req, res) => {
+    const reqRef = req;
+    const decodedInfo = reqRef.body.decodedInfo;
+    handyUtils.debug('decodedInfo at helpSupport FAQ', decodedInfo);
+    if (decodedInfo) {
+      userAccount.find({ userId: decodedInfo.userId }, (userErr, userResult) => {
+        const userInfo = { userData: userResult[0], loggedIn: true };
+        userAccount.find({}, (userErr2, userResult2) => {
+          userInfo.users = userResult2;
+          res.render('faq', userInfo);
+        });
       });
-    }
-    else{
+    } else {
       res.render('faq');
     }
   });
-}//end of export
+};

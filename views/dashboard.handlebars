@@ -39,7 +39,7 @@
       </div>
     </div>
     <div class="float-clear">
-      <form action="/addtutorrequesthandler" method="post" id="addRequestForm">
+      <form action="/dashboard/add/tutor/request/handler" method="post" id="addRequestForm">
         <h2>Add Tutor Request</h2>
         <p>
           <label for="fName">First Name</label>
@@ -112,7 +112,7 @@
 
 
         {{#each rejectedDocs}}
-          <a href="/dashboard/tutorrequest/{{this.requestId}}" class="userLi float-left">
+          <a href="/dashboard/tutor/request/{{this.requestId}}" class="userLi float-left">
 
               <span>&nbsp;{{this.firstName}}&nbsp;{{this.lastName}}</span>
               <div class="float-right">
@@ -163,7 +163,7 @@
     {{#if userData.studentsToTutor}}
     <div class="listCont">
     {{#each userData.studentsToTutor}}
-      <a href="/dashboard/tutorrequest/{{this.requestId}}" class="userLi float-left">
+      <a href="/dashboard/tutor/request/{{this.requestId}}" class="userLi float-left">
         <div class="float-left liWrapper">
           {{#if this.pendingStatus}}
           <div>

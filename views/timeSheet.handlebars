@@ -7,7 +7,7 @@
 	<div class="listCont">
 	{{#each users}}
 	<div class="userLi">
-		<a href="/timesheet/tutortimesheetdetails/{{userId}}" class="float-left">
+		<a href="/timesheet/tutor/timesheet/details/{{userId}}" class="float-left">
 			<div class="float-left text-wrap">
 				{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;
 				 <span class="aquariusLabel bold">{{this.monthlyTotalSessionHours}}</span><span>&nbsp;Total Session Hours</span>
@@ -33,7 +33,7 @@
   </div>
   {{/if}}
 	<div class="span-1-2 float-right">
-		<a href="/timesheet/addsession" class="button aquarius float-right">Add Session</a>
+		<a href="/timesheet/create/session" class="button aquarius float-right">Add Session</a>
 	</div>
 	<div class="col span-1-2">
 		<p>

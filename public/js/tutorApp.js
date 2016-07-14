@@ -1,12 +1,12 @@
 (function(){
 	console.log("tutorApp loaded *****");
-	//Mobile Nav Click event
-	if (document.getElementById('mobileMenu')) {
+	// Mobile Nav Click event
+  if (document.getElementById('mobileMenu')) {
 		document.getElementById('mobileMenu').addEventListener('click',function() {
 			var movNav = document.getElementById('mobileNav');
 			movNav.style.display == '' ?movNav.style.display = 'block':movNav.style.display = '';;
 		});
-	}
+  }
 
 	// ACTIVE NAV
 	var nav = document.getElementsByTagName("NAV");
@@ -76,12 +76,12 @@
 						// });
 			    }
 			  };
-			  xhttp.open("GET", "/tutoreligibility/"+searchQuery, true);
+			  xhttp.open("GET", "/dashboard/tutor/eligibility/"+searchQuery, true);
 			  xhttp.send();
 			}
 		});
 	}
-	//Re-assign page
+	// Re-assign page
 	if (document.getElementById('searchCourses2')) {
 		//search course when user clicks button
 		document.getElementById('searchCourses2').addEventListener('click',function() {
@@ -98,7 +98,7 @@
 						var response = JSON.parse(xhttp2.responseText);
 						var resultsHtml ='<div class="listCont">';
 						for (var i = 0; i < response.length; i++) {
-							resultsHtml+= "<div class=\"userLi\">"+response[i]['firstName']+" "+ response[i]['lastName'] + " " +response[i]['monthlyTotalHours'] +" Total Hours<a class=\"aquarius button float-right\" href=\"/reassigntutor/"+ response[i]['userId']+ "/" + rejectedReqId +"\">Assign</a></div>";
+							resultsHtml+= "<div class=\"userLi\">"+response[i]['firstName']+" "+ response[i]['lastName'] + " " +response[i]['monthlyTotalHours'] +" Total Hours<a class=\"aquarius button float-right\" href=\"/dashboard/reassign/tutor/"+ response[i]['userId']+ "/" + rejectedReqId +"\">Assign</a></div>";
 						}
 						resultsHtml+= "</div>";
 						//place the results from the ajax call into the container
@@ -107,7 +107,7 @@
 
 			    }
 			  };
-			  xhttp2.open("GET", "/tutoreligibility/"+searchQuery, true);
+			  xhttp2.open("GET", "/dashboard/tutor/eligibility/"+searchQuery, true);
 			  xhttp2.send();
 			}
 		});

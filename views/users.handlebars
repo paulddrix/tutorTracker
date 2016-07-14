@@ -18,7 +18,7 @@
 
 
 	<div class="span-1-2 float-right">
-		<a href="/users/adduser" class="button aquarius float-right">Add User</a>
+		<a href="/users/create/user" class="button aquarius float-right">Add User</a>
   </div>
   <div class="col span-1-2">
 		<p>
@@ -28,7 +28,7 @@
 	<div class="listCont">
 		{{#each users}}
 		<div class="userLi">
-			<a href="/users/userprofiles/{{userId}}" class="float-left">
+			<a href="/users/{{userId}}" class="float-left">
 				<div class="float-left text-wrap">
 					{{firstName}}&nbsp;{{lastName}}&nbsp;
 					{{#if this.degree}}
@@ -39,8 +39,8 @@
 					<span class="aquariusLabel bold">Administrator</span>
 					{{/if}}
 				</div>
-				<a href="/users/deleteuserhandler/{{userId}}" class="button fsorange float-right">Delete</a>&nbsp;
-				<a href="/users/edituser/{{userId}}" class="button aquarius float-right">Edit User</a>
+				<a href="/users/destroy/user/handler/{{userId}}" class="button fsorange float-right">Delete</a>&nbsp;
+				<a href="/users/update/user/{{userId}}" class="button aquarius float-right">Edit User</a>
 			</a>
 		</div>
 
@@ -52,7 +52,7 @@
 	</p>
 	<div class="listCont">
 	{{#each users}}
-		<a href="users/userprofiles/{{userId}}" class="userLi float-left">
+		<a href="users/{{userId}}" class="userLi float-left">
 		<div class="float-left">
 			<span>{{this.firstName}}&nbsp;{{this.lastName}}&nbsp;</span>
 			{{#if this.degree}}

@@ -1,34 +1,37 @@
 <div>
-    <h1>Add User</h1>
-    <form action="/adduserhandler" method="post">
+    <h1>Edit User</h1>
+    <form action="/users/update/user/handler" method="post">
       <p>
         <label for="fName">First Name</label>
-        <input type="text" name="firstName" id="fName" required="required">
+        <input type="text" name="firstName" id="fName" required="required" value="{{userData.firstName}}">
       </p>
       <p>
         <label for="lName">Last Name</label>
-        <input type="text" name="lastName" id="lName" required="required">
+        <input type="text" name="lastName" id="lName" required="required" value="{{userData.lastName}}">
       </p>
       <p>
         <label for="email">Email</label>
-        <input type="email" name="email" id="email" size="30" required="required">
+        <input type="email" name="email" id="email" size="30" required="required" value="{{userData.email}}">
       </p>
       <p>
         <label for="password">Password</label>
-        <input type="password" name="password" id="password" required="required">
+        <input type="password" name="password" id="password" required="required" value="{{userData.password}}">
       </p>
       <p>
         <label for="phone">Phone</label>
-        <input type="text" min="10" name="phone" id="phone" required="required">
+        <input type="text" min="10" name="phone" id="phone" required="required" value="{{userData.phone}}">
       </p>
       <p>
         <label for="idNumber">Student ID</label>
-        <input type="text" min="10" name="idNumber" id="idNumber" required="required">
+        <input type="text" min="10" name="idNumber" id="idNumber" required="required" value="{{userData.idNumber}}">
       </p>
       <p>
         <label for="degree">Degree</label>
-        <input name="degree" id="degree" list="degrees" required="required">
+        <input name="degree" required="required" id="degree" list="degrees">
         <datalist id="degrees">
+          {{#if userData.degree }}
+          <option value="{{userData.degree}}">{{userData.degree}}</option>
+          {{/if}}
           <option value="false">Select a Degree</option>
           <option value="Digital Arts &amp; Design">Digital Arts &amp; Design</option>
           <option value="Game Development">Game Development</option>
@@ -44,15 +47,27 @@
           <option value="Mobile Development">Mobile Development</option>
           <option value="Software Development">Software Development</option>
         </datalist>
+
       </p>
       <p>
+        {{#if userData.admin}}
+        <input type="checkbox" name="admin" id="admin" checked="checked" value="true">
+        <label for="admin">Administrator</label>
+        {{else}}
         <input type="checkbox" name="admin" id="admin" value="true">
         <label for="admin">Administrator</label>
+        {{/if}}
       </p>
       <p>
-        <input type="checkbox" name="textAlert" value="true" id="txtAlert">
+        {{#if userData.textAlert}}
+        <input type="checkbox" name="textAlert" id="txtAlert" checked="checked" value="true">
         <label for="txtAlert">Text Alerts</label>
+        {{else}}
+        <input type="checkbox" name="textAlert" id="txtAlert" value="true">
+        <label for="txtAlert">Text Alerts</label>
+        {{/if}}
       </p>
-      <button type="submit" class="blue_button">Add User</button>
+      <input type="hidden" name="userId" value="{{userData.userId}}">
+      <button type="submit" class="blue_button">Save Changes</button>
     </form>
 </div>
