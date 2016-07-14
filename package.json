@@ -30,6 +30,10 @@
     "moment": "^2.11.2",
     "mongodb": "~2.0"
   },
+  "engines": {
+    "node": "v6.2.2",
+    "npm": "3.8.3"
+  },
   "devDependencies": {
     "chai": "^3.3.0",
     "eslint": "^2.11.1",
