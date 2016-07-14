@@ -8,7 +8,7 @@ var expect = require('chai').expect,
 describe('Account Tests', function() {
 
     it('Create a new user', function(done){
-        userAccount.createUser({
+        userAccount.create({
             email: "tester@testsuit.test",
             password: "testing101",
             name:"Tester Quiz",
@@ -16,7 +16,7 @@ describe('Account Tests', function() {
           }, function (err,doc) {
                 var newUser = doc;
                 expect(doc).not.to.be.null;
-                userAccount.getUser({email:"tester@testsuit.test"}, function(err,targetDoc){
+                userAccount.find({email:"tester@testsuit.test"}, function(err,targetDoc){
                     expect(targetDoc).not.to.be.null;
                     done();
                 });
@@ -26,14 +26,14 @@ describe('Account Tests', function() {
     });
 
     it('FIND ALL users', function(done){
-        userAccount.getUsers({},function(err,targetDoc){
+        userAccount.find({},function(err,targetDoc){
             expect(targetDoc.length).not.to.be.empty;
             done();
         });
     });
 
     it('REMOVE an existing user', function(done){
-        userAccount.createUser({
+        userAccount.create({
             email: "bbergh@fullsail.edu",
             password: "bb",
             name:"Brandy Bergh",
@@ -41,8 +41,8 @@ describe('Account Tests', function() {
           }, function (err,doc) {
                 var removeUser = doc;
                 expect(doc).not.to.be.null;
-                userAccount.destroyUser({email:"bbergh@fullsail.edu"}, function() {
-                    userAccount.getUser({email:"bbergh@fullsail.edu"}, function(err,targetDoc){
+                userAccount.destroy({email:"bbergh@fullsail.edu"}, function() {
+                    userAccount.find({email:"bbergh@fullsail.edu"}, function(err,targetDoc){
                         expect(targetDoc).to.be.empty;
                         done();
                     });
@@ -52,8 +52,8 @@ describe('Account Tests', function() {
     });
     //remove all test from db
     it('REMOVE all test users',function (done){
-        userAccount.destroyUser({email: "tester@testsuit.test"}, function() {
-            userAccount.getUser({email: "tester@testsuit.test"}, function(err,targetTest){
+        userAccount.destroy({email: "tester@testsuit.test"}, function() {
+            userAccount.find({email: "tester@testsuit.test"}, function(err,targetTest){
                 expect(targetTest).to.be.empty;
                 done();
             });
